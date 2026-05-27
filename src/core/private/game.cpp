@@ -3,7 +3,7 @@
 Game::Game()
 {
     if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO))
-        log("SDL Unloaded: " + (string) SDL_GetError());
+        log("SDL Unloaded: " + (string)SDL_GetError());
     else
         log("SDL Loaded");
     if (!TTF_Init())
@@ -42,6 +42,20 @@ void Game::handle()
         if (event.type == SDL_EVENT_WINDOW_CLOSE_REQUESTED)
             terminate();
     level->handle(dt);
+    for (
+        auto fruitIt = level->fruits.begin(); 
+        fruitIt != level->fruits.end(); 
+    )
+    {
+        if (!fruitIt->taken 
+            && SDL_HasRectIntersectionFloat(&fruitIt->rect, &level->player.rect))
+        {
+            fruitIt->taken = true;
+            level->points += 1;
+        }
+        else
+            fruitIt++;
+    }
 }
 
 void Game::terminate()

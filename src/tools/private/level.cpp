@@ -13,19 +13,23 @@ Level::Level(SDL_Renderer *renderer, int number)
             player = Player(renderer, obj.x, obj.y - SPRITE_SIZE);
         else if (!strcmp(name, "grasses"))
             for (int x = 0; x < obj.width; x += SPRITE_SIZE)
-                grasses.push_back(Grass(renderer, x, obj.y));
+                grasses.push_back(Grass(renderer, obj.x + x + SPRITE_SIZE / 2, obj.y));
+        else if (!strcmp(name, "fruit"))
+            fruits.push_back(Fruit(renderer, obj.x, obj.y - SPRITE_SIZE));
     }
 }
 
-void Level::render() 
+void Level::render()
 {
     map.render(Camera);
     for (auto grass : grasses)
         grass.render(Camera);
+    for (auto fruit : fruits)
+        fruit.render(Camera);
     player.render(Camera);
 }
 
-void Level::handle(double dt) 
+void Level::handle(double dt)
 {
     player.handle(dt, grasses);
     float targetX = player.Position.x - CAMERA_X;

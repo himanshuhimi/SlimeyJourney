@@ -8,8 +8,7 @@ class Player : public Sprite
 public:
     int speed;
     float jumpStrength;
-    bool onGround;
-    vector<Grass> colGrasses;
+    bool spacePressed = false;
     std::unordered_map<string, Animation *> anims;
     enum Direction {Left, Right} lastDirection;
     struct PlayerStates

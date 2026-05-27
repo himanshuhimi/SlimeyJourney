@@ -16,7 +16,6 @@ public:
     void render();
     void handle();
     void terminate();
-
 private:
     Uint64 LAST = SDL_GetPerformanceCounter();
     Uint64 NOW;

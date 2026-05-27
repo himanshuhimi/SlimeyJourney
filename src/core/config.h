@@ -13,12 +13,13 @@
 #include <SDL3_mixer/SDL_mixer.h>
 #include <tinyxml2.h>
 
-using std::string, std::vector;
+using std::string, std::vector, std::unordered_map;
 
 extern const string TITLE;
-extern const int SPRITE_SIZE;
+extern const float SPRITE_SIZE;
 extern int WIDTH, HEIGHT;
 extern const int CAMERA_X, CAMERA_Y;
+extern const unordered_map<string, double> juiceStrengths;
 
 void log(string message);
 void log(int number);
@@ -54,8 +55,7 @@ struct Text
         string data,
         string fontSource,
         SDL_Color color,
-        int pixelSize = 24
-    );
+        int pixelSize = 24);
     void render();
     void updateData(string newData);
     void updateAlpha(int newAlpha);
@@ -71,8 +71,30 @@ struct Animation
     void handle(double dt);
     void render(Vector2D Camera);
 };
+extern struct _Random_
+{
+    int randint(int begin, int end);
+    template <typename T>
+    T choice(vector<T> vec)
+    {
+        if (vec.empty())
+            log("Empty Vector.");
+        return vec.at(randint(0, vec.size() - 1));
+    }
+} Random;
+extern struct _Colors_
+{
+    SDL_Color white = SDL_Color{255, 255, 255, 255};
+    SDL_Color black = SDL_Color{0, 0, 0, 255};
+    SDL_Color red = SDL_Color{255, 0, 0, 255};
+    SDL_Color green = SDL_Color{0, 255, 0, 255};
+    SDL_Color blue = SDL_Color{0, 0, 255, 255};
+    SDL_Color orange = SDL_Color{255, 165, 0, 255};
+    SDL_Color yellow = SDL_Color{255, 222, 0, 255};
+    SDL_Color pink = SDL_Color{255, 182, 193, 255};
+} colors;
 
 enum constants
 {
-    gravity = 980
+    gravity = 400
 };

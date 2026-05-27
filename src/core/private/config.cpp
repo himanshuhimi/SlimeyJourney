@@ -1,9 +1,15 @@
 #include "../config.h"
 
 const string TITLE = "Puddle Pebble";
-const int SPRITE_SIZE = 32;
+const float SPRITE_SIZE = 32.0f;
 int WIDTH = 640, HEIGHT = 360;
 const int CAMERA_X = WIDTH / 2, CAMERA_Y = HEIGHT / 2;
+const unordered_map<string, double> juiceStrengths = {
+    {"apple", 0.1},
+    {"melon", 0.2},
+    {"orange", 0.3}
+};
+
 void log(string message)
 {
     std::cout << "[LOG] " << message << std::endl;
@@ -107,3 +113,17 @@ void Animation::render(Vector2D Camera)
     src.h = (float)SPRITE_SIZE;
     imageSet->render(&src, &renderDst);
 }
+
+int _Random_::randint(int begin, int end)
+{
+    static bool seeded = false;
+    if (!seeded)
+    {
+        std::srand(static_cast<unsigned>(std::time(nullptr)));
+        seeded = true;
+    }
+    return begin + std::rand() % (end - begin + 1);
+};
+
+_Random_ Random;
+_Colors_ colors;
