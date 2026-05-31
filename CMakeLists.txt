@@ -4,6 +4,7 @@ project("game")
 set(LIBRARIES
     SDL3
     SDL3_image
+    SDL3_mixer
     SDL3_ttf
     tinyxml2
 )

@@ -53,8 +53,8 @@ struct Text
         float x,
         float y,
         string data,
-        string fontSource,
         SDL_Color color,
+        string fontSource = "assets/fonts/roboto.ttf",
         int pixelSize = 24);
     void render();
     void updateData(string newData);
@@ -70,6 +70,13 @@ struct Animation
     Animation(SDL_Renderer *renderer, SDL_FRect dst, string source);
     void handle(double dt);
     void render(Vector2D Camera);
+};
+struct Audio {
+    MIX_Mixer *mixer = nullptr;
+    MIX_Audio *audio = nullptr;
+    MIX_Track *track = nullptr;
+    Audio(string audioSource);
+    void play(int times = 0);
 };
 extern struct _Random_
 {
@@ -90,11 +97,13 @@ extern struct _Colors_
     SDL_Color green = SDL_Color{0, 255, 0, 255};
     SDL_Color blue = SDL_Color{0, 0, 255, 255};
     SDL_Color orange = SDL_Color{255, 165, 0, 255};
-    SDL_Color yellow = SDL_Color{255, 222, 0, 255};
+    SDL_Color yellow = SDL_Color{255, 206, 27, 255};
     SDL_Color pink = SDL_Color{255, 182, 193, 255};
+    SDL_Color violet = SDL_Color{27, 76, 255, 255};
+    _Colors_() {};
+    SDL_Color hexToRgb();
 } colors;
-
-enum constants
+extern struct _Consts_
 {
-    gravity = 400
-};
+    double gravity = 245;
+} constants;

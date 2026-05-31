@@ -10,11 +10,8 @@ public:
     float jumpStrength;
     bool spacePressed = false;
     std::unordered_map<string, Animation *> anims;
+    std::unordered_map<string, Audio *> audios;
     enum Direction {Left, Right} lastDirection;
-    struct PlayerStates
-    {
-        bool jumping, walking;
-    } state;
     Player(SDL_Renderer *renderer, float x, float y);
     void handle(double dt, const vector<Grass> &grasses);
     void render(Vector2D Camera);

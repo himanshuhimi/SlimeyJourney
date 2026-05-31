@@ -10,6 +10,10 @@ Game::Game()
         log("TTF Unloaded: " + (string)SDL_GetError());
     else
         log("TTF Loaded");
+    if (!MIX_Init())
+        log("Mix Unloaded: " + (string)SDL_GetError());
+    else
+        log("Mix Loaded");
     if (!SDL_CreateWindowAndRenderer(TITLE.c_str(), WIDTH, HEIGHT, 0, &window, &renderer))
         log("Display Unloaded: " + (string)SDL_GetError());
     else

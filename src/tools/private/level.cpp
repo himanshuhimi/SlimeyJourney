@@ -1,10 +1,13 @@
 #include "../level.h"
 
 Level::Level(SDL_Renderer *renderer, int number)
-    : player(renderer, 0, 0),
+    : renderer(renderer),
+      player(renderer, 0, 0),
       map(
           renderer,
-          "maps/" + std::to_string(number - 1) + ".tmx")
+          "maps/" + std::to_string(number - 1) + ".tmx"),
+      pointsText(renderer, WIDTH / 8, HEIGHT / 8, "0", SDL_Color{143, 128, 55, 255}),
+      bottleImage(renderer, "assets/images/ui/bottle.png")
 {
     for (Map::Object obj : map.objectGroup.objects)
     {
@@ -17,6 +20,11 @@ Level::Level(SDL_Renderer *renderer, int number)
         else if (!strcmp(name, "fruit"))
             fruits.push_back(Fruit(renderer, obj.x, obj.y - SPRITE_SIZE));
     }
+    bottleRect = SDL_FRect{
+        WIDTH / 8.0f - (SPRITE_SIZE * 2),
+        HEIGHT / 8.0f,
+        bottleImage.width,
+        bottleImage.height};
 }
 
 void Level::render()
@@ -26,6 +34,8 @@ void Level::render()
         grass.render(Camera);
     for (auto fruit : fruits)
         fruit.render(Camera);
+    bottleImage.render(nullptr, &bottleRect);
+    pointsText.render();
     player.render(Camera);
 }
 
@@ -38,4 +48,5 @@ void Level::handle(double dt)
     float maxY = std::max<float>(0.0f, map.pixelHeight - HEIGHT);
     Camera.x = std::clamp(targetX, 0.0f, maxX);
     Camera.y = std::clamp(targetY, 0.0f, maxY);
+    pointsText.updateData(std::to_string(points));
 }

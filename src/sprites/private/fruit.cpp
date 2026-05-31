@@ -6,7 +6,7 @@ Fruit::Fruit(SDL_Renderer *renderer, float x, float y)
     vector<string> fruits = {"apple", "melon", "orange"};
     string choice = Random.choice<string>(fruits);
     string path = "assets/images/fruits/" + choice + ".png";
-    image = new Image(renderer, path);
+    image = Image(renderer, path);
     percentage = juiceStrengths.at(choice);
 }
 

@@ -9,11 +9,15 @@ class Level
 {
 public:
     int points = 0;
+    SDL_Renderer *renderer = nullptr;
     Player player;
     vector<Grass> grasses;
     vector<Fruit> fruits;
     Map map;
     Vector2D Camera;
+    Text pointsText;
+    Image bottleImage;
+    SDL_FRect bottleRect;
     Level(SDL_Renderer *renderer, int number);
     void render();
     void handle(double dt);

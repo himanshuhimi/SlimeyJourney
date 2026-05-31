@@ -38,8 +38,8 @@ Text::Text(
     float x,
     float y,
     string data,
-    string fontSource,
     SDL_Color color,
+    string fontSource,
     int pixelSize)
     : renderer(renderer), x(x), y(y),
       pixelSize(pixelSize), color(color)
@@ -125,5 +125,25 @@ int _Random_::randint(int begin, int end)
     return begin + std::rand() % (end - begin + 1);
 };
 
+Audio::Audio(string audioSource)
+{
+    mixer = MIX_CreateMixerDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, nullptr);
+    if (!mixer)
+        log("Mixer Unloaded");
+    audio = MIX_LoadAudio(mixer, audioSource.c_str(), true);
+    if (!audio)
+        log("Audio Unloaded: " + audioSource);
+    track = MIX_CreateTrack(mixer);
+    if (!track)
+        log("Track Unloaded");
+    MIX_SetTrackAudio(track, audio);
+}
+
+void Audio::play(int times)
+{
+    MIX_PlayTrack(track, times);
+}
+
 _Random_ Random;
 _Colors_ colors;
+_Consts_ constants;
