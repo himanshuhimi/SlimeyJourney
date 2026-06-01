@@ -39,8 +39,8 @@ Text::Text(
     float y,
     string data,
     SDL_Color color,
-    string fontSource,
-    int pixelSize)
+    int pixelSize,
+    string fontSource)
     : renderer(renderer), x(x), y(y),
       pixelSize(pixelSize), color(color)
 {
@@ -142,6 +142,21 @@ Audio::Audio(string audioSource)
 void Audio::play(int times)
 {
     MIX_PlayTrack(track, times);
+}
+
+Cooldown::Cooldown(double duration) : duration(duration) {}
+
+void Cooldown::handle(double dt)
+{
+    if (!available)
+    {
+        timeElapsed += dt;
+        if (timeElapsed >= duration)
+        {
+            available = true;
+            timeElapsed = 0;
+        }
+    }
 }
 
 _Random_ Random;

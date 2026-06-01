@@ -54,8 +54,8 @@ struct Text
         float y,
         string data,
         SDL_Color color,
-        string fontSource = "assets/fonts/roboto.ttf",
-        int pixelSize = 24);
+        int pixelSize = 24,
+        string fontSource = "assets/fonts/roboto.ttf");
     void render();
     void updateData(string newData);
     void updateAlpha(int newAlpha);
@@ -71,12 +71,21 @@ struct Animation
     void handle(double dt);
     void render(Vector2D Camera);
 };
-struct Audio {
+struct Audio
+{
     MIX_Mixer *mixer = nullptr;
     MIX_Audio *audio = nullptr;
     MIX_Track *track = nullptr;
     Audio(string audioSource);
     void play(int times = 0);
+};
+struct Cooldown
+{
+    bool available = false;
+    double duration = 0.0;
+    double timeElapsed = 0.0;
+    Cooldown(double duration = 2.0);
+    void handle(double dt);
 };
 extern struct _Random_
 {

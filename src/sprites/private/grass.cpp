@@ -4,9 +4,11 @@ Grass::Grass(SDL_Renderer *renderer, float x, float y)
     : renderer(renderer), image(renderer, "assets/images/empty.png")
 {
     
-    Position.x = x - rect.w / 2;
+    Position.x = x;
     Position.y = y;
-    rect.x = Position.x;
+    rect.w = image.width;
+    rect.h = image.height;
+    rect.x = Position.x - rect.w / 2;
     rect.y = Position.y;
 }
 

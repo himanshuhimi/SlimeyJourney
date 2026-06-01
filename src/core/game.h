@@ -11,6 +11,7 @@ public:
     SDL_Event event;
     bool active = false;
     double dt;
+    std::unordered_map<string, Audio *> audios;
     Game();
     void launch();
     void render();

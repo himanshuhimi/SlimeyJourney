@@ -19,6 +19,8 @@ Game::Game()
     else
         log("Display Loaded");
     level = new Level(renderer, 1);
+    audios = {
+        {"pickup", new Audio("assets/audios/pickup.wav")}};
     active = true;
 }
 
@@ -47,15 +49,15 @@ void Game::handle()
             terminate();
     level->handle(dt);
     for (
-        auto fruitIt = level->fruits.begin(); 
-        fruitIt != level->fruits.end(); 
-    )
+        auto fruitIt = level->fruits.begin();
+        fruitIt != level->fruits.end();)
     {
-        if (!fruitIt->taken 
-            && SDL_HasRectIntersectionFloat(&fruitIt->rect, &level->player.rect))
+        bool collided = SDL_HasRectIntersectionFloat(&fruitIt->rect, &level->player.rect);
+        if (!fruitIt->taken && collided)
         {
             fruitIt->taken = true;
             level->points += 1;
+            audios["pickup"]->play();
         }
         else
             fruitIt++;
