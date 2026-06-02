@@ -7,7 +7,6 @@ Fruit::Fruit(SDL_Renderer *renderer, float x, float y)
     string choice = Random.choice<string>(fruits);
     string path = "assets/images/fruits/" + choice + ".png";
     image = Image(renderer, path);
-    percentage = juiceStrengths.at(choice);
 }
 
 void Fruit::render(Vector2D Camera)

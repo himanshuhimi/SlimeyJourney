@@ -2,6 +2,7 @@
 
 #include "../core/config.h"
 #include "../sprites/grass.h"
+#include "LOS.h"
 
 class Sprite
 {
@@ -10,6 +11,8 @@ public:
     Image image;
     Vector2D Velocity, Position;
     SDL_FRect dst, rect;
+    LOS gravityLOS, lineOfSight;
+    enum Direction {Left, Right} lastDirection;
     bool isGravitational = false;
     float speed, jumpStrength;
     struct SpriteStates

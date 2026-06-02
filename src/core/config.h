@@ -19,10 +19,10 @@ extern const string TITLE;
 extern const float SPRITE_SIZE;
 extern int WIDTH, HEIGHT;
 extern const int CAMERA_X, CAMERA_Y;
-extern const unordered_map<string, double> juiceStrengths;
 
 void log(string message);
 void log(int number);
+bool checkCollision(SDL_FRect A, SDL_FRect B);
 
 struct Vector2D
 {
@@ -105,6 +105,7 @@ extern struct _Colors_
     SDL_Color red = SDL_Color{255, 0, 0, 255};
     SDL_Color green = SDL_Color{0, 255, 0, 255};
     SDL_Color blue = SDL_Color{0, 0, 255, 255};
+    SDL_Color skyblue = SDL_Color{41, 160, 204, 255};
     SDL_Color orange = SDL_Color{255, 165, 0, 255};
     SDL_Color yellow = SDL_Color{255, 206, 27, 255};
     SDL_Color pink = SDL_Color{255, 182, 193, 255};

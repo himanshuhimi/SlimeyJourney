@@ -1,14 +1,9 @@
 #include "../config.h"
 
-const string TITLE = "Puddle Pebble";
+const string TITLE = "Slimey Journey";
 const float SPRITE_SIZE = 32.0f;
 int WIDTH = 640, HEIGHT = 360;
 const int CAMERA_X = WIDTH / 2, CAMERA_Y = HEIGHT / 2;
-const unordered_map<string, double> juiceStrengths = {
-    {"apple", 0.1},
-    {"melon", 0.2},
-    {"orange", 0.3}
-};
 
 void log(string message)
 {
@@ -18,6 +13,11 @@ void log(string message)
 void log(int number)
 {
     std::cout << "[LOG] " << number << std::endl;
+}
+
+bool checkCollision(SDL_FRect A, SDL_FRect B)
+{
+    return SDL_HasRectIntersectionFloat(&A, &B);
 }
 
 Image::Image(SDL_Renderer *renderer, string source) : renderer(renderer)

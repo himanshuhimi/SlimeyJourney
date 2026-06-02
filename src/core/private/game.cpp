@@ -35,7 +35,13 @@ void Game::launch()
 
 void Game::render()
 {
-    SDL_SetRenderDrawColor(renderer, 100, 198, 243, 255);
+    SDL_SetRenderDrawColor(
+        renderer,
+        colors.skyblue.r,
+        colors.skyblue.g,
+        colors.skyblue.b,
+        colors.skyblue.a
+    );
     SDL_RenderClear(renderer);
     level->render();
     SDL_RenderPresent(renderer);
@@ -52,7 +58,7 @@ void Game::handle()
         auto fruitIt = level->fruits.begin();
         fruitIt != level->fruits.end();)
     {
-        bool collided = SDL_HasRectIntersectionFloat(&fruitIt->rect, &level->player.rect);
+        bool collided = checkCollision(fruitIt->rect, level->player.rect);
         if (!fruitIt->taken && collided)
         {
             fruitIt->taken = true;

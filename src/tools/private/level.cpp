@@ -6,7 +6,7 @@ Level::Level(SDL_Renderer *renderer, int number)
       map(
           renderer,
           "maps/" + std::to_string(number - 1) + ".tmx"),
-      pointsText(renderer, WIDTH / 8, HEIGHT / 8, "0", colors.red, 22),
+      pointsText(renderer, WIDTH / 8, HEIGHT / 8, "0", colors.white, 18),
       bottleImage(renderer, "assets/images/ui/bottle.png")
 {
     for (Map::Object obj : map.objectGroup.objects)
@@ -23,8 +23,8 @@ Level::Level(SDL_Renderer *renderer, int number)
             enemies.push_back(Slime(renderer, obj.x, obj.y));
     }
     bottleRect = SDL_FRect{
-        WIDTH / 8.0f - (pointsText.rect.w),
-        HEIGHT / 8.0f - (pointsText.rect.h / 4),
+        pointsText.rect.x - (pointsText.rect.w),
+        pointsText.rect.y - (pointsText.rect.h / 4),
         bottleImage.width,
         bottleImage.height};
 }

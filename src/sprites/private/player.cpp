@@ -35,14 +35,9 @@ void Player::handle(double dt, const vector<Grass> &grasses)
         anims["jump"]->index = 0;
     }
     if (state.jumping)
-    {
         anims["jump"]->handle(dt);
-    }
     if (state.walking)
-    {
         audios["walking"]->play();
-        lastDirection = (Velocity.x > 0) ? Direction::Right : Direction::Left;
-    }
 }
 
 void Player::render(Vector2D Camera)
