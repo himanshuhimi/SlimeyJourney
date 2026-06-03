@@ -28,12 +28,13 @@ void Sprite::handle(double dt, const vector<Grass> &grasses)
     Position.y += Velocity.y * dt;
     rect.x = Position.x;
     rect.y = Position.y;
+    Center.x = rect.x + rect.w / 2;
+    Center.y = rect.y + rect.h / 2;
     lineOfSight.matchPosition(rect);
     gravityLOS.matchPosition(rect);
     bool onGround = false;
     bool prevOnGround = state.onGround;
     for (auto &grass : grasses)
-    {
         if (checkCollision(gravityLOS.rect, grass.rect))
         {
             onGround = true;
@@ -45,7 +46,6 @@ void Sprite::handle(double dt, const vector<Grass> &grasses)
                 Velocity.y = 0;
             }
         }
-    }
     state.jumping = !onGround;
     state.onGround = onGround;
     if (state.walking)
@@ -56,6 +56,7 @@ void Sprite::handle(double dt, const vector<Grass> &grasses)
 
 void Sprite::render(Vector2D Camera)
 {
+    Sprite::Camera = Camera;
     dst = rect;
     dst.x -= Camera.x;
     dst.y -= Camera.y;

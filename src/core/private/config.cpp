@@ -5,19 +5,16 @@ const float SPRITE_SIZE = 32.0f;
 int WIDTH = 640, HEIGHT = 360;
 const int CAMERA_X = WIDTH / 2, CAMERA_Y = HEIGHT / 2;
 
-void log(string message)
-{
-    std::cout << "[LOG] " << message << std::endl;
-}
-
-void log(int number)
-{
-    std::cout << "[LOG] " << number << std::endl;
-}
-
 bool checkCollision(SDL_FRect A, SDL_FRect B)
 {
     return SDL_HasRectIntersectionFloat(&A, &B);
+}
+
+SDL_FRect GetMousePosition()
+{
+    SDL_FRect result = {0, 0, 0, 0};
+    SDL_GetMouseState(&result.x, &result.y);
+    return result;
 }
 
 Image::Image(SDL_Renderer *renderer, string source) : renderer(renderer)
@@ -74,6 +71,7 @@ void Text::updateData(string newData)
         newData.size(),
         color);
     texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_GetTextureSize(texture, &rect.w, &rect.h);
 }
 
 void Text::updateAlpha(int newAlpha)

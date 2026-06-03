@@ -5,22 +5,25 @@
 #include "../sprites/player.h"
 #include "../sprites/fruit.h"
 #include "../sprites/slime.h"
+#include "../ui/progress.h"
 
 class Level
 {
 public:
-    int points = 0;
+    Player player;
+    vector<Grass> grasses = {};
+    vector<Fruit> fruits = {};
+    vector<Enemy> enemies = {};
     SDL_Renderer *renderer = nullptr;
     Map map;
     Vector2D Camera;
-    Text pointsText;
-    Image bottleImage;
-    SDL_FRect bottleRect;
-    Player player;
-    vector<Grass> grasses;
-    vector<Fruit> fruits;
-    vector<Enemy> enemies;
+    Image heartImage, bottleImage;
+    SDL_FRect heartRect, bottleRect;
+    Progress heartProg, fruitProg;
+    int points = 0, fruitLength = 0;
+    double increment = 0.0;
     Level(SDL_Renderer *renderer, int number);
-    void render();
+    void loadObjects();
     void handle(double dt);
+    void render();
 };

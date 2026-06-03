@@ -9,7 +9,7 @@ class Sprite
 public:
     SDL_Renderer *renderer = nullptr;
     Image image;
-    Vector2D Velocity, Position;
+    Vector2D Camera, Velocity, Position, Center;
     SDL_FRect dst, rect;
     LOS gravityLOS, lineOfSight;
     enum Direction {Left, Right} lastDirection;

@@ -2,13 +2,32 @@
 
 #include "sprite.h"
 #include "LOS.h"
+#include "../ui/progress.h"
 
 class Enemy : public Sprite
 {
 public:
-    int speed = 0;
+    bool hasAwarded = false;
+    int speed = 0, maxHealthPoints = 0, healthPoints = 0;
     string foldertype = "";
-    Enemy(SDL_Renderer *renderer, string foldertype, float x, float y, int speed);
+    Progress healthBar;
+    Enemy(
+        SDL_Renderer *renderer, 
+        string foldertype, 
+        float x, 
+        float y, 
+        int speed,
+        int healthPoints = 5
+    );
     void handle(double dt, const vector<Grass> &grasses);
     void render(Vector2D Camera);
+    template <typename T>
+    void drop(vector<T> &vec)
+    {
+        if (!hasAwarded && healthPoints <= 0)
+        {
+            vec.emplace_back(T(renderer, Position.x, Position.y));
+            hasAwarded = true;
+        }
+    }
 };

@@ -22,4 +22,5 @@ private:
     Uint64 NOW;
     Level *level;
     void updateDeltaTime();
+    void collision();
 };

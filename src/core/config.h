@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <unordered_map>
 #include <filesystem>
+#include <cmath>
 #include <SDL3/SDL_main.h>
 #include <SDL3_image/SDL_image.h>
 #include <SDL3_ttf/SDL_ttf.h>
@@ -20,14 +21,32 @@ extern const float SPRITE_SIZE;
 extern int WIDTH, HEIGHT;
 extern const int CAMERA_X, CAMERA_Y;
 
-void log(string message);
-void log(int number);
+template <typename T>
+void log(const T &message) { std::cout << "[LOG] " << message << std::endl; };
 bool checkCollision(SDL_FRect A, SDL_FRect B);
+SDL_FRect GetMousePosition();
 
 struct Vector2D
 {
     float x, y;
     Vector2D(float x = 0.0f, float y = 0.0f) : x{x}, y{y} {};
+    float distanceFromVec(Vector2D secVector)
+    {
+        return sqrt(pow(secVector.x - x, 2) + pow(secVector.y - y, 2));
+    }
+    float getLength()
+    {
+        return sqrt(pow(x, 2) + pow(y, 2));
+    }
+    Vector2D normalise()
+    {
+        float length = (float)sqrt(pow(x, 2) + pow(y, 2));
+        if (length == 0.0)
+            return Vector2D{0, 0};
+        x /= length;
+        y /= length;
+        return Vector2D{x, y};
+    }
 };
 struct Image
 {

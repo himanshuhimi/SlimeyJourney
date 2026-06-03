@@ -40,8 +40,7 @@ void Game::render()
         colors.skyblue.r,
         colors.skyblue.g,
         colors.skyblue.b,
-        colors.skyblue.a
-    );
+        colors.skyblue.a);
     SDL_RenderClear(renderer);
     level->render();
     SDL_RenderPresent(renderer);
@@ -51,23 +50,18 @@ void Game::handle()
 {
     updateDeltaTime();
     while (SDL_PollEvent(&event))
-        if (event.type == SDL_EVENT_WINDOW_CLOSE_REQUESTED)
-            terminate();
-    level->handle(dt);
-    for (
-        auto fruitIt = level->fruits.begin();
-        fruitIt != level->fruits.end();)
     {
-        bool collided = checkCollision(fruitIt->rect, level->player.rect);
-        if (!fruitIt->taken && collided)
+        switch (event.type)
         {
-            fruitIt->taken = true;
-            level->points += 1;
-            audios["pickup"]->play();
+        case SDL_EVENT_WINDOW_CLOSE_REQUESTED:
+            terminate();
+            break;
+        case SDL_EVENT_MOUSE_BUTTON_UP:
+            level->player.mouseClicked = (event.button.button == SDL_BUTTON_LEFT);
         }
-        else
-            fruitIt++;
     }
+    collision();
+    level->handle(dt);
 }
 
 void Game::terminate()
@@ -81,4 +75,32 @@ void Game::updateDeltaTime()
     NOW = SDL_GetPerformanceCounter();
     dt = (double)(NOW - LAST) / SDL_GetPerformanceFrequency();
     LAST = NOW;
+}
+
+void Game::collision()
+{
+    for (auto fruitIt = level->fruits.begin(); fruitIt != level->fruits.end();)
+        if (!fruitIt->picked && checkCollision(fruitIt->rect, level->player.rect))
+        {
+            fruitIt->picked = true;
+            level->points += 1;
+            audios["pickup"]->play();
+            level->fruitProg.update(level->increment);
+        }
+        else
+            fruitIt++;
+    for (auto ballIt = level->player.balls.begin(); ballIt != level->player.balls.end(); ballIt++)
+        for (auto enemyIt = level->enemies.begin(); enemyIt != level->enemies.end();)
+        {
+            if (!ballIt->used && checkCollision(ballIt->rect, enemyIt->rect))
+            {
+                enemyIt->healthPoints -= 1;
+                enemyIt->healthBar.update(-(double)1 / enemyIt->maxHealthPoints);
+                ballIt->used = true;
+            }
+            else
+                enemyIt++;
+        }
+    for (auto enemyIt = level->enemies.begin(); enemyIt != level->enemies.end(); enemyIt++)
+        enemyIt->drop<Fruit>(level->fruits);
 }

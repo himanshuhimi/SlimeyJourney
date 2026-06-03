@@ -11,7 +11,7 @@ Fruit::Fruit(SDL_Renderer *renderer, float x, float y)
 
 void Fruit::render(Vector2D Camera)
 {
-    if (taken)
+    if (picked)
         return;
     Sprite::render(Camera);
 }
