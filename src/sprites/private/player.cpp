@@ -1,28 +1,22 @@
 #include "../player.h"
 
 Player::Player(SDL_Renderer *renderer, float x, float y)
-    : Sprite(renderer, "player/idle.png", x, y, true)
+    : Sprite(renderer, "player/idle.png", x, y)
 {
     string animBeginPath = "assets/images/player/anims/";
     string audioBeginPath = "assets/audios/player/";
-    anims = {
-        {"jump", new Animation(renderer, animBeginPath + "jump.png")}
-    };
+    anims = {{"jump", new Animation(renderer, animBeginPath + "jump.png")}};
     audios = {
         {"jump", new Audio(audioBeginPath + "jump.wav")},
         {"walking", new Audio(audioBeginPath + "walking.wav")},
-        {"shoot", new Audio(audioBeginPath + "shoot.wav")}
-    };
+        {"shoot", new Audio(audioBeginPath + "shoot.wav")}};
 }
 
-void Player::handle(
-    double dt, 
-    const vector<Grass> &grasses
-)
+void Player::handle(double dt, const vector<Grass> &grasses)
 {
     const bool *keys = SDL_GetKeyboardState(NULL);
     Velocity.x = -((int)keys[SDL_SCANCODE_A] - (int)keys[SDL_SCANCODE_D]) * speed;
-    handleJump(dt);
+    handleJump(dt, keys);
     Sprite::handle(dt, grasses);
     handleShooting(dt);
 }
@@ -38,9 +32,8 @@ void Player::render(Vector2D Camera)
         Sprite::render(Camera);
 }
 
-void Player::handleJump(double dt)
+void Player::handleJump(double dt, const bool *keys)
 {
-    const bool *keys = SDL_GetKeyboardState(NULL);
     if (!state.jumping && keys[SDL_SCANCODE_SPACE])
     {
         prevPos = Position;
@@ -54,28 +47,17 @@ void Player::handleJump(double dt)
 
 void Player::handleShooting(double dt)
 {
-    SDL_FRect mouseWin = GetMousePosition();
-    Vector2D mapMouse = {
-        mouseWin.x + Camera.x,
-        mouseWin.y + Camera.y
-    };
-    Vector2D Direction = {
-        mapMouse.x - Center.x, 
-        mapMouse.y - Center.y
-    };
+    SDL_FRect mouseWin = getMousePosition();
+    Vector2D mapMouse = {mouseWin.x + Camera.x, mouseWin.y + Camera.y};
+    Vector2D Direction = {mapMouse.x - Center.x, mapMouse.y - Center.y};
     Direction.normalise();
     throwCooldown.handle(dt);
     if (mouseClicked && throwCooldown.available)
     {
-        balls.emplace_back(Ball(
-            renderer,
-            Center.x,
-            Center.y,
-            Direction
-        ));
-        audios["shoot"]->play();
-        throwCooldown.available = false;
-        throwCooldown.timeElapsed = 0;
+        balls.emplace_back(Ball(renderer, Center.x, Center.y, Direction));
         mouseClicked = false;
+        throwCooldown.timeElapsed = 0;
+        throwCooldown.available = false;
+        audios["shoot"]->play();
     }
 }

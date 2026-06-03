@@ -2,22 +2,41 @@
 
 const string TITLE = "Slimey Journey";
 const float SPRITE_SIZE = 32.0f;
-int DEFAULT_WIDTH = 640, DEFAULT_HEIGHT = 360;
-int WIDTH = 640, HEIGHT = 360;
-int scaleX = WIDTH / DEFAULT_WIDTH;
-int scaleY = HEIGHT / DEFAULT_HEIGHT;
-const int CAMERA_X = WIDTH / 2, CAMERA_Y = HEIGHT / 2;
+int DEFAULT_WIDTH{640}, DEFAULT_HEIGHT{360};
+int WIDTH{640}, HEIGHT{360};
+int scaleX{WIDTH / DEFAULT_WIDTH}, scaleY{HEIGHT / DEFAULT_HEIGHT};
+int CAMERA_X{WIDTH / 2}, CAMERA_Y{HEIGHT / 2};
+const vector<string> fruits = {"apple", "melon", "orange"};
 
 bool checkCollision(SDL_FRect A, SDL_FRect B)
 {
     return SDL_HasRectIntersectionFloat(&A, &B);
 }
 
-SDL_FRect GetMousePosition()
+SDL_FRect getMousePosition()
 {
     SDL_FRect result = {0, 0, 0, 0};
     SDL_GetMouseState(&result.x, &result.y);
     return result;
+}
+
+Vector2D::Vector2D(float x, float y) : x(x), y(y) {};
+
+float Vector2D::distanceFromVec(Vector2D secVector)
+{
+    return sqrt(pow(secVector.x - x, 2) + pow(secVector.y - y, 2));
+}
+
+float Vector2D::getLength() { return sqrt(pow(x, 2) + pow(y, 2)); }
+
+Vector2D Vector2D::normalise()
+{
+    float length = getLength();
+    if (length == 0.0)
+        return Vector2D{0, 0};
+    x /= length;
+    y /= length;
+    return Vector2D{x, y};
 }
 
 Image::Image(SDL_Renderer *renderer, string source) : renderer(renderer)
@@ -38,23 +57,17 @@ void Image::render(const SDL_FRect *src, const SDL_FRect *dst)
 
 Text::Text(
     SDL_Renderer *renderer,
-    float x,
-    float y,
-    string data,
-    SDL_Color color,
-    int pixelSize,
-    string fontSource)
-    : renderer(renderer), x(x), y(y),
-      pixelSize(pixelSize), color(color)
+    float x, float y,
+    string data, SDL_Color color,
+    int pixelSize, string fontSource)
+    : renderer(renderer), x(x), y(y), pixelSize(pixelSize), color(color)
 {
     font = TTF_OpenFont(fontSource.c_str(), pixelSize);
     if (!font)
         log("Font Uninitialized: " + fontSource);
     surface = TTF_RenderText_Blended(
-        font,
-        data.c_str(),
-        data.size(),
-        color);
+        font, data.c_str(),
+        data.size(), color);
     texture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_DestroySurface(surface);
     SDL_GetTextureSize(texture, &rect.w, &rect.h);
@@ -119,17 +132,6 @@ void Animation::render(Vector2D Camera, SDL_FRect dst)
     imageSet->render(&src, &renderDst);
 }
 
-int _Random_::randint(int begin, int end)
-{
-    static bool seeded = false;
-    if (!seeded)
-    {
-        std::srand(static_cast<unsigned>(std::time(nullptr)));
-        seeded = true;
-    }
-    return begin + std::rand() % (end - begin + 1);
-};
-
 Audio::Audio(string audioSource)
 {
     mixer = MIX_CreateMixerDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, nullptr);
@@ -163,6 +165,12 @@ void Cooldown::handle(double dt)
         }
     }
 }
+
+int _Random_::randint(int begin, int end)
+{
+    std::srand(static_cast<unsigned>(std::time(nullptr)));
+    return begin + std::rand() % (end - begin + 1);
+};
 
 _Random_ Random;
 _Colors_ colors;

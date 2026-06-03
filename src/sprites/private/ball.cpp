@@ -6,8 +6,6 @@ Ball::Ball(SDL_Renderer *renderer, float x, float y, Vector2D Direction)
     prevPos = Position;
     Velocity.x = Direction.x * speed;
     Velocity.y = Direction.y * speed;
-    anims = {
-        {"explosion", new Animation(renderer, "assets/images/anims/explosion.png")}};
 }
 
 void Ball::handle(double dt, const vector<Grass> &grasses)

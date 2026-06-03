@@ -7,11 +7,9 @@ using namespace tinyxml2;
 class Map
 {
 public:
-    int width, height, tileWidth, tileHeight, pixelWidth, pixelHeight;
+    SDL_Renderer *renderer = nullptr;
     tinyxml2::XMLDocument doc;
     XMLElement *mapElement;
-    string source;
-    SDL_Renderer *renderer = nullptr;
     struct Layer
     {
         int width, height;
@@ -36,7 +34,10 @@ public:
     vector<Layer> layers;
     Tileset tileset;
     ObjectGroup objectGroup;
+    int width, height, tileWidth, tileHeight, pixelWidth, pixelHeight;
+    string source = "";
     Map(SDL_Renderer *renderer, string source);
+    void loadChildren();
     void loadLayer(XMLElement *child);
     void loadTileset(XMLElement *child);
     void loadObjectGroup(XMLElement *child);

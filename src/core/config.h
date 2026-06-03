@@ -18,35 +18,21 @@ using std::string, std::vector, std::unordered_map;
 
 extern const string TITLE;
 extern const float SPRITE_SIZE;
-extern int DEFAULT_WIDTH, DEFAULT_HEIGHT, WIDTH, HEIGHT, scaleX, scaleY;
-extern const int CAMERA_X, CAMERA_Y;
+extern int DEFAULT_WIDTH, DEFAULT_HEIGHT, WIDTH, HEIGHT, scaleX, scaleY, CAMERA_X, CAMERA_Y;
+extern const vector<string> fruits;
 
 template <typename T>
 void log(const T &message) { std::cout << "[LOG] " << message << std::endl; };
 bool checkCollision(SDL_FRect A, SDL_FRect B);
-SDL_FRect GetMousePosition();
+SDL_FRect getMousePosition();
 
 struct Vector2D
 {
     float x, y;
-    Vector2D(float x = 0.0f, float y = 0.0f) : x{x}, y{y} {};
-    float distanceFromVec(Vector2D secVector)
-    {
-        return sqrt(pow(secVector.x - x, 2) + pow(secVector.y - y, 2));
-    }
-    float getLength()
-    {
-        return sqrt(pow(x, 2) + pow(y, 2));
-    }
-    Vector2D normalise()
-    {
-        float length = (float)sqrt(pow(x, 2) + pow(y, 2));
-        if (length == 0.0)
-            return Vector2D{0, 0};
-        x /= length;
-        y /= length;
-        return Vector2D{x, y};
-    }
+    Vector2D(float x = 0.0f, float y = 0.0f);
+    float distanceFromVec(Vector2D secVector);
+    float getLength();
+    Vector2D normalise();
 };
 struct Image
 {
@@ -70,12 +56,9 @@ struct Text
     int pixelSize, alpha;
     Text(
         SDL_Renderer *renderer,
-        float x,
-        float y,
-        string data,
-        SDL_Color color,
-        int pixelSize = 24,
-        string fontSource = "assets/fonts/roboto.ttf");
+        float x, float y,
+        string data, SDL_Color color,
+        int pixelSize = 24, string fontSource = "assets/fonts/roboto.ttf");
     void render();
     void updateData(string newData);
     void updateAlpha(int newAlpha);
@@ -123,7 +106,7 @@ extern struct _Colors_
 {
     SDL_Color white = SDL_Color{255, 255, 255, 255};
     SDL_Color black = SDL_Color{0, 0, 0, 255};
-    SDL_Color red = SDL_Color{255, 0, 0, 255};
+    SDL_Color red = SDL_Color{179, 0, 0, 255};
     SDL_Color green = SDL_Color{0, 255, 0, 255};
     SDL_Color blue = SDL_Color{0, 0, 255, 255};
     SDL_Color skyblue = SDL_Color{41, 160, 204, 255};

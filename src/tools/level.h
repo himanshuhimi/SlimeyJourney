@@ -10,18 +10,21 @@
 class Level
 {
 public:
+    SDL_Renderer *renderer = nullptr;
     Player player;
     vector<Grass> grasses = {};
     vector<Fruit> fruits = {};
     vector<Enemy> enemies = {};
-    SDL_Renderer *renderer = nullptr;
-    Map map;
-    Vector2D Camera;
-    Progress heartProg, fruitProg;
+    Progress healthBar, fruitBar;
     int points = 0, fruitLength = 0;
     double increment = 0.0;
     Level(SDL_Renderer *renderer, int number);
-    void loadObjects();
     void handle(double dt);
     void render();
+    void loadObjects();
+    void clampCamera();
+
+private:
+    Map map;
+    Vector2D Camera;
 };

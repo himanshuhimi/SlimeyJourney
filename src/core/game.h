@@ -9,9 +9,9 @@ public:
     SDL_Renderer *renderer = nullptr;
     SDL_Window *window = nullptr;
     SDL_Event event;
-    bool active = false;
     double dt;
-    std::unordered_map<string, Audio *> audios;
+    bool active = false;
+    unordered_map<string, Audio *> audios;
     Game();
     void launch();
     void render();
@@ -20,7 +20,7 @@ public:
 private:
     Uint64 LAST = SDL_GetPerformanceCounter();
     Uint64 NOW;
-    Level *level;
+    Level *level = nullptr;
     void updateDeltaTime();
     void collision();
 };

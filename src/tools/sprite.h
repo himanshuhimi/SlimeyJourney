@@ -8,25 +8,25 @@ class Sprite
 {
 public:
     SDL_Renderer *renderer = nullptr;
-    Image image;
     Vector2D Camera, Velocity, Position, Center;
-    SDL_FRect dst, rect;
     LOS gravityLOS, lineOfSight;
-    enum Direction {Left, Right} lastDirection;
-    bool isGravitational = false;
-    float speed, jumpStrength;
+    SDL_FRect dst, rect;
+    Image image;
+    enum Direction
+    {
+        Left,
+        Right
+    } lastDirection;
     struct SpriteStates
     {
-        bool onGround = false;
-        bool jumping = false;
-        bool walking = false;
+        bool prevOnGround, onGround, jumping, walking;
     } state;
-    Sprite(SDL_Renderer *renderer, 
-        string imgSource, 
-        float x, 
-        float y, 
-        bool isGravitational = false
-    );
+    float speed, jumpStrength;
+    Sprite(SDL_Renderer *renderer, string imgSource, float x, float y);
     void handle(double dt, const vector<Grass> &grasses);
     void render(Vector2D Camera);
+    void handleMovement(double dt);
+    void handleLOS();
+    void handleGravity(double dt, const vector<Grass> &grasses);
+    void handleStates(bool onGround, bool prevOnGround);
 };

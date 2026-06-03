@@ -6,9 +6,9 @@ class Grass
 {
 public:
     SDL_Renderer *renderer = nullptr;
-    Image image;
     SDL_FRect rect, dst;
     Vector2D Position;
+    Image image;
     Grass(SDL_Renderer *renderer, float x, float y);
     void render(Vector2D Camera);
 };

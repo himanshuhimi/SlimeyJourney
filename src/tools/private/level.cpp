@@ -4,18 +4,45 @@ Level::Level(SDL_Renderer *renderer, int number)
     : renderer(renderer),
       player(renderer, 0, 0),
       map(renderer, "maps/" + std::to_string(number - 1) + ".tmx"),
-      heartProg(
-        renderer, WIDTH / 24.0f, HEIGHT / 16.0f, 
-        SDL_Color{89, 179, 0, 255}, 100.0f, 1.0, 2.0, 
-        Image(renderer, "assets/images/ui/heart.png")),
-      fruitProg(
-        renderer, WIDTH / 24.0f, HEIGHT / 6.0f, 
-        SDL_Color{95, 90, 204, 255}, 100, 0, 2.0,
-        Image(renderer, "assets/images/ui/bottle.png"))
+      healthBar(
+          renderer, WIDTH / 24.0f, HEIGHT / 16.0f,
+          colors.red, Image(renderer, "assets/images/ui/heart.png"),
+          1.0, 150),
+      fruitBar(
+          renderer, healthBar.Position.x, HEIGHT / 6.0f,
+          SDL_Color{95, 90, 204, 255}, Image(renderer, "assets/images/ui/bottle.png"))
 {
     loadObjects();
     fruitLength = enemies.size() + fruits.size(); // enemies also drop fruits.
-    increment = (double) 1/fruitLength;
+    increment = (double)1 / fruitLength;
+}
+
+void Level::handle(double dt)
+{
+    clampCamera();
+    for (auto &ball : player.balls)
+        ball.handle(dt, grasses);
+    for (auto &enemy : enemies)
+        enemy.handle(dt, grasses);
+    healthBar.handle(dt);
+    fruitBar.handle(dt);
+    player.handle(dt, grasses);
+}
+
+void Level::render()
+{
+    map.render(Camera);
+    for (auto &grass : grasses)
+        grass.render(Camera);
+    for (auto &fruit : fruits)
+        fruit.render(Camera);
+    for (auto &enemy : enemies)
+        enemy.render(Camera);
+    for (auto &ball : player.balls)
+        ball.render(Camera);
+    healthBar.render();
+    fruitBar.render();
+    player.render(Camera);
 }
 
 void Level::loadObjects()
@@ -35,7 +62,7 @@ void Level::loadObjects()
     }
 }
 
-void Level::handle(double dt)
+void Level::clampCamera()
 {
     float targetX = player.Position.x - CAMERA_X;
     float targetY = player.Position.y - CAMERA_Y;
@@ -43,27 +70,4 @@ void Level::handle(double dt)
     float maxY = std::max<float>(0.0f, map.pixelHeight - HEIGHT);
     Camera.x = std::clamp(targetX, 0.0f, maxX);
     Camera.y = std::clamp(targetY, 0.0f, maxY);
-    for (auto &ball : player.balls)
-        ball.handle(dt, grasses);
-    for (auto &enemy : enemies)
-        enemy.handle(dt, grasses);
-    heartProg.handle(dt);
-    fruitProg.handle(dt);
-    player.handle(dt, grasses);
-}
-
-void Level::render()
-{
-    map.render(Camera);
-    for (auto &grass : grasses)
-        grass.render(Camera);
-    for (auto &fruit : fruits)
-        fruit.render(Camera);
-    for (auto &enemy : enemies)
-        enemy.render(Camera);
-    for (auto &ball : player.balls)
-        ball.render(Camera);
-    heartProg.render();
-    fruitProg.render();
-    player.render(Camera);
 }

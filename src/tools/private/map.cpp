@@ -12,6 +12,11 @@ Map::Map(SDL_Renderer *renderer, string source)
     tileHeight = mapElement->IntAttribute("tileheight");
     pixelWidth = width * tileWidth;
     pixelHeight = height * tileHeight;
+    loadChildren();
+}
+
+void Map::loadChildren()
+{
     for (
         XMLElement *child = mapElement->FirstChildElement();
         child != nullptr;
@@ -37,18 +42,14 @@ void Map::loadLayer(XMLElement *child)
         log("No <data> element found in: " + source);
     layer.csvText = (string)layer.dataElement->GetText();
     for (char c : layer.csvText)
-    {
         if (isdigit(c))
             layer.num += c;
         else if (c == ',' || c == '\n')
-        {
             if (!layer.num.empty())
             {
                 layer.gids.push_back(std::stoi(layer.num));
                 layer.num.clear();
             }
-        }
-    }
     if (!layer.num.empty())
         layer.gids.push_back(std::stoi(layer.num));
     layers.push_back(layer);

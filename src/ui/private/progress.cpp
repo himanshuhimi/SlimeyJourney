@@ -5,16 +5,18 @@ Progress::Progress(
     float x,
     float y,
     SDL_Color color,
-    float width,
+    Image attachment,
     double startPercent,
-    double animSpeed,
-    Image attachment
-) : renderer(renderer), color(color),
+    float width,
+    double animSpeed
+) : renderer(renderer), color(color), attachment(attachment),
     startPercent(startPercent), animSpeed(animSpeed),
-    attachment(attachment), image(renderer, "assets/images/ui/bar.png")
+    image(renderer, "assets/images/ui/bar.png")
 {
-    rect.x = attachment.width + x;
-    rect.y = y;
+    Position.x = x;
+    Position.y = y;
+    rect.x = (attachment.width * 3) + Position.x;
+    rect.y = Position.y;
     rect.w = width;
     rect.h = image.height;
     fillRect.x = rect.x;
@@ -37,20 +39,20 @@ void Progress::update(double increment)
         reachPercent = 1.0;
     else if (reachPercent < 0.0)
         reachPercent = 0.0;
-    animSpeed = std::abs(animSpeed) * ((increment >= 0) ? 1 : -1);
+    animSpeed = abs(animSpeed) * ((increment >= 0) ? 1 : -1);
 }
 
 void Progress::handle(double dt)
 {
     if (percentage < reachPercent)
     {
-        percentage += std::abs(animSpeed) * dt;
+        percentage += abs(animSpeed) * dt;
         if (percentage > reachPercent)
             percentage = reachPercent;
     }
     else if (percentage > reachPercent)
     {
-        percentage -= std::abs(animSpeed) * dt;
+        percentage -= abs(animSpeed) * dt;
         if (percentage < reachPercent)
             percentage = reachPercent;
     }
@@ -67,6 +69,10 @@ void Progress::render(Vector2D Camera)
     dst.x -= Camera.x;
     dst.y -= Camera.y;
     if (attachment.renderer)
+    {
+        attachmentRect.x = dst.x - attachment.width;
+        attachmentRect.y = dst.y - (attachment.height / 2);
         attachment.render(nullptr, &attachmentRect);
+    }
     image.render(nullptr, &dst);
 }
