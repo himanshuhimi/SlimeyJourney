@@ -7,20 +7,27 @@ Progress::Progress(
     SDL_Color color,
     float width,
     double startPercent,
-    double animSpeed) : renderer(renderer),
-                       color(color),
-                       startPercent(startPercent),
-                       animSpeed(animSpeed),
-                       barImage(renderer, "assets/images/ui/bar.png")
+    double animSpeed,
+    Image attachment
+) : renderer(renderer), color(color),
+    startPercent(startPercent), animSpeed(animSpeed),
+    attachment(attachment), image(renderer, "assets/images/ui/bar.png")
 {
-    rect.x = x;
+    rect.x = attachment.width + x;
     rect.y = y;
     rect.w = width;
-    rect.h = barImage.height;
+    rect.h = image.height;
     fillRect.x = rect.x;
     fillRect.y = rect.y;
     fillRect.h = rect.h;
     reachPercent = startPercent;
+    if (attachment.renderer)
+    {
+        attachmentRect.w = attachment.width;
+        attachmentRect.h = attachment.height;
+        attachmentRect.x = rect.x - attachmentRect.w;
+        attachmentRect.y = rect.y - (attachmentRect.h / 2);
+    }
 }
 
 void Progress::update(double increment)
@@ -53,11 +60,13 @@ void Progress::handle(double dt)
 
 void Progress::render(Vector2D Camera)
 {
+    dst = rect;
     fillRect.w = rect.w * (float)percentage;
     SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
     SDL_RenderFillRect(renderer, &fillRect);
-    dst = rect;
     dst.x -= Camera.x;
     dst.y -= Camera.y;
-    barImage.render(nullptr, &dst);
+    if (attachment.renderer)
+        attachment.render(nullptr, &attachmentRect);
+    image.render(nullptr, &dst);
 }

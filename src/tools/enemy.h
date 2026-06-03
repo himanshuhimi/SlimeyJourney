@@ -7,7 +7,7 @@
 class Enemy : public Sprite
 {
 public:
-    bool hasAwarded = false;
+    bool hasDied = false, hasAwarded = false;
     int speed = 0, maxHealthPoints = 0, healthPoints = 0;
     string foldertype = "";
     Progress healthBar;
@@ -21,6 +21,7 @@ public:
     );
     void handle(double dt, const vector<Grass> &grasses);
     void render(Vector2D Camera);
+    void damage(int byPoints = 1);
     template <typename T>
     void drop(vector<T> &vec)
     {

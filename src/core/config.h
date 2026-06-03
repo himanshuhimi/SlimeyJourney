@@ -18,7 +18,7 @@ using std::string, std::vector, std::unordered_map;
 
 extern const string TITLE;
 extern const float SPRITE_SIZE;
-extern int WIDTH, HEIGHT;
+extern int DEFAULT_WIDTH, DEFAULT_HEIGHT, WIDTH, HEIGHT, scaleX, scaleY;
 extern const int CAMERA_X, CAMERA_Y;
 
 template <typename T>
@@ -51,6 +51,7 @@ struct Vector2D
 struct Image
 {
     SDL_Renderer *renderer = nullptr;
+    SDL_Surface *surface = nullptr;
     SDL_Texture *texture = nullptr;
     float width = 0, height = 0;
     Image(SDL_Renderer *renderer, string source);
@@ -85,10 +86,11 @@ struct Animation
     Image *imageSet = nullptr;
     SDL_FRect src, dst;
     int index = 0;
+    bool complete = false;
     float timer = 0.0f, frameTime = 0.5f;
-    Animation(SDL_Renderer *renderer, SDL_FRect dst, string source);
+    Animation(SDL_Renderer *renderer, string source);
     void handle(double dt);
-    void render(Vector2D Camera);
+    void render(Vector2D Camera, SDL_FRect dst);
 };
 struct Audio
 {

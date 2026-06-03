@@ -20,7 +20,9 @@ Game::Game()
         log("Display Loaded");
     level = new Level(renderer, 1);
     audios = {
-        {"pickup", new Audio("assets/audios/pickup.wav")}};
+        {"pickup", new Audio("assets/audios/pickup.wav")},
+        {"hurt", new Audio("assets/audios/hurt.wav")}
+    };
     active = true;
 }
 
@@ -94,13 +96,14 @@ void Game::collision()
         {
             if (!ballIt->used && checkCollision(ballIt->rect, enemyIt->rect))
             {
-                enemyIt->healthPoints -= 1;
+                enemyIt->damage();
                 enemyIt->healthBar.update(-(double)1 / enemyIt->maxHealthPoints);
+                audios["hurt"]->play();
                 ballIt->used = true;
             }
             else
                 enemyIt++;
         }
-    for (auto enemyIt = level->enemies.begin(); enemyIt != level->enemies.end(); enemyIt++)
-        enemyIt->drop<Fruit>(level->fruits);
+    for (auto &enemy : level->enemies)
+        enemy.drop<Fruit>(level->fruits);
 }

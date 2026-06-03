@@ -1,15 +1,19 @@
 #include "../ball.h"
 
 Ball::Ball(SDL_Renderer *renderer, float x, float y, Vector2D Direction)
-    : Sprite(renderer, "ball.png", x, y) 
-{ 
+    : Sprite(renderer, "ball.png", x, y)
+{
     prevPos = Position;
     Velocity.x = Direction.x * speed;
     Velocity.y = Direction.y * speed;
+    anims = {
+        {"explosion", new Animation(renderer, "assets/images/anims/explosion.png")}};
 }
 
 void Ball::handle(double dt, const vector<Grass> &grasses)
 {
+    if (used)
+        return;
     for (auto &grass : grasses)
         if (checkCollision(rect, grass.rect))
             used = true;

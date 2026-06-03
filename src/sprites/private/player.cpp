@@ -6,10 +6,13 @@ Player::Player(SDL_Renderer *renderer, float x, float y)
     string animBeginPath = "assets/images/player/anims/";
     string audioBeginPath = "assets/audios/player/";
     anims = {
-        {"jump", new Animation(renderer, rect, animBeginPath + "jump.png")}};
+        {"jump", new Animation(renderer, animBeginPath + "jump.png")}
+    };
     audios = {
         {"jump", new Audio(audioBeginPath + "jump.wav")},
-        {"walking", new Audio(audioBeginPath + "walking.wav")}};
+        {"walking", new Audio(audioBeginPath + "walking.wav")},
+        {"shoot", new Audio(audioBeginPath + "shoot.wav")}
+    };
 }
 
 void Player::handle(
@@ -30,7 +33,7 @@ void Player::render(Vector2D Camera)
     for (auto &[key, anim] : anims)
         anim->dst = dst;
     if (state.jumping)
-        anims["jump"]->render(Camera);
+        anims["jump"]->render(Camera, rect);
     else
         Sprite::render(Camera);
 }
@@ -56,7 +59,10 @@ void Player::handleShooting(double dt)
         mouseWin.x + Camera.x,
         mouseWin.y + Camera.y
     };
-    Vector2D Direction = {mapMouse.x - Center.x, mapMouse.y - Center.y};
+    Vector2D Direction = {
+        mapMouse.x - Center.x, 
+        mapMouse.y - Center.y
+    };
     Direction.normalise();
     throwCooldown.handle(dt);
     if (mouseClicked && throwCooldown.available)
@@ -67,6 +73,7 @@ void Player::handleShooting(double dt)
             Center.y,
             Direction
         ));
+        audios["shoot"]->play();
         throwCooldown.available = false;
         throwCooldown.timeElapsed = 0;
         mouseClicked = false;

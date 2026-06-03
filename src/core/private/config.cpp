@@ -2,7 +2,10 @@
 
 const string TITLE = "Slimey Journey";
 const float SPRITE_SIZE = 32.0f;
+int DEFAULT_WIDTH = 640, DEFAULT_HEIGHT = 360;
 int WIDTH = 640, HEIGHT = 360;
+int scaleX = WIDTH / DEFAULT_WIDTH;
+int scaleY = HEIGHT / DEFAULT_HEIGHT;
 const int CAMERA_X = WIDTH / 2, CAMERA_Y = HEIGHT / 2;
 
 bool checkCollision(SDL_FRect A, SDL_FRect B)
@@ -19,9 +22,12 @@ SDL_FRect GetMousePosition()
 
 Image::Image(SDL_Renderer *renderer, string source) : renderer(renderer)
 {
-    texture = IMG_LoadTexture(renderer, source.c_str());
-    if (!texture)
-        log("Unloaded Texture: " + source);
+    if (!renderer)
+        return;
+    surface = IMG_Load(source.c_str());
+    if (!surface)
+        log("Unloaded Image: " + (string)SDL_GetError());
+    texture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_GetTextureSize(texture, &width, &height);
 }
 
@@ -81,8 +87,8 @@ void Text::updateAlpha(int newAlpha)
         SDL_SetTextureAlphaMod(texture, alpha);
 }
 
-Animation::Animation(SDL_Renderer *renderer, SDL_FRect dst, string source)
-    : renderer(renderer), dst(dst)
+Animation::Animation(SDL_Renderer *renderer, string source)
+    : renderer(renderer)
 {
     imageSet = new Image(renderer, source);
 }
@@ -97,10 +103,11 @@ void Animation::handle(double dt)
         int maxFrames = imageSet->width / SPRITE_SIZE;
         if (index >= maxFrames)
             index = 0;
+        complete = true;
     }
 }
 
-void Animation::render(Vector2D Camera)
+void Animation::render(Vector2D Camera, SDL_FRect dst)
 {
     SDL_FRect renderDst = dst;
     renderDst.x -= Camera.x;

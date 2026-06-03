@@ -21,7 +21,8 @@ Enemy::Enemy(
 
 void Enemy::handle(double dt, const vector<Grass> &grasses)
 {
-    if (healthPoints <= 0)
+    hasDied = healthPoints <= 0;
+    if (hasDied)
     {
         healthPoints = 0;
         return;
@@ -53,8 +54,15 @@ void Enemy::handle(double dt, const vector<Grass> &grasses)
 
 void Enemy::render(Vector2D Camera)
 {
-    if (healthPoints <= 0)
+    if (hasDied)
         return;
     Sprite::render(Camera);
     healthBar.render(Camera);
+}
+
+void Enemy::damage(int byPoints)
+{
+    if (hasDied)
+        return;
+    healthPoints -= byPoints;
 }

@@ -104,7 +104,6 @@ void Map::loadObjectGroup(XMLElement *child)
 void Map::render(Vector2D Camera)
 {
     for (Layer &layer : layers)
-    {
         for (int i = 0; i < layer.gids.size(); i++)
         {
             int gid = layer.gids[i];
@@ -121,9 +120,8 @@ void Map::render(Vector2D Camera)
                 (float)((i / layer.width) * tileHeight) - Camera.y,
                 (float)(tileWidth),
                 (float)(tileHeight)};
-            SDL_RenderTexture(renderer, tileset.image->texture, &src, &dest);
+            tileset.image->render(&src, &dest);
         }
-    }
 }
 
 Map::~Map()

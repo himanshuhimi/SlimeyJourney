@@ -17,8 +17,6 @@ public:
     SDL_Renderer *renderer = nullptr;
     Map map;
     Vector2D Camera;
-    Image heartImage, bottleImage;
-    SDL_FRect heartRect, bottleRect;
     Progress heartProg, fruitProg;
     int points = 0, fruitLength = 0;
     double increment = 0.0;
