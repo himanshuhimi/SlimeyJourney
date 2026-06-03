@@ -5,7 +5,7 @@ Grass::Grass(SDL_Renderer *renderer, float x, float y)
 {
     Position.x = x;
     Position.y = y;
-    rect.x = Position.x - rect.w / 2;
+    rect.x = Position.x - image.width / 2;
     rect.y = Position.y;
     rect.w = image.width;
     rect.h = image.height;

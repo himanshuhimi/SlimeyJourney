@@ -49,19 +49,18 @@ void Level::loadObjects()
 {
     for (Map::Object obj : map.objectGroup.objects)
     {
-        const char *name = obj.name.c_str();
-        if (!strcmp(name, "player"))
+        string name = obj.name;
+        if (name == "player")
             player = Player(renderer, obj.x, obj.y - SPRITE_SIZE);
-        else if (!strcmp(name, "fruit"))
+        if (name == "fruit")
             fruits.push_back(Fruit(renderer, obj.x, obj.y - SPRITE_SIZE));
-        else if (!strcmp(name, "slime"))
+        if (name == "slime")
             enemies.push_back(Slime(renderer, obj.x, obj.y));
-        else if (!strcmp(name, "grasses"))
+        if (name == "grasses")
             for (int x = 0; x < obj.width; x += SPRITE_SIZE)
                 grasses.push_back(Grass(renderer, obj.x + x + SPRITE_SIZE / 2, obj.y));
     }
 }
-
 void Level::clampCamera()
 {
     float targetX = player.Position.x - CAMERA_X;

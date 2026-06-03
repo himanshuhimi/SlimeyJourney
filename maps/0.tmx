@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="30" height="12" tilewidth="32" tileheight="32" infinite="0" nextlayerid="11" nextobjectid="29">
+<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="30" height="12" tilewidth="32" tileheight="32" infinite="0" nextlayerid="11" nextobjectid="31">
  <tileset firstgid="1" source="tilesets/0.tsx"/>
  <layer id="6" name="ground" width="30" height="12">
   <data encoding="csv">
@@ -50,7 +50,6 @@
 </data>
  </layer>
  <objectgroup id="8" name="objects">
-  <object id="15" name="grasses" x="96" y="256" width="96" height="32"/>
   <object id="16" name="grasses" x="288" y="320" width="96" height="32"/>
   <object id="17" name="grasses" x="480" y="256" width="96" height="32"/>
   <object id="18" name="grasses" x="672" y="320" width="96" height="32"/>
@@ -74,5 +73,6 @@
    <point/>
   </object>
   <object id="27" name="grasses" x="864" y="256" width="96" height="32"/>
+  <object id="30" name="grasses" x="96" y="256" width="96" height="32"/>
  </objectgroup>
 </map>
