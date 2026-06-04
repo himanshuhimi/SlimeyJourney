@@ -3,6 +3,7 @@
 #define SDL_MAIN_HANDLED
 
 #include <iostream>
+#include <random>
 #include <algorithm>
 #include <filesystem>
 #include <vector>
