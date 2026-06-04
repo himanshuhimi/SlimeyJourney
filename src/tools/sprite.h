@@ -8,10 +8,11 @@ class Sprite
 {
 public:
     SDL_Renderer *renderer = nullptr;
-    Vector2D Camera, Velocity, Position, Center;
+    Vector2D Original, Camera, Velocity, Position, Center;
     LOS gravityLOS, lineOfSight;
     SDL_FRect dst, rect;
     Image image;
+    bool movable = true;
     enum Direction
     {
         Left,
@@ -21,8 +22,6 @@ public:
     {
         bool prevOnGround, onGround, jumping, walking;
     } state;
-    float speed, jumpStrength;
-    bool movable = true;
     Sprite(SDL_Renderer *renderer, string imgSource, float x, float y);
     void handle(double dt, const vector<Grass> &grasses);
     void render(Vector2D Camera);

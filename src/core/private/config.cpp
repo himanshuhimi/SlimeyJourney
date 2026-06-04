@@ -8,10 +8,7 @@ int scaleX{WIDTH / DEFAULT_WIDTH}, scaleY{HEIGHT / DEFAULT_HEIGHT};
 int CAMERA_X{WIDTH / 2}, CAMERA_Y{HEIGHT / 2};
 const vector<string> fruits = {"apple", "melon", "orange"};
 
-bool checkCollision(SDL_FRect A, SDL_FRect B)
-{
-    return SDL_HasRectIntersectionFloat(&A, &B);
-}
+bool checkCollision(SDL_FRect A, SDL_FRect B) { return SDL_HasRectIntersectionFloat(&A, &B); }
 
 SDL_FRect getMousePosition()
 {
@@ -57,17 +54,14 @@ void Image::render(const SDL_FRect *src, const SDL_FRect *dst)
 
 Text::Text(
     SDL_Renderer *renderer,
-    float x, float y,
-    string data, SDL_Color color,
+    float x, float y, string data, SDL_Color color,
     int pixelSize, string fontSource)
     : renderer(renderer), x(x), y(y), pixelSize(pixelSize), color(color)
 {
     font = TTF_OpenFont(fontSource.c_str(), pixelSize);
     if (!font)
         print("Font Uninitialized: " + fontSource);
-    surface = TTF_RenderText_Blended(
-        font, data.c_str(),
-        data.size(), color);
+    surface = TTF_RenderText_Blended(font, data.c_str(), data.size(), color);
     texture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_DestroySurface(surface);
     SDL_GetTextureSize(texture, &rect.w, &rect.h);
@@ -75,20 +69,15 @@ Text::Text(
     rect.y = y;
 }
 
-void Text::render()
-{
-    SDL_RenderTexture(renderer, texture, nullptr, &rect);
-}
+void Text::render() { SDL_RenderTexture(renderer, texture, nullptr, &rect); }
 
 void Text::updateData(string newData)
 {
     if (texture)
         SDL_DestroyTexture(texture);
     surface = TTF_RenderText_Blended(
-        font,
-        newData.c_str(),
-        newData.size(),
-        color);
+        font, newData.c_str(),
+        newData.size(), color);
     texture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_GetTextureSize(texture, &rect.w, &rect.h);
 }
@@ -101,8 +90,8 @@ void Text::updateAlpha(int newAlpha)
 }
 
 Animation::Animation(SDL_Renderer *renderer, string source, float frameTime)
-    : renderer(renderer), frameTime(frameTime), 
-    imageSet(renderer, source), maxFrames(imageSet.width / SPRITE_SIZE) {}
+    : renderer(renderer), frameTime(frameTime), imageSet(renderer, source), 
+      maxFrames(imageSet.width / SPRITE_SIZE) {}
 
 void Animation::handle(double dt)
 {
@@ -117,10 +106,9 @@ void Animation::handle(double dt)
         {
             index = 0;
             complete = true;
+            active = false;
         }
     };
-    if (complete)
-        active = false;
 }
 
 void Animation::render(Vector2D Camera, SDL_FRect dst)
@@ -157,10 +145,7 @@ Audio::Audio(string audioSource)
     MIX_SetTrackAudio(track, audio);
 }
 
-void Audio::play(int times)
-{
-    MIX_PlayTrack(track, times);
-}
+void Audio::play(int times) { MIX_PlayTrack(track, times); }
 
 Cooldown::Cooldown(double duration) : duration(duration) {}
 

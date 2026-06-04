@@ -11,10 +11,6 @@ Game::Game()
     if (!SDL_CreateWindowAndRenderer(TITLE.c_str(), WIDTH, HEIGHT, 0, &window, &renderer))
         print("Display Unloaded: " + (string)SDL_GetError());
     level = new Level(renderer, 1);
-    audios = {
-        {"pickup", new Audio("assets/audios/pickup.wav")},
-        {"hurt", new Audio("assets/audios/hurt.wav")}
-    };
     active = true;
 }
 
@@ -40,17 +36,14 @@ void Game::handle()
             level->player.mouseClicked = (event.button.button == SDL_BUTTON_LEFT);
             break;
         }
-    collision();
     level->handle(dt);
 }
 
 void Game::render()
 {
     SDL_SetRenderDrawColor(
-        renderer,
-        colors.skyblue.r,
-        colors.skyblue.g,
-        colors.skyblue.b,
+        renderer, colors.skyblue.r,
+        colors.skyblue.g, colors.skyblue.b,
         colors.skyblue.a);
     SDL_RenderClear(renderer);
     level->render();
@@ -68,32 +61,4 @@ void Game::updateDeltaTime()
     NOW = SDL_GetPerformanceCounter();
     dt = (double)(NOW - LAST) / SDL_GetPerformanceFrequency();
     LAST = NOW;
-}
-
-void Game::collision()
-{
-    for (auto fruitIt = level->fruits.begin(); fruitIt != level->fruits.end();)
-        if (!fruitIt->picked && checkCollision(fruitIt->rect, level->player.rect))
-        {
-            fruitIt->picked = true;
-            level->points += 1;
-            audios["pickup"]->play();
-            level->fruitBar.update(level->increment);
-        }
-        else
-            fruitIt++;
-    for (auto ballIt = level->player.balls.begin(); ballIt != level->player.balls.end(); ballIt++)
-        for (auto eneIt = level->enemies.begin(); eneIt != level->enemies.end();)
-        {
-            if (!ballIt->used && checkCollision(ballIt->rect, eneIt->rect))
-            {
-                eneIt->damage();
-                audios["hurt"]->play();
-                ballIt->used = true;
-            }
-            else
-                eneIt++;
-        }
-    for (auto &enemy : level->enemies)
-        enemy.drop(level->fruits);
 }

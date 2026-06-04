@@ -1,7 +1,7 @@
 #include "../sprite.h"
 
 Sprite::Sprite(SDL_Renderer *renderer, string imgSource, float x, float y)
-    : renderer(renderer), image(renderer, "assets/images/" + imgSource),
+    : renderer(renderer), Original(x, y), image(renderer, "assets/images/" + imgSource),
       gravityLOS(renderer, 0, 0, 1, 0), lineOfSight(renderer, 0, 0, 0, 1)
 {
     Position = Vector2D{x - image.width / 2, y};
@@ -9,8 +9,6 @@ Sprite::Sprite(SDL_Renderer *renderer, string imgSource, float x, float y)
     rect.y = Position.y;
     rect.w = image.width;
     rect.h = image.height;
-    jumpStrength = 100.0f;
-    speed = 180;
     lineOfSight.rect.w = rect.w / 2;
     gravityLOS.rect.h = rect.h / 2;
 }

@@ -31,16 +31,17 @@ public:
     {
         vector<Object> objects;
     };
+    ObjectGroup objectGroup;
     vector<Layer> layers;
     Tileset tileset;
-    ObjectGroup objectGroup;
-    int width, height, tileWidth, tileHeight, pixelWidth, pixelHeight;
     string source = "";
+    int width, height, tileWidth, tileHeight, pixelWidth, pixelHeight;
     Map(SDL_Renderer *renderer, string source);
+    void render(Vector2D Camera);
     void loadChildren();
     void loadLayer(XMLElement *child);
     void loadTileset(XMLElement *child);
     void loadObjectGroup(XMLElement *child);
-    void render(Vector2D Camera);
+    void loadGroups(XMLElement *child);
     ~Map();
 };

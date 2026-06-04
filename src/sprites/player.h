@@ -5,22 +5,25 @@
 #include "ball.h"
 #include "../ui/progress.h"
 
+class Enemy;
 class Player : public Sprite
 {
 public:
+    Enemy *combatEnemy = nullptr;
     Progress healthBar;
-    Vector2D prevPos, original;
+    Vector2D prevPos;
     Cooldown throwCooldown = {1.0};
-    bool dead, immune, mouseClicked;
-    unordered_map<string, Animation *> anims;
-    unordered_map<string, Audio *> audios;
+    bool inCombat = false, dead, immune, mouseClicked;
+    map<string, Animation> anims;
+    map<string, Audio> audios;
     vector<Ball> balls = {};
-    int HP = 5;
+    int maxHP = 5, HP = maxHP;
+    float speed, jumpStrength;
     Player(SDL_Renderer *renderer, float x, float y);
     void handle(double dt, const vector<Grass> &grasses);
     void render(Vector2D Camera);
     void damage(int byPoints = 1);
     void resetPos(bool previous = true);
-    void handleJump(double dt, const bool *keys);
+    void handleMovement(double dt);
     void handleShooting(double dt);
 };

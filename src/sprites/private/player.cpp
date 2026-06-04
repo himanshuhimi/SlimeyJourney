@@ -1,86 +1,97 @@
 #include "../player.h"
+#include "../enemy.h"
 
 Player::Player(SDL_Renderer *renderer, float x, float y)
     : Sprite(renderer, "player/idle.png", x, y),
-      healthBar(renderer, WIDTH / 24.0f, HEIGHT / 16.0f,
-          colors.red, Image(renderer, "assets/images/ui/heart.png"),
-          1.0, 150)
+      healthBar(renderer, 5, HEIGHT / 16.0f, colors.red,
+                Image(renderer, "assets/images/ui/heart.png"), 1.0, 150)
 {
-    string animBeginPath = "assets/images/player/anims/";
+    jumpStrength = 100.0f;
+    speed = 180;
+    string animBeginPath = "assets/anims/player/";
     string audioBeginPath = "assets/audios/player/";
     anims = {
-        {"jump", new Animation(renderer, animBeginPath + "jump.png")},
-        {"damage", new Animation(renderer, animBeginPath + "damage.png", 0.2)}};
+        {"jump", Animation(renderer, animBeginPath + "jump.png")},
+        {"damage", Animation(renderer, animBeginPath + "damage.png", 0.2)}};
     audios = {
-        {"jump", new Audio(audioBeginPath + "jump.wav")},
-        {"walking", new Audio(audioBeginPath + "walking.wav")},
-        {"shoot", new Audio(audioBeginPath + "shoot.wav")}};
+        {"jump", Audio(audioBeginPath + "jump.wav")},
+        {"walking", Audio(audioBeginPath + "walking.wav")},
+        {"shoot", Audio(audioBeginPath + "shoot.wav")},
+        {"pickup", Audio(audioBeginPath + "pickup.wav")},
+        {"hurt", Audio("assets/audios/hurt.wav")}
+    };
 }
 
 void Player::handle(double dt, const vector<Grass> &grasses)
 {
+    healthBar.handle(dt);
     dead = HP <= 0;
-    if (!movable || dead)
+    if (dead)
         return;
-    const bool *keys = SDL_GetKeyboardState(NULL);
-    Velocity.x = -((int)keys[SDL_SCANCODE_A] - (int)keys[SDL_SCANCODE_D]) * speed;
-    handleJump(dt, keys);
-    if (anims["damage"]->active)
+    if (anims.at("damage").active)
+        anims.at("damage").handle(dt);
+    if (anims.at("damage").complete)
     {
         movable = true;
         immune = false;
-        anims["damage"]->handle(dt);
     }
+    handleMovement(dt);
     Sprite::handle(dt, grasses);
     handleShooting(dt);
-    healthBar.handle(dt);
 }
 
 void Player::render(Vector2D Camera)
 {
+    healthBar.render();
     dst = rect;
     for (auto &[key, anim] : anims)
-        anim->dst = dst;
+        anim.dst = dst;
     if (state.jumping)
-        anims["jump"]->render(Camera, rect);
-    else if (anims["damage"]->active)
-        anims["damage"]->render(Camera, rect);
+        anims.at("jump").render(Camera, rect);
     else
         Sprite::render(Camera);
-    healthBar.render();
+    if (anims.at("damage").active)
+        anims.at("damage").render(Camera, rect);
 }
 
 void Player::damage(int byPoints)
 {
+    healthBar.update(-(double)1 / maxHP);
     if (dead || immune)
         return;
-    if (movable && !immune)
+    if (movable)
         HP -= byPoints;
     movable = false;
     immune = true;
-    anims["damage"]->restart();
-    healthBar.update(-(double)1 / HP);
+    anims.at("damage").restart();
+    audios.at("hurt").play();
 }
 
 void Player::resetPos(bool previous)
 {
-    Position = (previous) ? prevPos : original;
+    Position = (previous) ? prevPos : Original;
+    rect.x = Position.x;
+    rect.y = Position.y;
     damage();
 }
 
-void Player::handleJump(double dt, const bool *keys)
+void Player::handleMovement(double dt)
 {
+    if (!movable)
+        return;
+    const bool *keys = SDL_GetKeyboardState(NULL);
+    Velocity.x = -((int)keys[SDL_SCANCODE_A] - (int)keys[SDL_SCANCODE_D]) * speed;
     if (!state.jumping && keys[SDL_SCANCODE_SPACE])
     {
         Velocity.y -= jumpStrength;
         prevPos = Position;
-        audios["jump"]->play();
-        anims["jump"]->restart();
+        audios.at("jump").play();
+        anims.at("jump").restart();
     }
     if (state.jumping || !state.onGround)
     {
         Velocity.y += constants.gravity * dt;
-        anims["jump"]->handle(dt);
+        anims.at("jump").handle(dt);
     }
     if (rect.y > HEIGHT)
         resetPos();
@@ -99,6 +110,16 @@ void Player::handleShooting(double dt)
         mouseClicked = false;
         throwCooldown.timeElapsed = 0;
         throwCooldown.available = false;
-        audios["shoot"]->play();
+        audios.at("shoot").play();
+    }
+    if (inCombat && movable && combatEnemy->throwCooldown.available)
+    {
+        float x = combatEnemy->rect.x;
+        float y = combatEnemy->rect.y;
+        Vector2D Direction = {Center.x - combatEnemy->rect.x, Center.y - combatEnemy->rect.y};
+        Direction.normalise();
+        combatEnemy->balls.emplace_back(Ball(renderer, x, y, "enemies/slime", Direction));
+        combatEnemy->throwCooldown.timeElapsed = 0;
+        combatEnemy->throwCooldown.available = false;
     }
 }

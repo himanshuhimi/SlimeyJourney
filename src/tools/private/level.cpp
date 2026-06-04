@@ -4,13 +4,17 @@ Level::Level(SDL_Renderer *renderer, int number)
     : renderer(renderer),
       player(renderer, 0, 0),
       map(renderer, "maps/" + std::to_string(number - 1) + ".tmx"),
-      fruitBar(
-          renderer, player.healthBar.Position.x, HEIGHT / 6.0f,
-          SDL_Color{95, 90, 204, 255}, Image(renderer, "assets/images/ui/bottle.png"))
+      fruitBar(renderer, 0, 0, SDL_Color{95, 90, 204, 255},
+               Image(renderer, "assets/images/ui/bottle.png"))
 {
     loadObjects();
-    fruitLength = enemies.size() + fruits.size(); // enemies also drop fruits.
+    fruitLength = enemies.size() + fruits.size();
     increment = (double)1 / fruitLength;
+    fruitBar.rect.x = player.healthBar.rect.x;
+    fruitBar.rect.y = player.healthBar.rect.y + SPRITE_SIZE;
+    audios = {
+        {"pickup", Audio("assets/audios/player/pickup.wav")},
+        {"hurt", Audio("assets/audios/hurt.wav")}};
 }
 
 void Level::handle(double dt)
@@ -22,6 +26,7 @@ void Level::handle(double dt)
         enemy.handle(dt, grasses);
     fruitBar.handle(dt);
     player.handle(dt, grasses);
+    collision();
 }
 
 void Level::render()
@@ -37,6 +42,60 @@ void Level::render()
         ball.render(Camera);
     fruitBar.render();
     player.render(Camera);
+}
+
+void Level::collision()
+{
+    for (auto fruitIt = fruits.begin(); fruitIt != fruits.end();)
+        if (!fruitIt->picked && checkCollision(fruitIt->rect, player.rect))
+        {
+            fruitIt->picked = true;
+            points += 1;
+            player.audios.at("pickup").play();
+            fruitBar.update(increment);
+        }
+        else
+            fruitIt++;
+    for (auto &ball : player.balls)
+        for (auto eneIt = enemies.begin(); eneIt != enemies.end();)
+            if (!ball.used && checkCollision(ball.rect, eneIt->rect))
+            {
+                eneIt->damage();
+                audios.at("hurt").play();
+                ball.used = true;
+                if (eneIt->dead)
+                    eneIt = enemies.erase(eneIt);
+            }
+            else
+                eneIt++;
+    for (auto &enemy : enemies)
+        if (checkCollision(player.rect, enemy.attackRange))
+        {
+            player.inCombat = true;
+            player.combatEnemy = &enemy;
+            break;
+        }
+        else
+        {
+            player.inCombat = false;
+            player.combatEnemy = nullptr;
+        }
+    for (auto &enemy : enemies)
+    {
+        for (auto ballIt = enemy.balls.begin(); ballIt != enemy.balls.end(); ballIt++)
+        {
+            Ball ball = *ballIt;
+            bool collided = checkCollision(ball.rect, player.rect);
+            if (player.movable && !ball.used && collided)
+            {
+                player.damage();
+                ball.used = true;
+                ballIt = enemy.balls.erase(ballIt);
+                break;
+            }
+        }
+        enemy.drop<Fruit>(fruits);
+    }
 }
 
 void Level::loadObjects()
@@ -55,6 +114,7 @@ void Level::loadObjects()
                 grasses.push_back(Grass(renderer, obj.x + x + SPRITE_SIZE / 2, obj.y));
     }
 }
+
 void Level::clampCamera()
 {
     float targetX = player.Position.x - CAMERA_X;

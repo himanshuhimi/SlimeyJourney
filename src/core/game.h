@@ -9,10 +9,8 @@ public:
     SDL_Renderer *renderer = nullptr;
     SDL_Window *window = nullptr;
     SDL_Event event;
-    double dt;
     bool active = false;
-    unordered_map<string, Animation *> anims;
-    unordered_map<string, Audio *> audios;
+    double dt = 0.0;
     Game();
     void launch();
     void render();
@@ -23,5 +21,4 @@ private:
     Uint64 NOW;
     Level *level = nullptr;
     void updateDeltaTime();
-    void collision();
 };

@@ -3,18 +3,18 @@
 #define SDL_MAIN_HANDLED
 
 #include <iostream>
-#include <vector>
 #include <algorithm>
-#include <unordered_map>
 #include <filesystem>
+#include <vector>
 #include <cmath>
+#include <map>
 #include <SDL3/SDL_main.h>
 #include <SDL3_image/SDL_image.h>
 #include <SDL3_ttf/SDL_ttf.h>
 #include <SDL3_mixer/SDL_mixer.h>
 #include <tinyxml2.h>
 
-using std::string, std::vector, std::unordered_map;
+using std::string, std::vector, std::map;
 
 extern const string TITLE;
 extern const float SPRITE_SIZE;
@@ -34,6 +34,7 @@ struct Vector2D
     float getLength();
     Vector2D normalise();
 };
+
 struct Image
 {
     SDL_Renderer *renderer = nullptr;
@@ -44,6 +45,7 @@ struct Image
     Image(SDL_Renderer *renderer, string source);
     void render(const SDL_FRect *srcrect, const SDL_FRect *dstrect);
 };
+
 struct Text
 {
     SDL_Renderer *renderer = nullptr;
@@ -55,19 +57,18 @@ struct Text
     string data, fontSource;
     float x, y;
     int pixelSize, alpha;
-    Text(
-        SDL_Renderer *renderer,
-        float x, float y,
-        string data, SDL_Color color,
-        int pixelSize = 24, string fontSource = "assets/fonts/roboto.ttf");
+    Text(SDL_Renderer *renderer, float x, float y,
+        string data, SDL_Color color,int pixelSize = 24, 
+        string fontSource = "assets/fonts/roboto.ttf");
     void render();
     void updateData(string newData);
     void updateAlpha(int newAlpha);
 };
+
 struct Animation
 {
     SDL_Renderer *renderer = nullptr;
-    SDL_FRect src, dst;
+    SDL_FRect src, renderDst, dst;
     Image imageSet;
     int maxFrames = 0.0, index = 0;
     bool active = false, complete = false;
@@ -77,6 +78,7 @@ struct Animation
     void render(Vector2D Camera, SDL_FRect dst);
     void restart();
 };
+
 struct Audio
 {
     MIX_Mixer *mixer = nullptr;
@@ -85,6 +87,7 @@ struct Audio
     Audio(string audioSource);
     void play(int times = 0);
 };
+
 struct Cooldown
 {
     bool available = false;
@@ -93,6 +96,7 @@ struct Cooldown
     Cooldown(double duration = 2.0);
     void handle(double dt);
 };
+
 extern struct _Random_
 {
     int randint(int begin, int end);
@@ -104,6 +108,7 @@ extern struct _Random_
         return vec.at(randint(0, vec.size() - 1));
     }
 } Random;
+
 extern struct _Colors_
 {
     SDL_Color white = SDL_Color{255, 255, 255, 255};
@@ -119,6 +124,7 @@ extern struct _Colors_
     _Colors_() {};
     SDL_Color hexToRgb();
 } colors;
+
 extern struct _Consts_
 {
     double gravity = 245;

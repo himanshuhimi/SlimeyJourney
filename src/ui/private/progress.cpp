@@ -1,17 +1,11 @@
 #include "../progress.h"
 
 Progress::Progress(
-    SDL_Renderer *renderer,
-    float x,
-    float y,
-    SDL_Color color,
-    Image attachment,
-    double startPercent,
-    float width,
-    double animSpeed
-) : renderer(renderer), color(color), attachment(attachment),
-    startPercent(startPercent), animSpeed(animSpeed),
-    image(renderer, "assets/images/ui/bar.png")
+    SDL_Renderer *renderer, float x, float y, SDL_Color color,
+    Image attachment, double startPercent, float width, double animSpeed)
+    : renderer(renderer), color(color), attachment(attachment),
+      startPercent(startPercent), animSpeed(animSpeed),
+      image(renderer, "assets/images/ui/bar.png")
 {
     Position.x = x;
     Position.y = y;
@@ -40,7 +34,6 @@ void Progress::update(double increment)
     else if (reachPercent < 0.0)
         reachPercent = 0.0;
     animSpeed = abs(animSpeed) * ((increment >= 0) ? 1 : -1);
-    print(reachPercent);
 }
 
 void Progress::handle(double dt)

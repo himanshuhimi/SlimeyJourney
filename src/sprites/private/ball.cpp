@@ -3,9 +3,11 @@
 Ball::Ball(SDL_Renderer *renderer, float x, float y, string type, Vector2D Direction)
     : Sprite(renderer, type + "/ball.png", x, y)
 {
+    speed = 180;
     prevPos = Position;
     Velocity.x = Direction.x * speed;
     Velocity.y = Direction.y * speed;
+    anims = {{"explosion", Animation(renderer, "assets/anims/explosion.png")}};
 }
 
 void Ball::handle(double dt, const vector<Grass> &grasses)
@@ -15,12 +17,17 @@ void Ball::handle(double dt, const vector<Grass> &grasses)
     for (auto &grass : grasses)
         if (checkCollision(rect, grass.rect))
             used = true;
+    if (anims.at("explosion").active)
+        anims.at("explosion").handle(dt);
     Sprite::handle(dt, grasses);
 }
 
 void Ball::render(Vector2D Camera)
 {
-    if (used)
+    if (used && !anims.at("explosion").complete)
         return;
-    Sprite::render(Camera);
+    if (anims.at("explosion").active)
+        anims.at("explosion").render(Camera, rect);
+    else
+        Sprite::render(Camera);
 }
