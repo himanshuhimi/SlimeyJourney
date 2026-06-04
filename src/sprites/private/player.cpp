@@ -106,7 +106,7 @@ void Player::handleShooting(double dt)
     throwCooldown.handle(dt);
     if (mouseClicked && throwCooldown.available)
     {
-        balls.emplace_back(Ball(renderer, Center.x, Center.y, "player", Direction));
+        balls.emplace_back(Ball(renderer, rect.x, rect.y, "player", Direction));
         mouseClicked = false;
         throwCooldown.timeElapsed = 0;
         throwCooldown.available = false;
