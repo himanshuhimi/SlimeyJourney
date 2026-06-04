@@ -22,7 +22,7 @@ extern int DEFAULT_WIDTH, DEFAULT_HEIGHT, WIDTH, HEIGHT, scaleX, scaleY, CAMERA_
 extern const vector<string> fruits;
 
 template <typename T>
-void log(const T &message) { std::cout << "[LOG] " << message << std::endl; };
+void print(const T &message) { std::cout << "[LOG] " << message << std::endl; };
 bool checkCollision(SDL_FRect A, SDL_FRect B);
 SDL_FRect getMousePosition();
 
@@ -40,6 +40,7 @@ struct Image
     SDL_Surface *surface = nullptr;
     SDL_Texture *texture = nullptr;
     float width = 0, height = 0;
+    string source = "";
     Image(SDL_Renderer *renderer, string source);
     void render(const SDL_FRect *srcrect, const SDL_FRect *dstrect);
 };
@@ -66,14 +67,15 @@ struct Text
 struct Animation
 {
     SDL_Renderer *renderer = nullptr;
-    Image *imageSet = nullptr;
     SDL_FRect src, dst;
-    int index = 0;
-    bool complete = false;
+    Image imageSet;
+    int maxFrames = 0.0, index = 0;
+    bool active = false, complete = false;
     float timer = 0.0f, frameTime = 0.5f;
-    Animation(SDL_Renderer *renderer, string source);
+    Animation(SDL_Renderer *renderer, string source, float frameTime = 0.5f);
     void handle(double dt);
     void render(Vector2D Camera, SDL_FRect dst);
+    void restart();
 };
 struct Audio
 {
@@ -98,7 +100,7 @@ extern struct _Random_
     T choice(vector<T> vec)
     {
         if (vec.empty())
-            log("Empty Vector.");
+            print("Empty Vector.");
         return vec.at(randint(0, vec.size() - 1));
     }
 } Random;

@@ -1,7 +1,7 @@
 #include "../ball.h"
 
-Ball::Ball(SDL_Renderer *renderer, float x, float y, Vector2D Direction)
-    : Sprite(renderer, "ball.png", x, y)
+Ball::Ball(SDL_Renderer *renderer, float x, float y, string type, Vector2D Direction)
+    : Sprite(renderer, type + "/ball.png", x, y)
 {
     prevPos = Position;
     Velocity.x = Direction.x * speed;

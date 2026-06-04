@@ -29,17 +29,19 @@ void Sprite::render(Vector2D Camera)
     dst.x -= Camera.x;
     dst.y -= Camera.y;
     image.render(nullptr, &dst);
-    lineOfSight.render(Camera);
+    // lineOfSight.render(Camera);
 }
 
 void Sprite::handleMovement(double dt)
 {
+    if (!movable)
+        return;
     Position.x += Velocity.x * dt;
     Position.y += Velocity.y * dt;
     rect.x = Position.x;
     rect.y = Position.y;
     Center.x = rect.x + rect.w / 2;
-    Center.y = rect.y + rect.h / 2;   
+    Center.y = rect.y + rect.h / 2;
 }
 
 void Sprite::handleLOS()

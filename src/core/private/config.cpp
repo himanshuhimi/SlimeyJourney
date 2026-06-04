@@ -45,7 +45,7 @@ Image::Image(SDL_Renderer *renderer, string source) : renderer(renderer)
         return;
     surface = IMG_Load(source.c_str());
     if (!surface)
-        log("Unloaded Image: " + (string)SDL_GetError());
+        print("Unloaded Image: " + (string)SDL_GetError());
     texture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_GetTextureSize(texture, &width, &height);
 }
@@ -64,7 +64,7 @@ Text::Text(
 {
     font = TTF_OpenFont(fontSource.c_str(), pixelSize);
     if (!font)
-        log("Font Uninitialized: " + fontSource);
+        print("Font Uninitialized: " + fontSource);
     surface = TTF_RenderText_Blended(
         font, data.c_str(),
         data.size(), color);
@@ -100,24 +100,27 @@ void Text::updateAlpha(int newAlpha)
         SDL_SetTextureAlphaMod(texture, alpha);
 }
 
-Animation::Animation(SDL_Renderer *renderer, string source)
-    : renderer(renderer)
-{
-    imageSet = new Image(renderer, source);
-}
+Animation::Animation(SDL_Renderer *renderer, string source, float frameTime)
+    : renderer(renderer), frameTime(frameTime), 
+    imageSet(renderer, source), maxFrames(imageSet.width / SPRITE_SIZE) {}
 
 void Animation::handle(double dt)
 {
-    timer += dt;
+    if (!active)
+        return;
+    timer += (float)dt;
     if (timer >= frameTime)
     {
         timer = 0.0f;
         index++;
-        int maxFrames = imageSet->width / SPRITE_SIZE;
         if (index >= maxFrames)
+        {
             index = 0;
-        complete = true;
-    }
+            complete = true;
+        }
+    };
+    if (complete)
+        active = false;
 }
 
 void Animation::render(Vector2D Camera, SDL_FRect dst)
@@ -129,20 +132,28 @@ void Animation::render(Vector2D Camera, SDL_FRect dst)
     src.y = 0;
     src.w = (float)SPRITE_SIZE;
     src.h = (float)SPRITE_SIZE;
-    imageSet->render(&src, &renderDst);
+    imageSet.render(&src, &renderDst);
+}
+
+void Animation::restart()
+{
+    index = 0;
+    timer = 0;
+    complete = false;
+    active = true;
 }
 
 Audio::Audio(string audioSource)
 {
     mixer = MIX_CreateMixerDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, nullptr);
     if (!mixer)
-        log("Mixer Unloaded");
+        print("Mixer Unloaded");
     audio = MIX_LoadAudio(mixer, audioSource.c_str(), true);
     if (!audio)
-        log("Audio Unloaded: " + audioSource);
+        print("Audio Unloaded: " + audioSource);
     track = MIX_CreateTrack(mixer);
     if (!track)
-        log("Track Unloaded");
+        print("Track Unloaded");
     MIX_SetTrackAudio(track, audio);
 }
 

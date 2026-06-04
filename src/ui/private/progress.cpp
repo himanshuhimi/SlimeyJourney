@@ -40,6 +40,7 @@ void Progress::update(double increment)
     else if (reachPercent < 0.0)
         reachPercent = 0.0;
     animSpeed = abs(animSpeed) * ((increment >= 0) ? 1 : -1);
+    print(reachPercent);
 }
 
 void Progress::handle(double dt)

@@ -4,12 +4,8 @@ Level::Level(SDL_Renderer *renderer, int number)
     : renderer(renderer),
       player(renderer, 0, 0),
       map(renderer, "maps/" + std::to_string(number - 1) + ".tmx"),
-      healthBar(
-          renderer, WIDTH / 24.0f, HEIGHT / 16.0f,
-          colors.red, Image(renderer, "assets/images/ui/heart.png"),
-          1.0, 150),
       fruitBar(
-          renderer, healthBar.Position.x, HEIGHT / 6.0f,
+          renderer, player.healthBar.Position.x, HEIGHT / 6.0f,
           SDL_Color{95, 90, 204, 255}, Image(renderer, "assets/images/ui/bottle.png"))
 {
     loadObjects();
@@ -24,7 +20,6 @@ void Level::handle(double dt)
         ball.handle(dt, grasses);
     for (auto &enemy : enemies)
         enemy.handle(dt, grasses);
-    healthBar.handle(dt);
     fruitBar.handle(dt);
     player.handle(dt, grasses);
 }
@@ -40,7 +35,6 @@ void Level::render()
         enemy.render(Camera);
     for (auto &ball : player.balls)
         ball.render(Camera);
-    healthBar.render();
     fruitBar.render();
     player.render(Camera);
 }

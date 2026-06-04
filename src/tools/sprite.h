@@ -22,6 +22,7 @@ public:
         bool prevOnGround, onGround, jumping, walking;
     } state;
     float speed, jumpStrength;
+    bool movable = true;
     Sprite(SDL_Renderer *renderer, string imgSource, float x, float y);
     void handle(double dt, const vector<Grass> &grasses);
     void render(Vector2D Camera);

@@ -3,13 +3,13 @@
 Game::Game()
 {
     if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO))
-        log("SDL Unloaded: " + (string)SDL_GetError());
+        print("SDL Unloaded: " + (string)SDL_GetError());
     if (!TTF_Init())
-        log("TTF Unloaded: " + (string)SDL_GetError());
+        print("TTF Unloaded: " + (string)SDL_GetError());
     if (!MIX_Init())
-        log("Mix Unloaded: " + (string)SDL_GetError());
+        print("Mix Unloaded: " + (string)SDL_GetError());
     if (!SDL_CreateWindowAndRenderer(TITLE.c_str(), WIDTH, HEIGHT, 0, &window, &renderer))
-        log("Display Unloaded: " + (string)SDL_GetError());
+        print("Display Unloaded: " + (string)SDL_GetError());
     level = new Level(renderer, 1);
     audios = {
         {"pickup", new Audio("assets/audios/pickup.wav")},
@@ -83,17 +83,17 @@ void Game::collision()
         else
             fruitIt++;
     for (auto ballIt = level->player.balls.begin(); ballIt != level->player.balls.end(); ballIt++)
-        for (auto enemyIt = level->enemies.begin(); enemyIt != level->enemies.end();)
+        for (auto eneIt = level->enemies.begin(); eneIt != level->enemies.end();)
         {
-            if (!ballIt->used && checkCollision(ballIt->rect, enemyIt->rect))
+            if (!ballIt->used && checkCollision(ballIt->rect, eneIt->rect))
             {
-                enemyIt->damage();
-                enemyIt->healthBar.update(-(double)1 / enemyIt->maxHP);
+                eneIt->damage();
                 audios["hurt"]->play();
                 ballIt->used = true;
             }
             else
-                enemyIt++;
-            enemyIt->drop<Fruit>(level->fruits);
+                eneIt++;
         }
+    for (auto &enemy : level->enemies)
+        enemy.drop(level->fruits);
 }

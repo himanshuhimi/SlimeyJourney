@@ -11,12 +11,14 @@ Enemy::Enemy(
 {
     Velocity.x = speed;
     Position.y -= rect.h;
+    folderPath = "assets/images/enemies/" + type + "/";
+    anims = {{"damage", new Animation(renderer, folderPath + "anims/damage.png", 0.1)}};
 }
 
 void Enemy::handle(double dt, const vector<Grass> &grasses)
 {
-    hasDied = HP <= 0;
-    if (hasDied)
+    dead = HP <= 0;
+    if (dead)
         return;
     handleMovement(dt);
     handleLOS();
@@ -29,22 +31,34 @@ void Enemy::handle(double dt, const vector<Grass> &grasses)
     healthBar.handle(dt);
     healthBar.rect.x = Position.x;
     healthBar.rect.y = Position.y - (rect.h / 2);
+    if (anims["damage"]->active)
+        anims["damage"]->handle(dt);
 }
 
 void Enemy::render(Vector2D Camera)
 {
-    if (hasDied)
+    if (dead)
         return;
     healthBar.render(Camera);
-    Sprite::render(Camera);
+    if (anims["damage"]->active)
+        anims["damage"]->render(Camera, rect);
+    else
+        Sprite::render(Camera);
 }
 
 void Enemy::damage(int byPoints)
 {
-    if (hasDied)
+    if (dead)
     {
         HP = 0;
         return;
     }
     HP -= byPoints;
+    healthBar.update(-(double) 1 / maxHP);
+    anims["damage"]->restart();
+}
+
+void Enemy::handleShooting(double dt)
+{ 
+
 }

@@ -4,7 +4,7 @@ Map::Map(SDL_Renderer *renderer, string source)
     : renderer(renderer), source(source)
 {
     if (doc.LoadFile(source.c_str()) != XML_SUCCESS)
-        log("Map Uninitialized: " + source);
+        print("Map Uninitialized: " + source);
     mapElement = doc.FirstChildElement("map");
     width = mapElement->IntAttribute("width");
     height = mapElement->IntAttribute("height");
@@ -39,7 +39,7 @@ void Map::loadLayer(XMLElement *child)
     layer.height = child->IntAttribute("height");
     layer.dataElement = child->FirstChildElement("data");
     if (!layer.dataElement)
-        log("No <data> element found in: " + source);
+        print("No <data> element found in: " + source);
     layer.csvText = (string)layer.dataElement->GetText();
     for (char c : layer.csvText)
         if (isdigit(c))
@@ -61,7 +61,7 @@ void Map::loadTileset(XMLElement *child)
     string tsxSource = "maps/" + (string)child->Attribute("source");
     if (tsxSource.empty())
     {
-        log("TSX Source Uninitialized");
+        print("TSX Source Uninitialized");
         return;
     }
     tinyxml2::XMLDocument tsxDoc;
@@ -69,13 +69,13 @@ void Map::loadTileset(XMLElement *child)
     XMLElement *tsxRoot = tsxDoc.FirstChildElement("tileset");
     if (!tsxRoot)
     {
-        log("TSX Uninitialized: " + (string)tsxSource);
+        print("TSX Uninitialized: " + (string)tsxSource);
         return;
     }
     XMLElement *imageElement = tsxRoot->FirstChildElement("image");
     if (!imageElement)
     {
-        log("imageElement Uninitialized");
+        print("imageElement Uninitialized");
         return;
     }
     tileset.image = new Image(

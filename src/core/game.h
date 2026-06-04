@@ -11,6 +11,7 @@ public:
     SDL_Event event;
     double dt;
     bool active = false;
+    unordered_map<string, Animation *> anims;
     unordered_map<string, Audio *> audios;
     Game();
     void launch();
