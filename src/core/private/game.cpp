@@ -10,7 +10,7 @@ Game::Game()
         print("Mix Unloaded: " + (string)SDL_GetError());
     if (!SDL_CreateWindowAndRenderer(TITLE.c_str(), WIDTH, HEIGHT, 0, &window, &renderer))
         print("Display Unloaded: " + (string)SDL_GetError());
-    level = new Level(renderer, 1);
+    loadLevels();
     active = true;
 }
 
@@ -33,10 +33,25 @@ void Game::handle()
             terminate();
             break;
         case SDL_EVENT_MOUSE_BUTTON_UP:
-            level->player.mouseClicked = (event.button.button == SDL_BUTTON_LEFT);
+            currentLevel->player.mouseClicked = (event.button.button == SDL_BUTTON_LEFT);
             break;
         }
-    level->handle(dt);
+    switch (state)
+    {
+    case States::HOME:
+        break;
+    case States::SETTINGS:
+        break;
+    case States::PLAYING:
+        currentLevel->handle(dt);
+        break;
+    case States::PAUSED:
+        break;
+    case States::PROGRESSING:
+        break;
+    case States::OVER:
+        break;
+    }
 }
 
 void Game::render()
@@ -46,9 +61,26 @@ void Game::render()
         colors.skyblue.g, colors.skyblue.b,
         colors.skyblue.a);
     SDL_RenderClear(renderer);
-    level->render();
+    switch (state)
+    {
+    case States::HOME:
+        break;
+    case States::SETTINGS:
+        break;
+    case States::PLAYING:
+        currentLevel->render();
+        break;
+    case States::PAUSED:
+        break;
+    case States::PROGRESSING:
+        break;
+    case States::OVER:
+        break;
+    }
     SDL_RenderPresent(renderer);
 }
+
+void Game::update(States newState) { state = newState; }
 
 void Game::terminate()
 {
@@ -62,3 +94,22 @@ void Game::updateDeltaTime()
     dt = (double)(NOW - LAST) / SDL_GetPerformanceFrequency();
     LAST = NOW;
 }
+
+void Game::loadLevels()
+{
+    string directory = "maps";
+    if (!fs::exists(directory) && !fs::is_directory(directory))
+        return;
+    for (const auto &entry : fs::directory_iterator(directory))
+    {
+        auto path = entry.path();
+        if (path.filename().string() == "tilesets" || path.extension().string() != ".tmx")
+            continue;
+        string filename = path.stem().string();
+        int number = std::stoi(filename);
+        levels.emplace_back(new Level(renderer, number + 1));
+    }
+    updateLevel();
+}
+
+void Game::updateLevel() { currentLevel = levels.at(levelNum - 1); }

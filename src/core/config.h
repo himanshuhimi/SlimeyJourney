@@ -16,6 +16,7 @@
 #include <tinyxml2.h>
 
 using std::string, std::vector, std::map;
+namespace fs = std::filesystem;
 
 extern const string TITLE;
 extern const float SPRITE_SIZE;
@@ -59,8 +60,8 @@ struct Text
     float x, y;
     int pixelSize, alpha;
     Text(SDL_Renderer *renderer, float x, float y,
-        string data, SDL_Color color,int pixelSize = 24, 
-        string fontSource = "assets/fonts/roboto.ttf");
+         string data, SDL_Color color, int pixelSize = 24,
+         string fontSource = "assets/fonts/roboto.ttf");
     void render();
     void updateData(string newData);
     void updateAlpha(int newAlpha);
@@ -130,3 +131,13 @@ extern struct _Consts_
 {
     double gravity = 245;
 } constants;
+
+enum States
+{
+    HOME,
+    SETTINGS,
+    PLAYING,
+    PAUSED,
+    PROGRESSING,
+    OVER
+};

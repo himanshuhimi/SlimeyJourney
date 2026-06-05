@@ -28,7 +28,7 @@ public:
     {
         if (!hasAwarded && dead)
         {
-            vec.emplace_back(T(renderer, rect.x, rect.y));
+            vec.emplace_back(renderer, rect.x, rect.y);
             hasAwarded = true;
         }
     }

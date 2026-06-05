@@ -11,14 +11,20 @@ public:
     SDL_Event event;
     bool active = false;
     double dt = 0.0;
+    States state = States::PLAYING;
     Game();
     void launch();
     void render();
     void handle();
+    void update(States newState);
     void terminate();
 private:
     Uint64 LAST = SDL_GetPerformanceCounter();
     Uint64 NOW;
-    Level *level = nullptr;
+    int levelNum = 1;
+    Level *currentLevel;
+    vector<Level *> levels = {};
     void updateDeltaTime();
+    void loadLevels();
+    void updateLevel();
 };

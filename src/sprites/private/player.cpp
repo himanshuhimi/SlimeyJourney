@@ -106,7 +106,7 @@ void Player::handleShooting(double dt)
     throwCooldown.handle(dt);
     if (mouseClicked && throwCooldown.available)
     {
-        balls.emplace_back(Ball(renderer, rect.x, rect.y, "player", Direction));
+        balls.emplace_back(renderer, rect.x, rect.y, "player", Direction);
         mouseClicked = false;
         throwCooldown.timeElapsed = 0;
         throwCooldown.available = false;
@@ -118,7 +118,7 @@ void Player::handleShooting(double dt)
         float y = combatEnemy->rect.y;
         Vector2D Direction = {Center.x - combatEnemy->rect.x, Center.y - combatEnemy->rect.y};
         Direction.normalise();
-        combatEnemy->balls.emplace_back(Ball(renderer, x, y, "enemies/slime", Direction));
+        combatEnemy->balls.emplace_back(renderer, x, y, "enemies/slime", Direction);
         combatEnemy->throwCooldown.timeElapsed = 0;
         combatEnemy->throwCooldown.available = false;
     }
