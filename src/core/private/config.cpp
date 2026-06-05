@@ -2,9 +2,9 @@
 
 const string TITLE = "Slimey Journey";
 const float SPRITE_SIZE = 32.0f;
-int DEFAULT_WIDTH{640}, DEFAULT_HEIGHT{360};
 int WIDTH{640}, HEIGHT{360};
-int scaleX{WIDTH / DEFAULT_WIDTH}, scaleY{HEIGHT / DEFAULT_HEIGHT};
+int CHANGED_WIDTH{WIDTH * 3}, CHANGED_HEIGHT{HEIGHT* 3};
+int scaleX{CHANGED_WIDTH / WIDTH}, scaleY{CHANGED_HEIGHT / HEIGHT};
 int CAMERA_X{WIDTH / 2}, CAMERA_Y{HEIGHT / 2};
 const vector<string> fruits = {"apple", "melon", "orange"};
 
@@ -14,6 +14,8 @@ SDL_FRect getMousePosition()
 {
     SDL_FRect result = {0, 0, 0, 0};
     SDL_GetMouseState(&result.x, &result.y);
+    result.x /= scaleX;
+    result.y /= scaleY;
     return result;
 }
 
@@ -65,8 +67,8 @@ Text::Text(
     texture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_DestroySurface(surface);
     SDL_GetTextureSize(texture, &rect.w, &rect.h);
-    rect.x = x - rect.w / 2;
-    rect.y = y;
+    rect.x = x - (rect.w / 2);
+    rect.y = y - (rect.h / 2);
 }
 
 void Text::render() { SDL_RenderTexture(renderer, texture, nullptr, &rect); }

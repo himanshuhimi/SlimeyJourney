@@ -26,16 +26,6 @@ Progress::Progress(
     }
 }
 
-void Progress::update(double increment)
-{
-    reachPercent += increment;
-    if (reachPercent > 1.0)
-        reachPercent = 1.0;
-    else if (reachPercent < 0.0)
-        reachPercent = 0.0;
-    animSpeed = abs(animSpeed) * ((increment >= 0) ? 1 : -1);
-}
-
 void Progress::handle(double dt)
 {
     if (percentage < reachPercent)
@@ -71,4 +61,14 @@ void Progress::render(Vector2D Camera)
         attachment.render(nullptr, &attachmentRect);
     }
     image.render(nullptr, &dst);
+}
+
+void Progress::update(double increment)
+{
+    reachPercent += increment;
+    if (reachPercent > 1.0)
+        reachPercent = 1.0;
+    else if (reachPercent < 0.0)
+        reachPercent = 0.0;
+    animSpeed = abs(animSpeed) * ((increment >= 0) ? 1 : -1);
 }

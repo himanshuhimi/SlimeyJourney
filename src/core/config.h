@@ -21,7 +21,7 @@ namespace fs = std::filesystem;
 
 extern const string TITLE;
 extern const float SPRITE_SIZE;
-extern int DEFAULT_WIDTH, DEFAULT_HEIGHT, WIDTH, HEIGHT, scaleX, scaleY, CAMERA_X, CAMERA_Y;
+extern int WIDTH, HEIGHT, CHANGED_WIDTH, CHANGED_HEIGHT, scaleX, scaleY, CAMERA_X, CAMERA_Y;
 extern const vector<string> fruits;
 
 template <typename T>

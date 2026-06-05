@@ -8,9 +8,11 @@ Game::Game()
         print("TTF Unloaded: " + (string)SDL_GetError());
     if (!MIX_Init())
         print("Mix Unloaded: " + (string)SDL_GetError());
-    if (!SDL_CreateWindowAndRenderer(TITLE.c_str(), WIDTH, HEIGHT, 0, &window, &renderer))
+    if (!SDL_CreateWindowAndRenderer(TITLE.c_str(), CHANGED_WIDTH, CHANGED_HEIGHT,
+                                     0, &window, &renderer))
         print("Display Unloaded: " + (string)SDL_GetError());
-    ui = new UI(this);
+    SDL_SetRenderLogicalPresentation(renderer, WIDTH, HEIGHT,
+                                     SDL_LOGICAL_PRESENTATION_INTEGER_SCALE);
     loadLevels();
     active = true;
 }
@@ -26,6 +28,11 @@ void Game::launch()
 
 void Game::handle()
 {
+    if (!uiInit)
+    {
+        ui = new UI(this);
+        uiInit = true;
+    }
     updateDeltaTime();
     while (SDL_PollEvent(&event))
         switch (event.type)
@@ -35,7 +42,8 @@ void Game::handle()
             break;
         case SDL_EVENT_MOUSE_BUTTON_UP:
         {
-            ui->handle(event);
+            if (ui != nullptr)
+                ui->handle(event);
             currentLevel->player.mouseClicked = (event.button.button == SDL_BUTTON_LEFT);
             break;
         }
@@ -56,7 +64,8 @@ void Game::handle()
     case States::OVER:
         break;
     }
-    ui->update(dt);
+    if (ui != nullptr)
+        ui->update(dt);
     if (state == States::PLAYING && SDL_GetKeyboardState(NULL)[SDL_SCANCODE_ESCAPE])
         update(States::PAUSED);
     updateStateTexts();
@@ -86,7 +95,8 @@ void Game::render()
     case States::OVER:
         break;
     }
-    ui->render();
+    if (ui != nullptr)
+        ui->render();
     for (auto &text : texts)
         text.render();
     SDL_RenderPresent(renderer);
@@ -162,6 +172,5 @@ void Game::updateStateTexts()
     if (titles.find(state) == titles.end())
         return;
     texts.emplace_back(renderer, WIDTH / 2, 100,
-        titles.at(state), colors.black, 48, "assets/fonts/pixel.ttf"
-    );
+                       titles.at(state), colors.black, 48, "assets/fonts/pixel.ttf");
 }

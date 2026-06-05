@@ -18,7 +18,6 @@ public:
             button.handle(event);
     }
 
-
     void render()
     {
         for (auto &button : buttons)
@@ -57,7 +56,7 @@ public:
             result = {"CONTINUE", "HOME", "QUIT"};
             break;
         case States::PROGRESSING:
-            result = {"NEXT", "PLAY AGAIN", "HOME", "QUIT"};
+            result = {"NEXT", "PLAY AGAIN", "HOME"};
             break;
         case States::OVER:
             result = {"TRY AGAIN", "HOME", "QUIT"};

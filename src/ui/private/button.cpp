@@ -4,12 +4,14 @@ Button::Button(SDL_Renderer *renderer, float x, float y,
                std::function<void()> callback, string label)
     : renderer(renderer), callback(std::function<void()>(callback)),
       image(renderer, "assets/ui/buttons/unhovered.png"),
-      text(renderer, x, y, label, colors.black, 18)
+      text(renderer, 0, 0, "", colors.black)
 {
     rect = SDL_FRect{x - (image.width / 2), y, image.width, image.height};
-    images = {
-        Image(renderer, "assets/ui/buttons/unhovered.png"),
-        Image(renderer, "assets/ui/buttons/hovered.png")};
+    text = Text(
+        renderer, rect.x + (rect.w / 2), rect.y + (rect.h / 2),
+        label, colors.black, 18);
+    images.emplace_back(renderer, "assets/ui/buttons/unhovered.png");
+    images.emplace_back(renderer, "assets/ui/buttons/hovered.png");
 }
 
 void Button::handle(SDL_Event event)
