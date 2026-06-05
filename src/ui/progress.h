@@ -13,7 +13,8 @@ public:
     double startPercent = 0.0, animSpeed = 0.0, reachPercent = 0.0, percentage = 0.0;
     bool complete = false;
     Progress(
-        SDL_Renderer *renderer, float x, float y, SDL_Color color = colors.white,
+        SDL_Renderer *renderer, float x, float y, 
+        SDL_Color color = SDL_Color{255, 255, 255, 255},
         Image attachment = {nullptr, ""}, double startPercent = 0.0,
         float width = 100, double animSpeed = 2.0);
     void update(double increment = 0.2);

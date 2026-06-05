@@ -4,7 +4,7 @@ Enemy::Enemy(SDL_Renderer *renderer, string type, float x, float y,
              int speed, int HP, float sightRange)
     : Sprite(renderer, "enemies/" + type + "/idle.png", x, y), maxHP(HP),
       HP(HP), type(type), healthBar(renderer, x, y - rect.h, colors.red,
-                                    Image(renderer, "assets/images/ui/heart.png"), 1.0, 32)
+                                    Image(renderer, "assets/ui/heart.png"), 1.0, 32)
 {
     Velocity.x = speed;
     Position.y -= rect.h;

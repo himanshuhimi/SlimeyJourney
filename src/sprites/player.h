@@ -13,7 +13,7 @@ public:
     Progress healthBar;
     Vector2D prevPos;
     Cooldown throwCooldown = {1.0};
-    bool inCombat = false, dead, immune, mouseClicked;
+    bool inCombat = false, dead = false, immune = false, mouseClicked = false;
     map<string, Animation> anims;
     map<string, Audio> audios;
     vector<Ball> balls = {};

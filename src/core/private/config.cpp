@@ -169,6 +169,13 @@ int _Random_::randint(int begin, int end)
     return dist(rng);
 };
 
+map<int, string> titles = {
+    {States::HOME, TITLE},
+    {States::PAUSED, "PAUSED!"},
+    {States::PROGRESSING, "CONQUERED!"},
+    {States::OVER, "GAME OVER!"}
+};
+
 _Random_ Random;
 _Colors_ colors;
 _Consts_ constants;

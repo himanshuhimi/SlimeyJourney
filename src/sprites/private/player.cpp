@@ -4,7 +4,7 @@
 Player::Player(SDL_Renderer *renderer, float x, float y)
     : Sprite(renderer, "player/idle.png", x, y),
       healthBar(renderer, 5, HEIGHT / 16.0f, colors.red,
-                Image(renderer, "assets/images/ui/heart.png"), 1.0, 150)
+                Image(renderer, "assets/ui/heart.png"), 1.0, 150)
 {
     jumpStrength = 100.0f;
     speed = 180;

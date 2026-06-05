@@ -3,9 +3,10 @@
 #define SDL_MAIN_HANDLED
 
 #include <iostream>
-#include <random>
 #include <algorithm>
 #include <filesystem>
+#include <functional>
+#include <random>
 #include <vector>
 #include <cmath>
 #include <map>
@@ -141,3 +142,5 @@ enum States
     PROGRESSING,
     OVER
 };
+
+extern map<int, string> titles;

@@ -2,6 +2,8 @@
 
 #include "config.h"
 #include "../tools/level.h"
+#include "../ui/button.h"
+#include "../tools/ui.h"
 
 class Game
 {
@@ -11,21 +13,27 @@ public:
     SDL_Event event;
     bool active = false;
     double dt = 0.0;
-    States state = States::PLAYING;
+    States state = States::HOME;
     Game();
     void launch();
     void render();
     void handle();
     void update(States newState);
+    void nextLevel();
     void terminate();
+
 private:
+    Level *currentLevel = nullptr;
+    UI<Game *> *ui = nullptr;
+    vector<Level *> levels = {};
+    vector<Button> buttons = {};
+    vector<Text> texts = {};
     Uint64 LAST = SDL_GetPerformanceCounter();
     Uint64 NOW;
     int levelNum = 1;
-    Level *currentLevel;
-    vector<Level *> levels = {};
     void updateDeltaTime();
     void loadLevels();
     void updateLevel();
     void manageUpdation();
+    void updateStateTexts();
 };

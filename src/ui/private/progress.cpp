@@ -5,7 +5,7 @@ Progress::Progress(
     Image attachment, double startPercent, float width, double animSpeed)
     : renderer(renderer), color(color), attachment(attachment),
       startPercent(startPercent), animSpeed(animSpeed),
-      image(renderer, "assets/images/ui/bar.png")
+      image(renderer, "assets/ui/bar.png")
 {
     Position.x = x;
     Position.y = y;

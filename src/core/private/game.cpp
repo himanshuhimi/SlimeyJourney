@@ -10,6 +10,7 @@ Game::Game()
         print("Mix Unloaded: " + (string)SDL_GetError());
     if (!SDL_CreateWindowAndRenderer(TITLE.c_str(), WIDTH, HEIGHT, 0, &window, &renderer))
         print("Display Unloaded: " + (string)SDL_GetError());
+    ui = new UI(this);
     loadLevels();
     active = true;
 }
@@ -33,8 +34,11 @@ void Game::handle()
             terminate();
             break;
         case SDL_EVENT_MOUSE_BUTTON_UP:
+        {
+            ui->handle(event);
             currentLevel->player.mouseClicked = (event.button.button == SDL_BUTTON_LEFT);
             break;
+        }
         }
     switch (state)
     {
@@ -52,6 +56,10 @@ void Game::handle()
     case States::OVER:
         break;
     }
+    ui->update(dt);
+    if (state == States::PLAYING && SDL_GetKeyboardState(NULL)[SDL_SCANCODE_ESCAPE])
+        update(States::PAUSED);
+    updateStateTexts();
     manageUpdation();
 }
 
@@ -78,10 +86,28 @@ void Game::render()
     case States::OVER:
         break;
     }
+    ui->render();
+    for (auto &text : texts)
+        text.render();
     SDL_RenderPresent(renderer);
 }
 
-void Game::update(States newState) { state = newState; }
+void Game::update(States newState)
+{
+    state = newState;
+    ui->loadButtons();
+    loadLevels();
+}
+
+void Game::nextLevel()
+{
+    if (levelNum >= levels.size())
+    {
+        update(States::HOME);
+        return;
+    }
+    levelNum += 1;
+}
 
 void Game::terminate()
 {
@@ -98,6 +124,8 @@ void Game::updateDeltaTime()
 
 void Game::loadLevels()
 {
+    if (!levels.empty())
+        levels.clear();
     string directory = "maps";
     if (!fs::exists(directory) && !fs::is_directory(directory))
         return;
@@ -117,10 +145,23 @@ void Game::updateLevel() { currentLevel = levels.at(levelNum - 1); }
 
 void Game::manageUpdation()
 {
+    if (state != States::PLAYING)
+        return;
     bool complete = currentLevel->fruitBar.complete;
     bool collided = checkCollision(currentLevel->player.rect, currentLevel->flag.rect);
     if (complete && collided)
         update(States::PROGRESSING);
-    if (currentLevel->player.dead)
+    else if (currentLevel->player.dead)
         update(States::OVER);
+}
+
+void Game::updateStateTexts()
+{
+    if (!texts.empty())
+        texts.clear();
+    if (titles.find(state) == titles.end())
+        return;
+    texts.emplace_back(renderer, WIDTH / 2, 100,
+        titles.at(state), colors.black, 48, "assets/fonts/pixel.ttf"
+    );
 }
