@@ -5,6 +5,7 @@
 #include "../sprites/player.h"
 #include "../sprites/fruit.h"
 #include "../sprites/slime.h"
+#include "../sprites/flag.h"
 #include "../ui/progress.h"
 
 class Level
@@ -14,6 +15,7 @@ public:
     Progress fruitBar;
     Vector2D Camera;
     Map map;
+    Flag flag;
     Player player;
     vector<Grass> grasses = {};
     vector<Fruit> fruits = {};

@@ -52,6 +52,7 @@ void Game::handle()
     case States::OVER:
         break;
     }
+    manageUpdation();
 }
 
 void Game::render()
@@ -113,3 +114,13 @@ void Game::loadLevels()
 }
 
 void Game::updateLevel() { currentLevel = levels.at(levelNum - 1); }
+
+void Game::manageUpdation()
+{
+    bool complete = currentLevel->fruitBar.complete;
+    bool collided = checkCollision(currentLevel->player.rect, currentLevel->flag.rect);
+    if (complete && collided)
+        update(States::PROGRESSING);
+    if (currentLevel->player.dead)
+        update(States::OVER);
+}

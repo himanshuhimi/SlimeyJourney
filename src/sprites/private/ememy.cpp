@@ -1,9 +1,7 @@
 #include "../enemy.h"
 
-Enemy::Enemy(
-    SDL_Renderer *renderer, string type,
-    float x, float y,
-    int speed, int HP)
+Enemy::Enemy(SDL_Renderer *renderer, string type, float x, float y,
+             int speed, int HP, float sightRange)
     : Sprite(renderer, "enemies/" + type + "/idle.png", x, y), maxHP(HP),
       HP(HP), type(type), healthBar(renderer, x, y - rect.h, colors.red,
                                     Image(renderer, "assets/images/ui/heart.png"), 1.0, 32)
@@ -12,18 +10,14 @@ Enemy::Enemy(
     Position.y -= rect.h;
     folderPath = "assets/anims/" + type + "/";
     anims = {{"damage", Animation(renderer, folderPath + "damage.png", 0.1)}};
-    attackRange = SDL_FRect{Center.x, Center.y, 60, 60};
+    lineOfSight = LOS(renderer, x, y, sightRange, 1);
 }
 
 void Enemy::handle(double dt, const vector<Grass> &grasses)
 {
     dead = HP <= 0;
     if (dead)
-    {
-        attackRange.w = 0;
-        attackRange.h = 0;
         return;
-    }
     handleMovement(dt);
     handleLOS();
     handleGravity(dt, grasses);
@@ -33,6 +27,8 @@ void Enemy::handle(double dt, const vector<Grass> &grasses)
         ball.handle(dt, grasses);
     if (anims.at("damage").active)
         anims.at("damage").handle(dt);
+    if (state.prevOnGround && !state.onGround)
+        Velocity.x *= -1;
 }
 
 void Enemy::render(Vector2D Camera)
@@ -41,7 +37,6 @@ void Enemy::render(Vector2D Camera)
         return;
     for (auto &ball : balls)
         ball.render(Camera);
-    // SDL_RenderRect(renderer, &attackRange);
     if (anims.at("damage").active)
     {
         anims.at("damage").render(Camera, rect);
@@ -56,13 +51,6 @@ void Enemy::handleMovement(double dt)
     Sprite::handleMovement(dt);
     healthBar.rect.x = Position.x;
     healthBar.rect.y = Position.y - (rect.h / 2);
-    attackRange.x = dst.x - (attackRange.w / 2);
-    attackRange.y = dst.y - (attackRange.h / 2);
-    if (state.prevOnGround && !state.onGround)
-    {
-        Velocity.x *= -1;
-        lineOfSight.rect.w *= -1;
-    }
 }
 
 void Enemy::damage(int byPoints)

@@ -27,4 +27,5 @@ private:
     void updateDeltaTime();
     void loadLevels();
     void updateLevel();
+    void manageUpdation();
 };

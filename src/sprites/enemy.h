@@ -10,7 +10,6 @@ class Enemy : public Sprite
 {
 public:
     Progress healthBar;
-    SDL_FRect attackRange;
     Cooldown throwCooldown = {2.0};
     bool dead = false, hasAwarded = false, immune = false;
     map<string, Animation> anims;
@@ -18,7 +17,7 @@ public:
     string folderPath = "", type = "";
     vector<Ball> balls = {};
     Enemy(SDL_Renderer *renderer, string type,
-        float x, float y, int speed = 40, int HP = 5);
+        float x, float y, int speed = 40, int HP = 5, float sightRange = 40);
     void handle(double dt, const vector<Grass> &grasses);
     void render(Vector2D Camera);
     void handleMovement(double dt);

@@ -27,7 +27,7 @@ void Sprite::render(Vector2D Camera)
     dst.x -= Camera.x;
     dst.y -= Camera.y;
     image.render(nullptr, &dst);
-    // lineOfSight.render(Camera);
+    lineOfSight.render(Camera);
 }
 
 void Sprite::handleMovement(double dt)

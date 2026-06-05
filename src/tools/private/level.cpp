@@ -1,8 +1,7 @@
 #include "../level.h"
 
 Level::Level(SDL_Renderer *renderer, int number)
-    : renderer(renderer),
-      player(renderer, 0, 0),
+    : renderer(renderer), player(renderer, 0, 0), flag(renderer, 0, 0),
       map(renderer, "maps/" + std::to_string(number - 1) + ".tmx"),
       fruitBar(renderer, 0, 0, SDL_Color{95, 90, 204, 255},
                Image(renderer, "assets/images/ui/bottle.png"))
@@ -25,6 +24,7 @@ void Level::handle(double dt)
     for (auto &enemy : enemies)
         enemy.handle(dt, grasses);
     fruitBar.handle(dt);
+    flag.handle(dt);
     player.handle(dt, grasses);
     collision();
 }
@@ -41,6 +41,7 @@ void Level::render()
     for (auto &ball : player.balls)
         ball.render(Camera);
     fruitBar.render();
+    flag.render(Camera);
     player.render(Camera);
 }
 
@@ -69,7 +70,7 @@ void Level::collision()
             else
                 eneIt++;
     for (auto &enemy : enemies)
-        if (checkCollision(player.rect, enemy.attackRange))
+        if (checkCollision(player.rect, enemy.lineOfSight.rect))
         {
             player.inCombat = true;
             player.combatEnemy = &enemy;
@@ -105,6 +106,8 @@ void Level::loadObjects()
         string name = obj.name;
         if (name == "player")
             player = Player(renderer, obj.x, obj.y - SPRITE_SIZE);
+        if (name == "flag")
+            flag = Flag(renderer, obj.x, obj.y - SPRITE_SIZE);
         if (name == "fruit")
             fruits.push_back(Fruit(renderer, obj.x, obj.y - SPRITE_SIZE));
         if (name == "slime")

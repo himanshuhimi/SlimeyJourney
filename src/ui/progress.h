@@ -11,6 +11,7 @@ public:
     SDL_Color color;
     Vector2D Position;
     double startPercent = 0.0, animSpeed = 0.0, reachPercent = 0.0, percentage = 0.0;
+    bool complete = false;
     Progress(
         SDL_Renderer *renderer, float x, float y, SDL_Color color = colors.white,
         Image attachment = {nullptr, ""}, double startPercent = 0.0,
