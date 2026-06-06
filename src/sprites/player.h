@@ -17,7 +17,7 @@ public:
     map<string, Animation> anims;
     map<string, Audio> audios;
     vector<Ball> balls = {};
-    int maxHP = 5, HP = maxHP;
+    int maxAmmo = 15, ammo = maxAmmo, maxHP = 5, HP = maxHP;
     float speed, jumpStrength;
     Player(SDL_Renderer *renderer, float x, float y);
     void handle(double dt, const vector<Grass> &grasses);

@@ -8,18 +8,18 @@ Player::Player(SDL_Renderer *renderer, float x, float y)
 {
     jumpStrength = 100.0f;
     speed = 180;
-    string animBeginPath = "assets/anims/player/";
-    string audioBeginPath = "assets/audios/player/";
+    string animPath = "assets/anims/player/";
+    string audioPath = "assets/audios/player/";
     anims = {
-        {"jump", Animation(renderer, animBeginPath + "jump.png")},
-        {"damage", Animation(renderer, animBeginPath + "damage.png", 0.2)}};
+        {"jump", Animation(renderer, animPath + "jump.png")},
+        {"damage", Animation(renderer, animPath + "damage.png", 0.1)},
+        {"walking", Animation(renderer, animPath + "walking.png", 0.1)}};
     audios = {
-        {"jump", Audio(audioBeginPath + "jump.wav")},
-        {"walking", Audio(audioBeginPath + "walking.wav")},
-        {"shoot", Audio(audioBeginPath + "shoot.wav")},
-        {"pickup", Audio(audioBeginPath + "pickup.wav")},
-        {"hurt", Audio("assets/audios/hurt.wav")}
-    };
+        {"jump", Audio(audioPath + "jump.wav")},
+        {"walking", Audio(audioPath + "walking.wav")},
+        {"shoot", Audio(audioPath + "shoot.wav")},
+        {"pickup", Audio(audioPath + "pickup.wav")},
+        {"hurt", Audio("assets/audios/hurt.wav")}};
 }
 
 void Player::handle(double dt, const vector<Grass> &grasses)
@@ -30,6 +30,8 @@ void Player::handle(double dt, const vector<Grass> &grasses)
         return;
     if (anims.at("damage").active)
         anims.at("damage").handle(dt);
+    else if (anims.at("walking").active)
+        anims.at("walking").handle(dt);
     if (anims.at("damage").complete)
     {
         movable = true;
@@ -48,10 +50,17 @@ void Player::render(Vector2D Camera)
         anim.dst = dst;
     if (state.jumping)
         anims.at("jump").render(Camera, rect);
+    else if (anims.at("walking").active)
+        anims.at("walking").render(Camera, rect);
     else
         Sprite::render(Camera);
     if (anims.at("damage").active)
+    {
+        for (auto &[key, anim]: anims)
+            if (key != "damage")
+                anim.active = false;
         anims.at("damage").render(Camera, rect);
+    }
 }
 
 void Player::damage(int byPoints)
@@ -81,6 +90,7 @@ void Player::handleMovement(double dt)
         return;
     const bool *keys = SDL_GetKeyboardState(NULL);
     Velocity.x = -((int)keys[SDL_SCANCODE_A] - (int)keys[SDL_SCANCODE_D]) * speed;
+    anims.at("walking").active = state.walking;
     if (!state.jumping && keys[SDL_SCANCODE_SPACE])
     {
         Velocity.y -= jumpStrength;
@@ -93,6 +103,8 @@ void Player::handleMovement(double dt)
         Velocity.y += constants.gravity * dt;
         anims.at("jump").handle(dt);
     }
+    if (anims.at("walking").active)
+        anims.at("walking").handle(dt);
     if (rect.y > HEIGHT)
         resetPos();
 }
@@ -104,9 +116,10 @@ void Player::handleShooting(double dt)
     Vector2D Direction = {mapMouse.x - Center.x, mapMouse.y - Center.y};
     Direction.normalise();
     throwCooldown.handle(dt);
-    if (mouseClicked && throwCooldown.available)
+    if (mouseClicked && throwCooldown.available && ammo > 0)
     {
         balls.emplace_back(renderer, rect.x, rect.y, "player", Direction);
+        ammo -= 1;
         mouseClicked = false;
         throwCooldown.timeElapsed = 0;
         throwCooldown.available = false;
@@ -122,4 +135,6 @@ void Player::handleShooting(double dt)
         combatEnemy->throwCooldown.timeElapsed = 0;
         combatEnemy->throwCooldown.available = false;
     }
+    if (ammo <= 0 && !(ammo >= maxAmmo))
+        ammo += 1;
 }

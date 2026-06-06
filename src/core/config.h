@@ -136,6 +136,7 @@ extern struct _Consts_
 enum States
 {
     HOME,
+    LOADING,
     SETTINGS,
     PLAYING,
     PAUSED,

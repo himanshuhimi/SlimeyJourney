@@ -9,7 +9,9 @@ Enemy::Enemy(SDL_Renderer *renderer, string type, float x, float y,
     Velocity.x = speed;
     Position.y -= rect.h;
     folderPath = "assets/anims/" + type + "/";
-    anims = {{"damage", Animation(renderer, folderPath + "damage.png", 0.1)}};
+    anims = {
+        {"damage", Animation(renderer, folderPath + "damage.png", 0.1)},
+        {"walking", Animation(renderer, folderPath + "walking.png", 0.1)}};
     lineOfSight = LOS(renderer, x, y, sightRange, 1);
 }
 
@@ -27,6 +29,8 @@ void Enemy::handle(double dt, const vector<Grass> &grasses)
         ball.handle(dt, grasses);
     if (anims.at("damage").active)
         anims.at("damage").handle(dt);
+    else if (anims.at("walking").active)
+        anims.at("walking").handle(dt);
     if (state.prevOnGround && !state.onGround)
         Velocity.x *= -1;
 }
@@ -35,15 +39,20 @@ void Enemy::render(Vector2D Camera)
 {
     if (dead)
         return;
-    for (auto &ball : balls)
-        ball.render(Camera);
+    if (anims.at("walking").active)
+        anims.at("walking").render(Camera, rect);
+    else
+        Sprite::render(Camera);
     if (anims.at("damage").active)
     {
+        for (auto &[key, anim]: anims)
+            if (key != "damage")
+                anim.active = false;
         anims.at("damage").render(Camera, rect);
         healthBar.render(Camera);
     }
-    else
-        Sprite::render(Camera);
+    for (auto &ball : balls)
+        ball.render(Camera);
 }
 
 void Enemy::handleMovement(double dt)
@@ -51,6 +60,7 @@ void Enemy::handleMovement(double dt)
     Sprite::handleMovement(dt);
     healthBar.rect.x = Position.x;
     healthBar.rect.y = Position.y - (rect.h / 2);
+    anims.at("walking").active = state.walking;
 }
 
 void Enemy::damage(int byPoints)

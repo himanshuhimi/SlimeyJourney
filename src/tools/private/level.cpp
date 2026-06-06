@@ -8,6 +8,7 @@ Level::Level(SDL_Renderer *renderer, int number)
 {
     loadObjects();
     fruitLength = enemies.size() + fruits.size();
+    player.ammo = enemies.size() * 5;
     increment = (double)1 / fruitLength;
     fruitBar.rect.x = player.healthBar.rect.x;
     fruitBar.rect.y = player.healthBar.rect.y + SPRITE_SIZE;
@@ -57,13 +58,15 @@ void Level::collision()
         }
         else
             fruitIt++;
-    for (auto &ball : player.balls)
+    for (auto ballIt = player.balls.begin(); ballIt != player.balls.end(); ballIt++)
         for (auto eneIt = enemies.begin(); eneIt != enemies.end();)
-            if (!ball.used && checkCollision(ball.rect, eneIt->rect))
+            if (!ballIt->used && checkCollision(ballIt->rect, eneIt->rect))
             {
                 eneIt->damage();
                 audios.at("hurt").play();
-                ball.used = true;
+                ballIt->used = true;
+                player.inCombat = true;
+                player.combatEnemy = &(*eneIt);
                 if (eneIt->dead)
                     eneIt = enemies.erase(eneIt);
             }
@@ -112,6 +115,8 @@ void Level::loadObjects()
             fruits.push_back(Fruit(renderer, obj.x, obj.y - SPRITE_SIZE));
         if (name == "slime")
             enemies.push_back(Slime(renderer, obj.x, obj.y));
+        // if (name == "snail")
+        //     enemies.push_back(Snail(renderer, obj.x, obj.y));
         if (name == "grasses")
             for (int x = 0; x < obj.width; x += SPRITE_SIZE)
                 grasses.push_back(Grass(renderer, obj.x + x + SPRITE_SIZE / 2, obj.y));

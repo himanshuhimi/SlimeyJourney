@@ -50,22 +50,19 @@ void Game::handle()
         }
     switch (state)
     {
-    case States::HOME:
-        break;
-    case States::SETTINGS:
-        break;
+    // case States::LOADING:
+    //     ui->loading.handle(dt);
+    //     break;
     case States::PLAYING:
         currentLevel->handle(dt);
         break;
-    case States::PAUSED:
-        break;
-    case States::PROGRESSING:
-        break;
-    case States::OVER:
-        break;
     }
     if (ui != nullptr)
+    {
         ui->update(dt);
+        if (ui->loading.complete)
+            state = nextState;
+    }
     if (state == States::PLAYING && SDL_GetKeyboardState(NULL)[SDL_SCANCODE_ESCAPE])
         update(States::PAUSED);
     updateStateTexts();
@@ -81,18 +78,12 @@ void Game::render()
     SDL_RenderClear(renderer);
     switch (state)
     {
-    case States::HOME:
-        break;
-    case States::SETTINGS:
-        break;
+    // case States::LOADING:
+    //     ui->loading.update();
+    //     ui->loading.render();
+    //     break;
     case States::PLAYING:
         currentLevel->render();
-        break;
-    case States::PAUSED:
-        break;
-    case States::PROGRESSING:
-        break;
-    case States::OVER:
         break;
     }
     if (ui != nullptr)
@@ -102,9 +93,10 @@ void Game::render()
     SDL_RenderPresent(renderer);
 }
 
-void Game::update(States newState)
+void Game::update(States newState, bool loading)
 {
-    state = newState;
+    nextState = newState;
+    state = nextState;
     ui->loadButtons();
     loadLevels();
 }
@@ -117,6 +109,7 @@ void Game::nextLevel()
         return;
     }
     levelNum += 1;
+    update(States::PLAYING);
 }
 
 void Game::terminate()

@@ -18,7 +18,7 @@ public:
     void launch();
     void render();
     void handle();
-    void update(States newState);
+    void update(States newState, bool loading = true);
     void nextLevel();
     void terminate();
 
@@ -30,6 +30,7 @@ private:
     vector<Text> texts = {};
     Uint64 LAST = SDL_GetPerformanceCounter();
     Uint64 NOW;
+    States nextState;
     int levelNum = 1;
     bool uiInit = false;
     void updateDeltaTime();
