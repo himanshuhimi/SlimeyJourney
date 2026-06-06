@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../tools/sprite.h"
+#include "tools/sprite.h"
 
 class Fruit : public Sprite
 {

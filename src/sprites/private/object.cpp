@@ -1,7 +1,7 @@
-#include "../grass.h"
+#include "../object.h"
 
-Grass::Grass(SDL_Renderer *renderer, float x, float y)
-    : renderer(renderer), image(renderer, "assets/images/empty.png")
+Object::Object(SDL_Renderer *renderer, float x, float y)
+    : renderer(renderer), image(renderer, "assets/images/object.png")
 {
     Position.x = x;
     Position.y = y;
@@ -11,7 +11,7 @@ Grass::Grass(SDL_Renderer *renderer, float x, float y)
     rect.h = image.height;
 }
 
-void Grass::render(Vector2D Camera)
+void Object::render(Vector2D Camera)
 {
     dst = rect;
     dst.x -= Camera.x;

@@ -1,12 +1,11 @@
 #pragma once
 
 #include "map.h"
-#include "../sprites/grass.h"
-#include "../sprites/player.h"
-#include "../sprites/fruit.h"
-#include "../sprites/slime.h"
-#include "../sprites/flag.h"
-#include "../ui/progress.h"
+#include "sprites/player.h"
+#include "sprites/fruit.h"
+#include "sprites/enemies/slime.h"
+#include "sprites/flag.h"
+#include "ui/progress.h"
 
 class Level
 {
@@ -17,7 +16,7 @@ public:
     Map map;
     Flag flag;
     Player player;
-    vector<Grass> grasses = {};
+    vector<Object> grasses = {};
     vector<Fruit> fruits = {};
     vector<Enemy> enemies = {};
     std::map<string, Audio> audios;

@@ -1,7 +1,7 @@
 #include "../flag.h"
 
 Flag::Flag(SDL_Renderer *renderer, float x, float y)
-    : Sprite(renderer, "empty.png", x, y),
+    : Sprite(renderer, "object.png", x, y),
       anim(renderer, "assets/anims/flag.png", 0.1)
 {
     anim.active = true;

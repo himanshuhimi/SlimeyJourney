@@ -1,9 +1,9 @@
 #pragma once
 
 #include "config.h"
-#include "../tools/level.h"
-#include "../ui/button.h"
-#include "../tools/ui.h"
+#include "tools/level.h"
+#include "ui/button.h"
+#include "tools/ui.h"
 
 class Game
 {

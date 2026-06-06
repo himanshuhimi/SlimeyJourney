@@ -15,7 +15,7 @@ Enemy::Enemy(SDL_Renderer *renderer, string type, float x, float y,
     lineOfSight = LOS(renderer, x, y, sightRange, 1);
 }
 
-void Enemy::handle(double dt, const vector<Grass> &grasses)
+void Enemy::handle(double dt, const vector<Object> &grasses)
 {
     dead = HP <= 0;
     if (dead)

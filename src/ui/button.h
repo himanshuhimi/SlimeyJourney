@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../core/config.h"
+#include "core/config.h"
 
 class Button
 {

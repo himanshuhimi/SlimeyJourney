@@ -108,7 +108,6 @@ void Game::nextLevel()
         update(States::HOME);
         return;
     }
-    levelNum += 1;
     update(States::PLAYING);
 }
 
@@ -150,10 +149,13 @@ void Game::manageUpdation()
 {
     if (state != States::PLAYING)
         return;
-    bool complete = currentLevel->fruitBar.complete;
+    bool complete = currentLevel->fruitBar.percentage >= 0.8;
     bool collided = checkCollision(currentLevel->player.rect, currentLevel->flag.rect);
     if (complete && collided)
+    {
         update(States::PROGRESSING);
+        levelNum += 1;
+    }
     else if (currentLevel->player.dead)
         update(States::OVER);
 }

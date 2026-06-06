@@ -40,10 +40,9 @@ void Progress::handle(double dt)
         if (percentage < reachPercent)
             percentage = reachPercent;
     }
-    if (percentage >= 1.0)
-        complete = true;
     fillRect.x = dst.x;
     fillRect.y = dst.y;
+    complete = (percentage >= 1.0);
 }
 
 void Progress::render(Vector2D Camera)

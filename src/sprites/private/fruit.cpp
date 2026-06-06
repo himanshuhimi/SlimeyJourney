@@ -1,7 +1,7 @@
 #include "../fruit.h"
 
 Fruit::Fruit(SDL_Renderer *renderer, float x, float y)
-    : Sprite(renderer, "empty.png", x, y)
+    : Sprite(renderer, "object.png", x, y)
 {
     choice = Random.choice<string>(fruits);
     image = Image(renderer, "assets/images/fruits/" + choice + ".png");

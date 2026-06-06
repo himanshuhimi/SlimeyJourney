@@ -13,7 +13,7 @@ Sprite::Sprite(SDL_Renderer *renderer, string imgSource, float x, float y)
     gravityLOS.rect.h = rect.h / 2;
 }
 
-void Sprite::handle(double dt, const vector<Grass> &grasses)
+void Sprite::handle(double dt, const vector<Object> &grasses)
 {
     handleMovement(dt);
     handleGravity(dt, grasses);
@@ -50,7 +50,7 @@ void Sprite::handleLOS()
         lineOfSight.rect.w *= -1;
 }
 
-void Sprite::handleGravity(double dt, const vector<Grass> &grasses)
+void Sprite::handleGravity(double dt, const vector<Object> &grasses)
 {
     bool onGround = false;
     bool prevOnGround = state.onGround;

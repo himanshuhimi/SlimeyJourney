@@ -1,5 +1,4 @@
 #include "../player.h"
-#include "../enemy.h"
 
 Player::Player(SDL_Renderer *renderer, float x, float y)
     : Sprite(renderer, "player/idle.png", x, y),
@@ -22,7 +21,7 @@ Player::Player(SDL_Renderer *renderer, float x, float y)
         {"hurt", Audio("assets/audios/hurt.wav")}};
 }
 
-void Player::handle(double dt, const vector<Grass> &grasses)
+void Player::handle(double dt, const vector<Object> &grasses)
 {
     healthBar.handle(dt);
     dead = HP <= 0;
@@ -116,10 +115,9 @@ void Player::handleShooting(double dt)
     Vector2D Direction = {mapMouse.x - Center.x, mapMouse.y - Center.y};
     Direction.normalise();
     throwCooldown.handle(dt);
-    if (mouseClicked && throwCooldown.available && ammo > 0)
+    if (mouseClicked && throwCooldown.available)
     {
         balls.emplace_back(renderer, rect.x, rect.y, "player", Direction);
-        ammo -= 1;
         mouseClicked = false;
         throwCooldown.timeElapsed = 0;
         throwCooldown.available = false;
@@ -135,6 +133,4 @@ void Player::handleShooting(double dt)
         combatEnemy->throwCooldown.timeElapsed = 0;
         combatEnemy->throwCooldown.available = false;
     }
-    if (ammo <= 0 && !(ammo >= maxAmmo))
-        ammo += 1;
 }

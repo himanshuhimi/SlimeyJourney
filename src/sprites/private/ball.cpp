@@ -10,7 +10,7 @@ Ball::Ball(SDL_Renderer *renderer, float x, float y, string type, Vector2D Direc
     anims = {{"explosion", Animation(renderer, "assets/anims/explosion.png")}};
 }
 
-void Ball::handle(double dt, const vector<Grass> &grasses)
+void Ball::handle(double dt, const vector<Object> &grasses)
 {
     if (used)
         return;

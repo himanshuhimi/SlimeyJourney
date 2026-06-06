@@ -1,9 +1,9 @@
 #pragma once
 
-#include "../tools/sprite.h"
-#include "grass.h"
+#include "tools/sprite.h"
 #include "ball.h"
-#include "../ui/progress.h"
+#include "ui/progress.h"
+#include "tools/enemy.h"
 
 class Enemy;
 class Player : public Sprite
@@ -17,10 +17,10 @@ public:
     map<string, Animation> anims;
     map<string, Audio> audios;
     vector<Ball> balls = {};
-    int maxAmmo = 15, ammo = maxAmmo, maxHP = 5, HP = maxHP;
+    int maxHP = 5, HP = maxHP;
     float speed, jumpStrength;
     Player(SDL_Renderer *renderer, float x, float y);
-    void handle(double dt, const vector<Grass> &grasses);
+    void handle(double dt, const vector<Object> &grasses);
     void render(Vector2D Camera);
     void damage(int byPoints = 1);
     void resetPos(bool previous = true);

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../core/config.h"
-#include "../ui/button.h"
+#include "core/config.h"
+#include "ui/button.h"
 
 template <typename T>
 class UI

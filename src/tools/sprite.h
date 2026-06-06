@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../core/config.h"
-#include "../sprites/grass.h"
+#include "core/config.h"
+#include "sprites/object.h"
 #include "LOS.h"
 
 class Sprite
@@ -23,10 +23,10 @@ public:
         bool prevOnGround, onGround, jumping, walking;
     } state;
     Sprite(SDL_Renderer *renderer, string imgSource, float x, float y);
-    void handle(double dt, const vector<Grass> &grasses);
+    void handle(double dt, const vector<Object> &grasses);
     void render(Vector2D Camera);
     void handleMovement(double dt);
     void handleLOS();
-    void handleGravity(double dt, const vector<Grass> &grasses);
+    void handleGravity(double dt, const vector<Object> &grasses);
     void handleStates(bool onGround, bool prevOnGround);
 };

@@ -8,7 +8,6 @@ Level::Level(SDL_Renderer *renderer, int number)
 {
     loadObjects();
     fruitLength = enemies.size() + fruits.size();
-    player.ammo = enemies.size() * 5;
     increment = (double)1 / fruitLength;
     fruitBar.rect.x = player.healthBar.rect.x;
     fruitBar.rect.y = player.healthBar.rect.y + SPRITE_SIZE;
@@ -117,9 +116,9 @@ void Level::loadObjects()
             enemies.push_back(Slime(renderer, obj.x, obj.y));
         // if (name == "snail")
         //     enemies.push_back(Snail(renderer, obj.x, obj.y));
-        if (name == "grasses")
+        if (name == "object")
             for (int x = 0; x < obj.width; x += SPRITE_SIZE)
-                grasses.push_back(Grass(renderer, obj.x + x + SPRITE_SIZE / 2, obj.y));
+                grasses.push_back(Object(renderer, obj.x + x + SPRITE_SIZE / 2, obj.y));
     }
 }
 
