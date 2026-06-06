@@ -31,7 +31,7 @@ private:
     Uint64 LAST = SDL_GetPerformanceCounter();
     Uint64 NOW;
     States nextState;
-    int levelNum = 1;
+    int levelNum = 0;
     bool uiInit = false;
     void updateDeltaTime();
     void loadLevels();

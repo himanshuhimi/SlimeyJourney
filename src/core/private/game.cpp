@@ -138,12 +138,12 @@ void Game::loadLevels()
             continue;
         string filename = path.stem().string();
         int number = std::stoi(filename);
-        levels.emplace_back(new Level(renderer, number + 1));
+        levels.emplace_back(new Level(renderer, number));
     }
     updateLevel();
 }
 
-void Game::updateLevel() { currentLevel = levels.at(levelNum - 1); }
+void Game::updateLevel() { currentLevel = levels.at(levelNum); }
 
 void Game::manageUpdation()
 {

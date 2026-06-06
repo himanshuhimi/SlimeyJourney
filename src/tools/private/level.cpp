@@ -2,7 +2,7 @@
 
 Level::Level(SDL_Renderer *renderer, int number)
     : renderer(renderer), player(renderer, 0, 0), flag(renderer, 0, 0),
-      map(renderer, "maps/" + std::to_string(number - 1) + ".tmx"),
+      map(renderer, "maps/" + std::to_string(number) + ".tmx"),
       fruitBar(renderer, 0, 0, SDL_Color{95, 90, 204, 255},
                Image(renderer, "assets/ui/bottle.png"))
 {
