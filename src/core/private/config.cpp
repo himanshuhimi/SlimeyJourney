@@ -177,6 +177,12 @@ map<int, string> titles = {
     {States::PROGRESSING, "CONQUERED!"},
     {States::OVER, "GAME OVER!"}
 };
+map<int, SDL_Color> titleColors = {
+    {States::HOME, SDL_Color{52, 87, 102, 255}},
+    {States::PAUSED, colors.black},
+    {States::PROGRESSING, SDL_Color{255, 215, 0, 255}},
+    {States::OVER, SDL_Color{255, 0, 0, 255}}
+};
 
 _Random_ Random;
 _Colors_ colors;

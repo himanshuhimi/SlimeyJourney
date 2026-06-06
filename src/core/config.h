@@ -144,3 +144,4 @@ enum States
 };
 
 extern map<int, string> titles;
+extern map<int, SDL_Color> titleColors;

@@ -171,6 +171,7 @@ void Game::updateStateTexts()
         texts.clear();
     if (titles.find(state) == titles.end())
         return;
-    texts.emplace_back(renderer, WIDTH / 2, 100,
-                       titles.at(state), colors.black, 48, "assets/fonts/pixel.ttf");
+    texts.emplace_back(renderer, WIDTH / 2, 50,
+                       titles.at(state), titleColors.at(state),
+                       48, "assets/fonts/pixel.ttf");
 }
