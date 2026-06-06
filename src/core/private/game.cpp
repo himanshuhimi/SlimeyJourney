@@ -173,5 +173,5 @@ void Game::updateStateTexts()
         return;
     texts.emplace_back(renderer, WIDTH / 2, 50,
                        titles.at(state), titleColors.at(state),
-                       48, "assets/fonts/pixel.ttf");
+                       48, "assets/fonts/molle.ttf");
 }

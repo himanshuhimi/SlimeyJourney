@@ -9,7 +9,7 @@ Button::Button(SDL_Renderer *renderer, float x, float y,
     rect = SDL_FRect{x - (image.width / 2), y, image.width, image.height};
     text = Text(
         renderer, rect.x + (rect.w / 2), rect.y + (rect.h / 2),
-        label, colors.black, 18);
+        label, SDL_Color{33, 35, 59, 255}, 18, "assets/fonts/pixel.ttf");
     images.emplace_back(renderer, "assets/ui/buttons/unhovered.png");
     images.emplace_back(renderer, "assets/ui/buttons/hovered.png");
 }

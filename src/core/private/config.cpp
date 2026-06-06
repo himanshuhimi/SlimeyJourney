@@ -178,7 +178,7 @@ map<int, string> titles = {
     {States::OVER, "GAME OVER!"}
 };
 map<int, SDL_Color> titleColors = {
-    {States::HOME, SDL_Color{52, 87, 102, 255}},
+    {States::HOME, SDL_Color{255, 253, 208, 255}},
     {States::PAUSED, colors.black},
     {States::PROGRESSING, SDL_Color{255, 215, 0, 255}},
     {States::OVER, SDL_Color{255, 0, 0, 255}}
