@@ -36,6 +36,8 @@ void Map::render(Vector2D Camera)
                 (float)(tileHeight)};
             tileset.image->render(&src, &dest);
         }
+    for (auto &text : objectGroup.texts)
+        text.render();
 }
 
 void Map::loadChildren()
@@ -114,7 +116,7 @@ void Map::loadObjectGroup(XMLElement *child)
     for (
         XMLElement *objectElement = child->FirstChildElement("object");
         objectElement != nullptr;
-        objectElement = objectElement->NextSiblingElement())
+        objectElement = objectElement->NextSiblingElement("object"))
     {
         Object object;
         object.name = objectElement->Attribute("name");

@@ -82,6 +82,7 @@ void Text::updateData(string newData)
         newData.size(), color);
     texture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_GetTextureSize(texture, &rect.w, &rect.h);
+    SDL_SetTextureScaleMode(texture, SDL_SCALEMODE_PIXELART);
 }
 
 void Text::updateAlpha(int newAlpha)

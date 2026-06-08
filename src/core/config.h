@@ -62,7 +62,7 @@ struct Text
     int pixelSize, alpha;
     Text(SDL_Renderer *renderer, float x, float y,
          string data, SDL_Color color, int pixelSize = 24,
-         string fontSource = "assets/fonts/roboto.ttf");
+         string fontSource = "assets/fonts/pixel.ttf");
     void render();
     void updateData(string newData);
     void updateAlpha(int newAlpha);
@@ -125,7 +125,14 @@ extern struct _Colors_
     SDL_Color pink = SDL_Color{255, 182, 193, 255};
     SDL_Color violet = SDL_Color{27, 76, 255, 255};
     _Colors_() {};
-    SDL_Color hexToRgb();
+    SDL_Color hexToRgb(string color)
+    {
+        color.erase(0, color.find_first_not_of('#'));
+        unsigned char r = std::stoi(color.substr(0, 2), nullptr, 16);
+        unsigned char g = std::stoi(color.substr(2, 2), nullptr, 16);
+        unsigned char b = std::stoi(color.substr(4, 2), nullptr, 16);
+        return SDL_Color{r, g, b, 255};
+    }
 } colors;
 
 extern struct _Consts_
