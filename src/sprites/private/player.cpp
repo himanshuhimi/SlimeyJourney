@@ -104,8 +104,6 @@ void Player::handleMovement(double dt)
     }
     if (anims.at("walking").active)
         anims.at("walking").handle(dt);
-    if (rect.y > HEIGHT)
-        resetPos();
 }
 
 void Player::handleShooting(double dt)

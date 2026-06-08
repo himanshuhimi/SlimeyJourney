@@ -2,6 +2,7 @@
 
 Level::Level(SDL_Renderer *renderer, int number)
     : renderer(renderer), player(renderer, 0, 0), flag(renderer, 0, 0),
+      timer(renderer, durations.at(number)),
       map(renderer, "maps/" + std::to_string(number) + ".tmx"),
       fruitBar(renderer, 0, 0, SDL_Color{95, 90, 204, 255},
                Image(renderer, "assets/ui/bottle.png"))
@@ -26,7 +27,12 @@ void Level::handle(double dt)
     fruitBar.handle(dt);
     flag.handle(dt);
     player.handle(dt, grasses);
+    if (player.rect.y >= map.pixelHeight)
+        player.resetPos();
     collision();
+    timer.handle(dt);
+    if (timer.currentTime <= 0.0)
+        player.damage(5);
 }
 
 void Level::render()
@@ -43,6 +49,7 @@ void Level::render()
     fruitBar.render();
     flag.render(Camera);
     player.render(Camera);
+    timer.render();
 }
 
 void Level::collision()

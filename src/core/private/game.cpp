@@ -143,7 +143,11 @@ void Game::loadLevels()
     updateLevel();
 }
 
-void Game::updateLevel() { currentLevel = levels.at(levelNum); }
+void Game::updateLevel() 
+{ 
+    if (levelNum < levels.size())
+        currentLevel = levels.at(levelNum);
+}
 
 void Game::manageUpdation()
 {

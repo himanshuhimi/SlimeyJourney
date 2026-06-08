@@ -1,6 +1,7 @@
 #pragma once
 
 #include "map.h"
+#include "timer.h"
 #include "sprites/player.h"
 #include "sprites/fruit.h"
 #include "sprites/enemies/slime.h"
@@ -16,6 +17,7 @@ public:
     Map map;
     Flag flag;
     Player player;
+    Timer timer;
     vector<Object> grasses = {};
     vector<Fruit> fruits = {};
     vector<Enemy> enemies = {};

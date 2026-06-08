@@ -183,6 +183,14 @@ map<int, SDL_Color> titleColors = {
     {States::PROGRESSING, SDL_Color{255, 215, 0, 255}},
     {States::OVER, SDL_Color{255, 0, 0, 255}}
 };
+map<int, double> durations = {
+    {0, 0.5},
+    {1, 0.5},
+    {2, 0.5},
+    {3, 0.5},
+    {4, 0.5},
+    {5, 1.0}
+};
 
 _Random_ Random;
 _Colors_ colors;
