@@ -1,17 +1,24 @@
 #include "../button.h"
 
 Button::Button(SDL_Renderer *renderer, float x, float y,
-               std::function<void()> callback, string label)
+               std::function<void()> callback, string label,
+                SDL_Color color)
     : renderer(renderer), callback(std::function<void()>(callback)),
-      image(renderer, "assets/ui/buttons/unhovered.png"),
+      image(nullptr, ""), color(color),
       text(renderer, 0, 0, "", colors.black)
 {
-    rect = SDL_FRect{x - (image.width / 2), y, image.width, image.height};
+    Image unhovered = Image(renderer, "assets/ui/buttons/unhovered.png");
+    Image hovered = Image(renderer, "assets/ui/buttons/hovered.png");
+    images.emplace_back(unhovered);
+    images.emplace_back(hovered);
+    
+    rect = SDL_FRect{x - (images[0].width / 2), y, images[0].width, images[0].height};
+    
     text = Text(
         renderer, rect.x + (rect.w / 2), rect.y + (rect.h / 2),
         label, SDL_Color{33, 35, 59, 255}, 18);
-    images.emplace_back(renderer, "assets/ui/buttons/unhovered.png");
-    images.emplace_back(renderer, "assets/ui/buttons/hovered.png");
+    
+    image = images[0];
 }
 
 void Button::handle(SDL_Event event)
@@ -22,6 +29,8 @@ void Button::handle(SDL_Event event)
 
 void Button::render()
 {
+    SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+    SDL_RenderFillRect(renderer, &rect);
     image.render(nullptr, &rect);
     text.render();
 }

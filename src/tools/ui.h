@@ -40,55 +40,78 @@ public:
     {
         if (!buttons.empty())
             buttons.clear();
-        vector<string> labels = getButtonLabels();
-        map<string, std::function<void()>> functions = getButtonFunctions();
+        vector<string> labels = getBtnLabels();
         for (int i = 0; i < labels.size(); i++)
-            buttons.emplace_back(game->renderer, WIDTH / 2, HEIGHT / 2 + (i * 60),
-                                 functions[labels[i]], labels[i]);
+        {
+            string label = labels[i];
+            std::function<void()> callback = getBtnFunction(label);
+            float x = WIDTH / 2;
+            float y = HEIGHT / 2 + (i * 64);
+            SDL_Color color = getBtnColor(label);
+            buttons.emplace_back(game->renderer, x, y, callback, label, color);
+        }
     }
 
-    vector<string> getButtonLabels()
+    vector<string> getBtnLabels()
     {
-        vector<string> result = {};
+        vector<string> res = {};
         switch (game->state)
         {
         case States::HOME:
-            result = {"PLAY", "SETTINGS", "QUIT"};
+            res = {"PLAY", "SETTINGS", "QUIT"};
             break;
         case States::SETTINGS:
             break;
         case States::PAUSED:
-            result = {"CONTINUE", "HOME", "QUIT"};
+            res = {"CONTINUE", "HOME", "QUIT"};
             break;
         case States::PROGRESSING:
-            result = {"NEXT", "PLAY AGAIN", "HOME"};
+            res = {"NEXT", "PLAY AGAIN", "HOME"};
             break;
         case States::OVER:
-            result = {"TRY AGAIN", "HOME", "QUIT"};
+            res = {"TRY AGAIN", "HOME", "QUIT"};
             break;
-        }
-        return result;
+        };
+        return res;
     }
 
-    map<string, std::function<void()>> getButtonFunctions()
+    std::function<void()> getBtnFunction(string label)
     {
-        return {
-            {"PLAY", [this]
-             { game->update(States::PLAYING); }},
-            {"TRY AGAIN", [this]
-             { game->update(States::PLAYING); }},
-            {"PLAY AGAIN", [this]
-             { game->update(States::PLAYING); }},
-            {"CONTINUE", [this]
-             { game->update(States::PLAYING, false); }},
-            {"SETTINGS", [this]
-             { game->update(States::SETTINGS); }},
-            {"HOME", [this]
-             { game->update(States::HOME); }},
-            {"NEXT", [this]
-             { game->nextLevel(); }},
-            {"QUIT", [this]
-             { game->terminate(); }},
+        map<string, std::function<void()>> functions =
+            {
+                {"PLAY", [this]
+                 { game->update(States::PLAYING); }},
+                {"TRY AGAIN", [this]
+                 { game->update(States::PLAYING); }},
+                {"PLAY AGAIN", [this]
+                 { game->update(States::PLAYING); }},
+                {"CONTINUE", [this]
+                 { game->update(States::PLAYING, false); }},
+                {"SETTINGS", [this]
+                 { game->update(States::SETTINGS); }},
+                {"HOME", [this]
+                 { game->update(States::HOME); }},
+                {"NEXT", [this]
+                 { game->nextLevel(); }},
+                {"QUIT", [this]
+                 { game->terminate(); }},
+            };
+        return functions.at(label);
+    }
+
+    SDL_Color getBtnColor(string label)
+    {
+        SDL_Color normal = SDL_Color{211, 211, 255, 255};
+        map<string, SDL_Color> cols = {
+            {"PLAY", colors.green},
+            {"NEXT", colors.green},
+            {"TRY AGAIN", colors.green},
+            {"PLAY AGAIN", colors.green},
+            {"CONTINUE", colors.green},
+            {"QUIT", colors.red},
+            {"SETTINGS", normal},
+            {"HOME", normal},
         };
+        return cols.at(label);
     }
 };

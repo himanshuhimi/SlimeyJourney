@@ -8,11 +8,14 @@ Game::Game()
         print("TTF Unloaded: " + (string)SDL_GetError());
     if (!MIX_Init())
         print("Mix Unloaded: " + (string)SDL_GetError());
-    if (!SDL_CreateWindowAndRenderer(TITLE.c_str(), CHANGED_WIDTH, CHANGED_HEIGHT,
-                                     0, &window, &renderer))
+    float width = (scaled) ? CHANGED_WIDTH : WIDTH;
+    float height = (scaled) ? CHANGED_HEIGHT : HEIGHT;
+    if (!SDL_CreateWindowAndRenderer(TITLE.c_str(), width, height, 0, &window, &renderer))
         print("Display Unloaded: " + (string)SDL_GetError());
-    SDL_SetRenderLogicalPresentation(renderer, WIDTH, HEIGHT,
-                                     SDL_LOGICAL_PRESENTATION_INTEGER_SCALE);
+    if (scaled)
+        SDL_SetRenderLogicalPresentation(renderer, WIDTH, HEIGHT, logicalPresentation);
+    // else
+    //     SDL_SetRenderLogicalPresentation(renderer, WIDTH, HEIGHT, )
     loadLevels();
     active = true;
 }

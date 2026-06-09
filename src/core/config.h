@@ -21,8 +21,13 @@ namespace fs = std::filesystem;
 
 extern const string TITLE;
 extern const float SPRITE_SIZE;
-extern int WIDTH, HEIGHT, CHANGED_WIDTH, CHANGED_HEIGHT, scaleX, scaleY, CAMERA_X, CAMERA_Y;
+extern int WIDTH, HEIGHT;
+extern int CHANGED_WIDTH, CHANGED_HEIGHT;
+extern int scaleX, scaleY;
+extern int CAMERA_X, CAMERA_Y;
+extern bool scaled;
 extern const vector<string> fruits;
+extern SDL_RendererLogicalPresentation logicalPresentation;
 
 template <typename T>
 void print(const T &message) { std::cout << "[LOG] " << message << std::endl; };

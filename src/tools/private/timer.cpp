@@ -2,7 +2,7 @@
 
 Timer::Timer(SDL_Renderer *renderer, double duration)
     : duration(duration * 60), currentTime(duration * 60),
-      text(renderer, WIDTH / 2, 60, "00:00", colors.white) {}
+      text(renderer, WIDTH / 2, 20, "00:00", colors.white) {}
 
 void Timer::handle(double dt)
 {

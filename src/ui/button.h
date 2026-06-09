@@ -7,6 +7,7 @@ class Button
 public:
     SDL_Renderer *renderer = nullptr;
     SDL_FRect rect;
+    SDL_Color color;
     Image image;
     Text text;
     vector<Image> images = {};
@@ -14,7 +15,8 @@ public:
     string label;
     Button(
         SDL_Renderer *renderer, float x, float y,
-        std::function<void()> callback, string label);
+        std::function<void()> callback, string label,
+        SDL_Color color);
     void handle(SDL_Event event);
     void render();
     bool hovered();

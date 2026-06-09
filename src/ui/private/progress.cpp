@@ -9,7 +9,7 @@ Progress::Progress(
 {
     Position.x = x;
     Position.y = y;
-    rect.x = (attachment.width * 2) + Position.x;
+    rect.x = (attachment.width) + Position.x;
     rect.y = Position.y;
     rect.w = width;
     rect.h = image.height;
@@ -21,7 +21,7 @@ Progress::Progress(
     {
         attachmentRect.w = attachment.width;
         attachmentRect.h = attachment.height;
-        attachmentRect.x = rect.x - attachmentRect.w;
+        attachmentRect.x = rect.x - (attachmentRect.w / 2);
         attachmentRect.y = rect.y - (attachmentRect.h / 2);
     }
 }

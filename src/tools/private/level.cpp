@@ -11,7 +11,7 @@ Level::Level(SDL_Renderer *renderer, int number)
     fruitLength = enemies.size() + fruits.size();
     increment = (double)1 / fruitLength;
     fruitBar.rect.x = player.healthBar.rect.x;
-    fruitBar.rect.y = player.healthBar.rect.y + SPRITE_SIZE;
+    fruitBar.rect.y = player.healthBar.rect.y + SPRITE_SIZE + (SPRITE_SIZE / 2);
     audios = {
         {"pickup", Audio("assets/audios/player/pickup.wav")},
         {"hurt", Audio("assets/audios/hurt.wav")}};
