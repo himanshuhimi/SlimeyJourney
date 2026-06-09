@@ -10,7 +10,6 @@ class Player : public Sprite
 {
 public:
     Enemy *combatEnemy = nullptr;
-    Progress healthBar;
     Vector2D prevPos;
     Cooldown throwCooldown = {1.0};
     bool inCombat = false, dead = false, immune = false, mouseClicked = false;
@@ -22,8 +21,8 @@ public:
     Player(SDL_Renderer *renderer, float x, float y);
     void handle(double dt, const vector<Object> &grasses);
     void render(Vector2D Camera);
-    void damage(int byPoints = 1);
-    void resetPos(bool previous = true);
+    void damage(Progress healthBar, int byPoints = 1);
+    void resetPos(Progress healthBar, bool previous = true);
     void handleMovement(double dt);
     void handleShooting(double dt);
 };

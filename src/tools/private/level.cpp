@@ -5,13 +5,15 @@ Level::Level(SDL_Renderer *renderer, int number)
       timer(renderer, durations.at(number)),
       map(renderer, "maps/" + std::to_string(number) + ".tmx"),
       fruitBar(renderer, 0, 0, SDL_Color{95, 90, 204, 255},
-               Image(renderer, "assets/ui/bottle.png"))
+               Image(renderer, "assets/ui/bottle.png")),
+      healthBar(renderer, 5, HEIGHT / 16.0f, colors.red,
+                Image(renderer, "assets/ui/heart.png"), 1.0, 150)
 {
     loadObjects();
     fruitLength = enemies.size() + fruits.size();
     increment = (double)1 / fruitLength;
-    fruitBar.rect.x = player.healthBar.rect.x;
-    fruitBar.rect.y = player.healthBar.rect.y + SPRITE_SIZE + (SPRITE_SIZE / 2);
+    fruitBar.rect.x = healthBar.rect.x;
+    fruitBar.rect.y = healthBar.rect.y + SPRITE_SIZE + (SPRITE_SIZE / 2);
     audios = {
         {"pickup", Audio("assets/audios/player/pickup.wav")},
         {"hurt", Audio("assets/audios/hurt.wav")}};
@@ -25,14 +27,15 @@ void Level::handle(double dt)
     for (auto &enemy : enemies)
         enemy.handle(dt, grasses);
     fruitBar.handle(dt);
+    healthBar.handle(dt);
     flag.handle(dt);
     player.handle(dt, grasses);
     if (player.rect.y >= map.pixelHeight)
-        player.resetPos();
+        player.resetPos(healthBar);
     collision();
     timer.handle(dt);
     if (timer.currentTime <= 0.0)
-        player.damage(5);
+        player.damage(healthBar);
 }
 
 void Level::render()
@@ -47,6 +50,7 @@ void Level::render()
     for (auto &ball : player.balls)
         ball.render(Camera);
     fruitBar.render();
+    healthBar.render();
     flag.render(Camera);
     player.render(Camera);
     timer.render();
@@ -98,7 +102,7 @@ void Level::collision()
             bool collided = checkCollision(ball.rect, player.rect);
             if (player.movable && !ball.used && collided)
             {
-                player.damage();
+                player.damage(healthBar);
                 ball.used = true;
                 ballIt = enemy.balls.erase(ballIt);
                 break;

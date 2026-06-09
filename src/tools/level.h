@@ -12,7 +12,7 @@ class Level
 {
 public:
     SDL_Renderer *renderer = nullptr;
-    Progress fruitBar;
+    Progress fruitBar, healthBar;
     Vector2D Camera;
     Map map;
     Flag flag;

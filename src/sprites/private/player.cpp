@@ -1,9 +1,7 @@
 #include "../player.h"
 
 Player::Player(SDL_Renderer *renderer, float x, float y)
-    : Sprite(renderer, "player/idle.png", x, y),
-      healthBar(renderer, 5, HEIGHT / 16.0f, colors.red,
-                Image(renderer, "assets/ui/heart.png"), 1.0, 150)
+    : Sprite(renderer, "player/idle.png", x, y)
 {
     jumpStrength = 100.0f;
     speed = 180;
@@ -23,7 +21,6 @@ Player::Player(SDL_Renderer *renderer, float x, float y)
 
 void Player::handle(double dt, const vector<Object> &grasses)
 {
-    healthBar.handle(dt);
     dead = HP <= 0;
     if (dead)
         return;
@@ -43,7 +40,6 @@ void Player::handle(double dt, const vector<Object> &grasses)
 
 void Player::render(Vector2D Camera)
 {
-    healthBar.render();
     dst = rect;
     for (auto &[key, anim] : anims)
         anim.dst = dst;
@@ -62,7 +58,7 @@ void Player::render(Vector2D Camera)
     }
 }
 
-void Player::damage(int byPoints)
+void Player::damage(Progress healthBar, int byPoints)
 {
     healthBar.update(-(double)1 / maxHP);
     if (dead || immune)
@@ -75,12 +71,12 @@ void Player::damage(int byPoints)
     audios.at("hurt").play();
 }
 
-void Player::resetPos(bool previous)
+void Player::resetPos(Progress healthBar, bool previous)
 {
     Position = (previous) ? prevPos : Original;
     rect.x = Position.x;
     rect.y = Position.y;
-    damage();
+    damage(healthBar);
 }
 
 void Player::handleMovement(double dt)
