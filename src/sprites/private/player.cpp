@@ -115,14 +115,4 @@ void Player::handleShooting(double dt)
         throwCooldown.available = false;
         audios.at("shoot").play();
     }
-    if (inCombat && movable && combatEnemy->throwCooldown.available)
-    {
-        float x = combatEnemy->rect.x;
-        float y = combatEnemy->rect.y;
-        Vector2D Direction = {Center.x - combatEnemy->rect.x, Center.y - combatEnemy->rect.y};
-        Direction.normalise();
-        combatEnemy->balls.emplace_back(renderer, x, y, "enemies/slime", Direction);
-        combatEnemy->throwCooldown.timeElapsed = 0;
-        combatEnemy->throwCooldown.available = false;
-    }
 }

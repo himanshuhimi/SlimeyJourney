@@ -10,7 +10,7 @@ Level::Level(SDL_Renderer *renderer, int number)
                 Image(renderer, "ui/heart.png"), 1.0, 150)
 {
     loadObjects();
-    fruitLength = enemies.size() + fruits.size();
+    fruitLength = fruits.size();
     increment = (double)1 / fruitLength;
     fruitBar.rect.x = healthBar.rect.x;
     fruitBar.rect.y = healthBar.rect.y + SPRITE_SIZE + (SPRITE_SIZE / 2);
@@ -24,8 +24,6 @@ void Level::handle(double dt)
     clampCamera();
     for (auto &ball : player.balls)
         ball.handle(dt, grasses);
-    for (auto &enemy : enemies)
-        enemy.handle(dt, grasses);
     fruitBar.handle(dt);
     healthBar.handle(dt);
     flag.handle(dt);
@@ -45,8 +43,6 @@ void Level::render()
         grass.render(Camera);
     for (auto &fruit : fruits)
         fruit.render(Camera);
-    for (auto &enemy : enemies)
-        enemy.render(Camera);
     for (auto &ball : player.balls)
         ball.render(Camera);
     fruitBar.render();
@@ -81,10 +77,6 @@ void Level::loadObjects()
             flag = Flag(renderer, obj.x, obj.y - SPRITE_SIZE);
         if (name == "fruit")
             fruits.push_back(Fruit(renderer, obj.x, obj.y - SPRITE_SIZE));
-        // if (name == "slime")
-        //     enemies.push_back(Slime(renderer, obj.x, obj.y));
-        // if (name == "snail")
-        //     enemies.push_back(Snail(renderer, obj.x, obj.y));
         if (name == "object")
             for (int x = 0; x < obj.width; x += SPRITE_SIZE)
                 grasses.push_back(Object(renderer, obj.x + x + SPRITE_SIZE / 2, obj.y));

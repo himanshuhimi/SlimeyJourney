@@ -3,13 +3,10 @@
 #include "tools/sprite.h"
 #include "ball.h"
 #include "ui/progress.h"
-#include "tools/enemy.h"
 
-class Enemy;
 class Player : public Sprite
 {
 public:
-    Enemy *combatEnemy = nullptr;
     Vector2D prevPos;
     Cooldown throwCooldown = {1.0};
     bool inCombat = false, dead = false, immune = false, mouseClicked = false;

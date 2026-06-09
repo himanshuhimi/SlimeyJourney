@@ -21,8 +21,7 @@ endforeach()
 
 file(GLOB_RECURSE PRIVATE_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/*/private/*.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/sprites/enemies/*.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/sprites/enemies/private/*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/sprites/*/private/*.cpp
 )
 
 if (CMAKE_BUILD_TYPE STREQUAL "Release")
@@ -46,9 +45,10 @@ target_link_libraries(${PROJECT_NAME}
     ${LINK_TARGETS}
     sqlite3
 )
-# foreach(directory ${DIRECTORIES})
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-    ${CMAKE_SOURCE_DIR}/data
-    $<TARGET_FILE_DIR:${PROJECT_NAME}>/${directory}
-)
+foreach(directory ${DIRECTORIES})
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_SOURCE_DIR}/data/${directory}
+        $<TARGET_FILE_DIR:${PROJECT_NAME}>/data/${directory}
+    )
+endforeach()
