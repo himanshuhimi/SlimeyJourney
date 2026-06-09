@@ -1,7 +1,6 @@
 #pragma once
 
 #include "map.h"
-#include "timer.h"
 #include "sprites/player.h"
 #include "sprites/fruit.h"
 #include "sprites/enemies/slime.h"

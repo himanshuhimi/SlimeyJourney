@@ -7,8 +7,8 @@ Button::Button(SDL_Renderer *renderer, float x, float y,
       image(nullptr, ""), color(color),
       text(renderer, 0, 0, "", colors.black)
 {
-    Image unhovered = Image(renderer, "assets/ui/buttons/unhovered.png");
-    Image hovered = Image(renderer, "assets/ui/buttons/hovered.png");
+    Image unhovered = Image(renderer, "ui/buttons/unhovered.png");
+    Image hovered = Image(renderer, "ui/buttons/hovered.png");
     images.emplace_back(unhovered);
     images.emplace_back(hovered);
     

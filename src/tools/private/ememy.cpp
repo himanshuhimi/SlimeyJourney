@@ -8,11 +8,10 @@ Enemy::Enemy(SDL_Renderer *renderer, string type, float x, float y,
 {
     Velocity.x = speed;
     Position.y -= rect.h;
-    folderPath = "assets/anims/" + type + "/";
     anims = {
-        {"damage", Animation(renderer, folderPath + "damage.png", 0.1)},
-        {"walking", Animation(renderer, folderPath + "walking.png", 0.1)}};
-    lineOfSight = LOS(renderer, x, y, sightRange, 1);
+        {"damage", Animation(renderer, type + "/damage.png", 0.1)},
+        {"walking", Animation(renderer, type + "/walking.png", 0.1)}};
+    lineOfSight = LineOfSight(renderer, x, y, sightRange, 1);
 }
 
 void Enemy::handle(double dt, const vector<Object> &grasses)

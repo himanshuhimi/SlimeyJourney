@@ -50,9 +50,10 @@ Vector2D Vector2D::normalise()
 
 Image::Image(SDL_Renderer *renderer, string source) : renderer(renderer)
 {
+    string path = "data/assets/" + source;
     if (!renderer)
         return;
-    surface = IMG_Load(source.c_str());
+    surface = IMG_Load(path.c_str());
     if (!surface)
         print("Unloaded Image: " + (string)SDL_GetError());
     texture = SDL_CreateTextureFromSurface(renderer, surface);
@@ -70,9 +71,10 @@ Text::Text(
     int pixelSize, string fontSource)
     : renderer(renderer), x(x), y(y), pixelSize(pixelSize), color(color)
 {
-    font = TTF_OpenFont(fontSource.c_str(), pixelSize);
+    string path = "data/assets/" + fontSource;
+    font = TTF_OpenFont(path.c_str(), pixelSize);
     if (!font)
-        print("Font Uninitialized: " + fontSource);
+        print("Font Uninitialized: " + path);
     surface = TTF_RenderText_Blended(font, data.c_str(), data.size(), color);
     texture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_DestroySurface(surface);
@@ -103,7 +105,7 @@ void Text::updateAlpha(int newAlpha)
 }
 
 Animation::Animation(SDL_Renderer *renderer, string source, float frameTime)
-    : renderer(renderer), frameTime(frameTime), imageSet(renderer, source), 
+    : renderer(renderer), frameTime(frameTime), imageSet(renderer, "anims/" + source), 
       maxFrames(imageSet.width / SPRITE_SIZE) {}
 
 void Animation::handle(double dt)
@@ -146,12 +148,13 @@ void Animation::restart()
 
 Audio::Audio(string audioSource)
 {
+    string path = "data/assets/" + audioSource;
     mixer = MIX_CreateMixerDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, nullptr);
     if (!mixer)
         print("Mixer Unloaded");
-    audio = MIX_LoadAudio(mixer, audioSource.c_str(), true);
+    audio = MIX_LoadAudio(mixer, path.c_str(), true);
     if (!audio)
-        print("Audio Unloaded: " + audioSource);
+        print("Audio Unloaded: " + path);
     track = MIX_CreateTrack(mixer);
     if (!track)
         print("Track Unloaded");
@@ -173,6 +176,50 @@ void Cooldown::handle(double dt)
             timeElapsed = 0;
         }
     }
+}
+
+LineOfSight::LineOfSight(SDL_Renderer *renderer, float x, float y, float width, float height)
+    : renderer(renderer)
+{
+    rect.x = x;
+    rect.y = y;
+    rect.w = width;
+    rect.h = height;
+}
+
+void LineOfSight::matchPosition(SDL_FRect matchRect)
+{
+    rect.x = matchRect.x + (matchRect.w / 2);
+    rect.y = matchRect.y + (matchRect.h / 2);
+}
+
+void LineOfSight::render(Vector2D Camera)
+{
+    dst = rect;
+    dst.x -= Camera.x;
+    dst.y -= Camera.y;
+    SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+    SDL_RenderFillRect(renderer, &dst);
+}
+
+Timer::Timer(SDL_Renderer *renderer, double duration)
+    : duration(duration * 60), currentTime(duration * 60),
+      text(renderer, WIDTH / 2, 20, "00:00", colors.white) {}
+
+void Timer::handle(double dt)
+{
+    if (currentTime > 0.0)
+        currentTime -= dt;
+}
+
+void Timer::render()
+{
+    int minutes = static_cast<int>(currentTime) / 60;
+    int seconds = static_cast<int>(currentTime) % 60;
+    char buffer[10];
+    sprintf(buffer, "%02d:%02d", minutes, seconds);
+    text.updateData(buffer);
+    text.render();
 }
 
 int _Random_::randint(int begin, int end)

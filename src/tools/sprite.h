@@ -2,14 +2,13 @@
 
 #include "core/config.h"
 #include "sprites/object.h"
-#include "LOS.h"
 
 class Sprite
 {
 public:
     SDL_Renderer *renderer = nullptr;
     Vector2D Original, Camera, Velocity, Position, Center;
-    LOS gravityLOS, lineOfSight;
+    LineOfSight gravityLOS, lineOfSight;
     SDL_FRect dst, rect;
     Image image;
     bool movable = true;

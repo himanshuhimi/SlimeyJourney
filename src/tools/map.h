@@ -35,7 +35,7 @@ public:
     ObjectGroup objectGroup;
     vector<Layer> layers;
     Tileset tileset;
-    string source = "";
+    string directory = "maps/", source = "";
     int width, height, tileWidth, tileHeight, pixelWidth, pixelHeight;
     Map(SDL_Renderer *renderer, string source);
     void render(Vector2D Camera);

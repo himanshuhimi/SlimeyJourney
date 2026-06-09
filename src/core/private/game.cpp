@@ -14,8 +14,6 @@ Game::Game()
         print("Display Unloaded: " + (string)SDL_GetError());
     if (scaled)
         SDL_SetRenderLogicalPresentation(renderer, WIDTH, HEIGHT, logicalPresentation);
-    // else
-    //     SDL_SetRenderLogicalPresentation(renderer, WIDTH, HEIGHT, )
     loadLevels();
     active = true;
 }
@@ -51,15 +49,8 @@ void Game::handle()
             break;
         }
         }
-    switch (state)
-    {
-    // case States::LOADING:
-    //     ui->loading.handle(dt);
-    //     break;
-    case States::PLAYING:
+    if (state == States::PLAYING)
         currentLevel->handle(dt);
-        break;
-    }
     if (ui != nullptr)
     {
         ui->update(dt);
@@ -131,7 +122,7 @@ void Game::loadLevels()
 {
     if (!levels.empty())
         levels.clear();
-    string directory = "maps";
+    string directory = "data/maps";
     if (!fs::exists(directory) && !fs::is_directory(directory))
         return;
     for (const auto &entry : fs::directory_iterator(directory))
@@ -175,5 +166,5 @@ void Game::updateStateTexts()
         return;
     texts.emplace_back(renderer, WIDTH / 2, 50,
                        titles.at(state), titleColors.at(state),
-                       48, "assets/fonts/molle.ttf");
+                       48, "fonts/molle.ttf");
 }

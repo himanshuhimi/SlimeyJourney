@@ -1,7 +1,6 @@
 #pragma once
 
 #include "sprite.h"
-#include "LOS.h"
 #include "ui/progress.h"
 #include "sprites/ball.h"
 #include "sprites/player.h"

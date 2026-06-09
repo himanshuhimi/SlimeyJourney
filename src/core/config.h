@@ -67,7 +67,7 @@ struct Text
     int pixelSize, alpha;
     Text(SDL_Renderer *renderer, float x, float y,
          string data, SDL_Color color, int pixelSize = 24,
-         string fontSource = "assets/fonts/pixel.ttf");
+         string fontSource = "fonts/pixel.ttf");
     void render();
     void updateData(string newData);
     void updateAlpha(int newAlpha);
@@ -103,6 +103,25 @@ struct Cooldown
     double timeElapsed = 0.0;
     Cooldown(double duration = 2.0);
     void handle(double dt);
+};
+struct LineOfSight
+{
+    SDL_Renderer *renderer = nullptr;
+    SDL_FRect rect, dst;
+    Vector2D Position;
+    LineOfSight(SDL_Renderer *renderer, float x, float y, float width, float height);
+    void matchPosition(SDL_FRect matchRect);
+    void render(Vector2D Camera);
+};
+
+struct Timer
+{
+    SDL_Renderer *renderer = nullptr;
+    Text text;
+    double duration = 0.0, currentTime = 0.0;
+    Timer(SDL_Renderer *renderer, double duration = 1.0);
+    void handle(double dt);
+    void render();
 };
 
 extern struct _Random_

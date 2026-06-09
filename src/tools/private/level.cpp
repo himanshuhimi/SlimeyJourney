@@ -3,11 +3,11 @@
 Level::Level(SDL_Renderer *renderer, int number)
     : renderer(renderer), player(renderer, 0, 0), flag(renderer, 0, 0),
       timer(renderer, durations.at(number)),
-      map(renderer, "maps/" + std::to_string(number) + ".tmx"),
+      map(renderer, std::to_string(number) + ".tmx"),
       fruitBar(renderer, 0, 0, SDL_Color{95, 90, 204, 255},
-               Image(renderer, "assets/ui/bottle.png")),
+               Image(renderer, "ui/bottle.png")),
       healthBar(renderer, 5, HEIGHT / 16.0f, colors.red,
-                Image(renderer, "assets/ui/heart.png"), 1.0, 150)
+                Image(renderer, "ui/heart.png"), 1.0, 150)
 {
     loadObjects();
     fruitLength = enemies.size() + fruits.size();
@@ -15,8 +15,8 @@ Level::Level(SDL_Renderer *renderer, int number)
     fruitBar.rect.x = healthBar.rect.x;
     fruitBar.rect.y = healthBar.rect.y + SPRITE_SIZE + (SPRITE_SIZE / 2);
     audios = {
-        {"pickup", Audio("assets/audios/player/pickup.wav")},
-        {"hurt", Audio("assets/audios/hurt.wav")}};
+        {"pickup", Audio("audios/player/pickup.wav")},
+        {"hurt", Audio("audios/hurt.wav")}};
 }
 
 void Level::handle(double dt)
@@ -68,48 +68,6 @@ void Level::collision()
         }
         else
             fruitIt++;
-    for (auto ballIt = player.balls.begin(); ballIt != player.balls.end(); ballIt++)
-        for (auto eneIt = enemies.begin(); eneIt != enemies.end();)
-            if (!ballIt->used && checkCollision(ballIt->rect, eneIt->rect))
-            {
-                eneIt->damage();
-                audios.at("hurt").play();
-                ballIt->used = true;
-                player.inCombat = true;
-                player.combatEnemy = &(*eneIt);
-                if (eneIt->dead)
-                    eneIt = enemies.erase(eneIt);
-            }
-            else
-                eneIt++;
-    for (auto &enemy : enemies)
-        if (checkCollision(player.rect, enemy.lineOfSight.rect))
-        {
-            player.inCombat = true;
-            player.combatEnemy = &enemy;
-            break;
-        }
-        else
-        {
-            player.inCombat = false;
-            player.combatEnemy = nullptr;
-        }
-    for (auto &enemy : enemies)
-    {
-        for (auto ballIt = enemy.balls.begin(); ballIt != enemy.balls.end(); ballIt++)
-        {
-            Ball ball = *ballIt;
-            bool collided = checkCollision(ball.rect, player.rect);
-            if (player.movable && !ball.used && collided)
-            {
-                player.damage(healthBar);
-                ball.used = true;
-                ballIt = enemy.balls.erase(ballIt);
-                break;
-            }
-        }
-        enemy.drop<Fruit>(fruits);
-    }
 }
 
 void Level::loadObjects()
@@ -123,8 +81,8 @@ void Level::loadObjects()
             flag = Flag(renderer, obj.x, obj.y - SPRITE_SIZE);
         if (name == "fruit")
             fruits.push_back(Fruit(renderer, obj.x, obj.y - SPRITE_SIZE));
-        if (name == "slime")
-            enemies.push_back(Slime(renderer, obj.x, obj.y));
+        // if (name == "slime")
+        //     enemies.push_back(Slime(renderer, obj.x, obj.y));
         // if (name == "snail")
         //     enemies.push_back(Snail(renderer, obj.x, obj.y));
         if (name == "object")

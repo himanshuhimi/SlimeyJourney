@@ -4,7 +4,7 @@ Fruit::Fruit(SDL_Renderer *renderer, float x, float y)
     : Sprite(renderer, "object.png", x, y)
 {
     choice = Random.choice<string>(fruits);
-    image = Image(renderer, "assets/images/fruits/" + choice + ".png");
+    image = Image(renderer, "images/fruits/" + choice + ".png");
 }
 
 void Fruit::render(Vector2D Camera)

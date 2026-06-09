@@ -1,7 +1,7 @@
 #include "../object.h"
 
 Object::Object(SDL_Renderer *renderer, float x, float y)
-    : renderer(renderer), image(renderer, "assets/images/object.png")
+    : renderer(renderer), image(renderer, "images/object.png")
 {
     Position.x = x;
     Position.y = y;

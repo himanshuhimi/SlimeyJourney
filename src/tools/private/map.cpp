@@ -3,8 +3,9 @@
 Map::Map(SDL_Renderer *renderer, string source)
     : renderer(renderer), source(source)
 {
-    if (doc.LoadFile(source.c_str()) != XML_SUCCESS)
-        print("Map Uninitialized: " + source);
+    string path = "data/" + directory + source;
+    if (doc.LoadFile(path.c_str()) != XML_SUCCESS)
+        print("Map Uninitialized: " + path);
     mapElement = doc.FirstChildElement("map");
     width = mapElement->IntAttribute("width");
     height = mapElement->IntAttribute("height");
@@ -84,7 +85,7 @@ void Map::loadLayer(XMLElement *child)
 void Map::loadTileset(XMLElement *child)
 {
     tileset.firstGID = child->IntAttribute("firstgid");
-    string tsxSource = "maps/" + (string)child->Attribute("source");
+    string tsxSource = "data/" + directory + (string)child->Attribute("source");
     if (tsxSource.empty())
     {
         print("TSX Source Uninitialized");
@@ -105,8 +106,7 @@ void Map::loadTileset(XMLElement *child)
         return;
     }
     tileset.image = new Image(
-        renderer,
-        "maps/tilesets/" + (string)imageElement->Attribute("source"));
+        renderer, "tilesets/" + (string)imageElement->Attribute("source"));
     tileset.columns = tileset.image->width / tileWidth;
     tileset.rows = tileset.image->height / tileHeight;
 }

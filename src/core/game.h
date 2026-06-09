@@ -26,7 +26,6 @@ private:
     Level *currentLevel = nullptr;
     UI<Game *> *ui = nullptr;
     vector<Level *> levels = {};
-    vector<Button> buttons = {};
     vector<Text> texts = {};
     Uint64 LAST = SDL_GetPerformanceCounter();
     Uint64 NOW;

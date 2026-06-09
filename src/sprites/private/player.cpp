@@ -5,18 +5,16 @@ Player::Player(SDL_Renderer *renderer, float x, float y)
 {
     jumpStrength = 100.0f;
     speed = 180;
-    string animPath = "assets/anims/player/";
-    string audioPath = "assets/audios/player/";
     anims = {
-        {"jump", Animation(renderer, animPath + "jump.png")},
-        {"damage", Animation(renderer, animPath + "damage.png", 0.1)},
-        {"walking", Animation(renderer, animPath + "walking.png", 0.1)}};
+        {"jump", Animation(renderer, "player/jump.png")},
+        {"damage", Animation(renderer, "player/damage.png", 0.1)},
+        {"walking", Animation(renderer, "player/walking.png", 0.1)}};
     audios = {
-        {"jump", Audio(audioPath + "jump.wav")},
-        {"walking", Audio(audioPath + "walking.wav")},
-        {"shoot", Audio(audioPath + "shoot.wav")},
-        {"pickup", Audio(audioPath + "pickup.wav")},
-        {"hurt", Audio("assets/audios/hurt.wav")}};
+        {"jump", Audio("audios/player/jump.wav")},
+        {"walking", Audio("audios/player/walking.wav")},
+        {"shoot", Audio("audios/player/shoot.wav")},
+        {"pickup", Audio("audios/player/pickup.wav")},
+        {"hurt", Audio("audios/hurt.wav")}};
 }
 
 void Player::handle(double dt, const vector<Object> &grasses)
