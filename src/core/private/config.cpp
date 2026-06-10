@@ -229,18 +229,6 @@ int _Random_::randint(int begin, int end)
     return dist(rng);
 };
 
-map<int, string> titles = {
-    {States::HOME, TITLE},
-    {States::PAUSED, "PAUSED!"},
-    {States::PROGRESSING, "CONQUERED!"},
-    {States::OVER, "GAME OVER!"}
-};
-map<int, SDL_Color> titleColors = {
-    {States::HOME, SDL_Color{255, 253, 208, 255}},
-    {States::PAUSED, colors.black},
-    {States::PROGRESSING, SDL_Color{255, 215, 0, 255}},
-    {States::OVER, SDL_Color{255, 0, 0, 255}}
-};
 map<int, double> durations = {
     {0, 0.5},
     {1, 0.5},
