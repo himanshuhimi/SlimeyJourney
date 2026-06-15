@@ -27,7 +27,7 @@ void Sprite::render(Vector2D Camera)
     dst.x -= Camera.x;
     dst.y -= Camera.y;
     image.render(nullptr, &dst);
-    // lineOfSight.render(Camera);
+    lineOfSight.render(Camera);
 }
 
 void Sprite::handleMovement(double dt)
@@ -46,14 +46,14 @@ void Sprite::handleLOS()
 {
     lineOfSight.matchPosition(rect);
     gravityLOS.matchPosition(rect);
-    if (state.prevOnGround && !state.onGround)
+    if (states.prevOnGround && !states.onGround)
         lineOfSight.rect.w *= -1;
 }
 
 void Sprite::handleGravity(double dt, const vector<Object> &grasses)
 {
     bool onGround = false;
-    bool prevOnGround = state.onGround;
+    bool prevOnGround = states.onGround;
     for (auto &grass : grasses)
         if (checkCollision(gravityLOS.rect, grass.rect))
         {
@@ -66,17 +66,17 @@ void Sprite::handleGravity(double dt, const vector<Object> &grasses)
                 Velocity.y = 0;
             }
         }
-    if (state.inAir || !state.onGround)
+    if (states.inAir || !states.onGround)
         Velocity.y += constants.gravity * dt;
     handleStates(onGround, prevOnGround);
 }
 
 void Sprite::handleStates(bool onGround, bool prevOnGround)
 {
-    state.prevOnGround = prevOnGround;
-    state.walking = (bool)Velocity.x;
-    state.onGround = onGround;
-    state.inAir = !onGround;
-    if (state.walking)
+    states.prevOnGround = prevOnGround;
+    states.walking = (bool)Velocity.x;
+    states.onGround = onGround;
+    states.inAir = !onGround;
+    if (states.walking)
         lastDirection = (Velocity.x > 0) ? Direction::Right : Direction::Left;
 }

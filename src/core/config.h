@@ -93,7 +93,7 @@ struct Audio
     MIX_Audio *audio = nullptr;
     MIX_Track *track = nullptr;
     Audio(string audioSource);
-    void play(int times = 0);
+    void play(int volume = 100, int times = 0);
 };
 
 struct Cooldown

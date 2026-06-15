@@ -24,6 +24,10 @@ public:
     SDL_FRect range;
     EnemyData data;
     string type = "";
+    struct EnemyActions
+    {
+        bool alert = false, attacking = false;
+    } actions;
     Enemy(SDL_Renderer *renderer, float x, float y, string type, EnemyData data);
     void handle(double dt, const vector<Object> grasses);
     void render(Vector2D Camera);

@@ -161,7 +161,11 @@ Audio::Audio(string audioSource)
     MIX_SetTrackAudio(track, audio);
 }
 
-void Audio::play(int times) { MIX_PlayTrack(track, times); }
+void Audio::play(int volume, int times) 
+{
+    MIX_SetTrackGain(track, (float)volume / 100);
+    MIX_PlayTrack(track, times); 
+}
 
 Cooldown::Cooldown(double duration) : duration(duration) {}
 

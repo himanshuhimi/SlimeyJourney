@@ -13,6 +13,7 @@ Enemy::Enemy(SDL_Renderer *renderer, float x, float y, string type, EnemyData da
         x - image.width / 2, y - image.height / 2,
         data.atkRange, data.atkRange
     };
+    lineOfSight.rect.w = data.atkRange;
 };
 
 void Enemy::handle(double dt, const vector<Object> grasses)

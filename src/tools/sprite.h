@@ -20,7 +20,7 @@ public:
     struct SpriteStates
     {
         bool prevOnGround, onGround, inAir, walking;
-    } state;
+    } states;
     Sprite(SDL_Renderer *renderer, string imgSource, float x, float y);
     void handle(double dt, const vector<Object> &grasses);
     void render(Vector2D Camera);

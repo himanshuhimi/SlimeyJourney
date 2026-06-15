@@ -41,7 +41,7 @@ void Player::render(Vector2D Camera)
     dst = rect;
     for (auto &[key, anim] : anims)
         anim.dst = dst;
-    if (state.inAir)
+    if (states.inAir)
         anims.at("jump").render(Camera, rect);
     else if (anims.at("walking").active)
         anims.at("walking").render(Camera, rect);
@@ -66,7 +66,7 @@ void Player::damage(Progress healthBar, int byPoints)
     movable = false;
     immune = true;
     anims.at("damage").restart();
-    audios.at("hurt").play();
+    audios.at("hurt").play(Random.randint(50, 80));
 }
 
 void Player::attack()
@@ -76,7 +76,7 @@ void Player::attack()
     Vector2D Direction = {mapMouse.x - Center.x, mapMouse.y - Center.y};
     Direction.normalise();
     balls.emplace_back(renderer, rect.x, rect.y, "player", Direction);
-    audios.at("shoot").play();
+    audios.at("shoot").play(Random.randint(50, 80));
 }
 
 void Player::resetPos(Progress healthBar, bool previous)
@@ -93,15 +93,15 @@ void Player::handleMovement(double dt)
         return;
     const bool *keys = SDL_GetKeyboardState(NULL);
     Velocity.x = -((int)keys[SDL_SCANCODE_A] - (int)keys[SDL_SCANCODE_D]) * speed;
-    anims.at("walking").active = state.walking;
-    if (!state.inAir && keys[SDL_SCANCODE_SPACE])
+    anims.at("walking").active = states.walking;
+    if (!states.inAir && keys[SDL_SCANCODE_SPACE])
     {
         Velocity.y -= jumpStrength;
         prevPos = Position;
-        audios.at("jump").play();
+        audios.at("jump").play(Random.randint(50, 80));
         anims.at("jump").restart();
     }
-    if (state.inAir || !state.onGround)
+    if (states.inAir || !states.onGround)
         anims.at("jump").handle(dt);
     if (anims.at("walking").active)
         anims.at("walking").handle(dt);

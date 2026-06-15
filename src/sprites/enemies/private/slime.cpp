@@ -12,7 +12,7 @@ Slime::Slime(SDL_Renderer *renderer, float x, float y)
 void Slime::handle(double dt, const vector<Object> &grasses)
 {
     Enemy::handle(dt, grasses);
-    if (state.prevOnGround && !state.onGround)
+    if (states.prevOnGround && !states.onGround)
         Velocity.x *= -1;
 }
 
