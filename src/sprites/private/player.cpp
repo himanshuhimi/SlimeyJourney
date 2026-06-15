@@ -41,7 +41,7 @@ void Player::render(Vector2D Camera)
     dst = rect;
     for (auto &[key, anim] : anims)
         anim.dst = dst;
-    if (state.jumping)
+    if (state.inAir)
         anims.at("jump").render(Camera, rect);
     else if (anims.at("walking").active)
         anims.at("walking").render(Camera, rect);
@@ -69,6 +69,16 @@ void Player::damage(Progress healthBar, int byPoints)
     audios.at("hurt").play();
 }
 
+void Player::attack()
+{
+    SDL_FRect mouseWin = getMousePosition();
+    Vector2D mapMouse = {mouseWin.x + Camera.x, mouseWin.y + Camera.y};
+    Vector2D Direction = {mapMouse.x - Center.x, mapMouse.y - Center.y};
+    Direction.normalise();
+    balls.emplace_back(renderer, rect.x, rect.y, "player", Direction);
+    audios.at("shoot").play();
+}
+
 void Player::resetPos(Progress healthBar, bool previous)
 {
     Position = (previous) ? prevPos : Original;
@@ -84,35 +94,27 @@ void Player::handleMovement(double dt)
     const bool *keys = SDL_GetKeyboardState(NULL);
     Velocity.x = -((int)keys[SDL_SCANCODE_A] - (int)keys[SDL_SCANCODE_D]) * speed;
     anims.at("walking").active = state.walking;
-    if (!state.jumping && keys[SDL_SCANCODE_SPACE])
+    if (!state.inAir && keys[SDL_SCANCODE_SPACE])
     {
         Velocity.y -= jumpStrength;
         prevPos = Position;
         audios.at("jump").play();
         anims.at("jump").restart();
     }
-    if (state.jumping || !state.onGround)
-    {
-        Velocity.y += constants.gravity * dt;
+    if (state.inAir || !state.onGround)
         anims.at("jump").handle(dt);
-    }
     if (anims.at("walking").active)
         anims.at("walking").handle(dt);
 }
 
 void Player::handleShooting(double dt)
 {
-    SDL_FRect mouseWin = getMousePosition();
-    Vector2D mapMouse = {mouseWin.x + Camera.x, mouseWin.y + Camera.y};
-    Vector2D Direction = {mapMouse.x - Center.x, mapMouse.y - Center.y};
-    Direction.normalise();
     throwCooldown.handle(dt);
     if (mouseClicked && throwCooldown.available)
     {
-        balls.emplace_back(renderer, rect.x, rect.y, "player", Direction);
+        attack();
         mouseClicked = false;
         throwCooldown.timeElapsed = 0;
         throwCooldown.available = false;
-        audios.at("shoot").play();
     }
 }

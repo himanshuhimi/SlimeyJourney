@@ -19,6 +19,7 @@ public:
     void handle(double dt, const vector<Object> &grasses);
     void render(Vector2D Camera);
     void damage(Progress healthBar, int byPoints = 1);
+    void attack();
     void resetPos(Progress healthBar, bool previous = true);
     void handleMovement(double dt);
     void handleShooting(double dt);

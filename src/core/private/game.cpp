@@ -98,5 +98,5 @@ void Game::manageUpdation()
     bool complete = currentLevel->fruitBar.percentage >= 0.8;
     bool collided = checkCollision(currentLevel->player.rect, currentLevel->flag.rect);
     if (complete && collided)
-        levelNum += 1;
+        updateLevel();
 }

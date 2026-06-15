@@ -66,6 +66,8 @@ void Sprite::handleGravity(double dt, const vector<Object> &grasses)
                 Velocity.y = 0;
             }
         }
+    if (state.inAir || !state.onGround)
+        Velocity.y += constants.gravity * dt;
     handleStates(onGround, prevOnGround);
 }
 
@@ -74,7 +76,7 @@ void Sprite::handleStates(bool onGround, bool prevOnGround)
     state.prevOnGround = prevOnGround;
     state.walking = (bool)Velocity.x;
     state.onGround = onGround;
-    state.jumping = !onGround;
+    state.inAir = !onGround;
     if (state.walking)
         lastDirection = (Velocity.x > 0) ? Direction::Right : Direction::Left;
 }

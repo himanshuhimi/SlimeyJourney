@@ -12,4 +12,5 @@ public:
     Ball(SDL_Renderer *renderer, float x, float y, string type, Vector2D Direction);
     void handle(double dt, const vector<Object> &grasses);
     void render(Vector2D Camera);
+    void destroy();
 };

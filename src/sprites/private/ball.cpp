@@ -7,7 +7,7 @@ Ball::Ball(SDL_Renderer *renderer, float x, float y, string type, Vector2D Direc
     prevPos = Position;
     Velocity.x = Direction.x * speed;
     Velocity.y = Direction.y * speed;
-    anims = {{"explosion", Animation(renderer, "assets/anims/explosion.png")}};
+    anims = {{"explosion", Animation(renderer, "explosion.png")}};
 }
 
 void Ball::handle(double dt, const vector<Object> &grasses)
@@ -16,7 +16,7 @@ void Ball::handle(double dt, const vector<Object> &grasses)
         return;
     for (auto &grass : grasses)
         if (checkCollision(rect, grass.rect))
-            used = true;
+            destroy();
     if (anims.at("explosion").active)
         anims.at("explosion").handle(dt);
     Sprite::handle(dt, grasses);
@@ -30,4 +30,10 @@ void Ball::render(Vector2D Camera)
         anims.at("explosion").render(Camera, rect);
     else
         Sprite::render(Camera);
+}
+
+void Ball::destroy()
+{
+    used = true;
+    anims.at("explosion").active = true;
 }

@@ -24,6 +24,8 @@ void Level::handle(double dt)
     clampCamera();
     for (auto &ball : player.balls)
         ball.handle(dt, grasses);
+    for (auto &slime : slimes)
+        slime.handle(dt, grasses);
     fruitBar.handle(dt);
     healthBar.handle(dt);
     flag.handle(dt);
@@ -45,6 +47,8 @@ void Level::render()
         fruit.render(Camera);
     for (auto &ball : player.balls)
         ball.render(Camera);
+    for (auto &slime : slimes)
+        slime.render(Camera);
     fruitBar.render();
     healthBar.render();
     flag.render(Camera);
@@ -73,11 +77,13 @@ void Level::loadObjects()
         string name = obj.name;
         if (name == "player")
             player = Player(renderer, obj.x, obj.y - SPRITE_SIZE);
-        if (name == "flag")
+        else if (name == "flag")
             flag = Flag(renderer, obj.x, obj.y - SPRITE_SIZE);
-        if (name == "fruit")
+        else if (name == "fruit")
             fruits.push_back(Fruit(renderer, obj.x, obj.y - SPRITE_SIZE));
-        if (name == "object")
+        else if (name == "slime")
+            slimes.push_back(Slime(renderer, obj.x, obj.y - SPRITE_SIZE));
+        else if (name == "object")
             for (int x = 0; x < obj.width; x += SPRITE_SIZE)
                 grasses.push_back(Object(renderer, obj.x + x + SPRITE_SIZE / 2, obj.y));
     }

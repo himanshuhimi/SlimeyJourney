@@ -19,7 +19,7 @@ public:
     } lastDirection;
     struct SpriteStates
     {
-        bool prevOnGround, onGround, jumping, walking;
+        bool prevOnGround, onGround, inAir, walking;
     } state;
     Sprite(SDL_Renderer *renderer, string imgSource, float x, float y);
     void handle(double dt, const vector<Object> &grasses);

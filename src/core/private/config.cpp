@@ -230,7 +230,7 @@ int _Random_::randint(int begin, int end)
 };
 
 map<int, double> durations = {
-    {0, 0.5},
+    {0, 10.0},
     {1, 0.5},
     {2, 0.5},
     {3, 0.5},

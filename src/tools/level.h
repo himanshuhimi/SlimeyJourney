@@ -1,9 +1,11 @@
 #pragma once
 
 #include "map.h"
+#include "enemy.h"
 #include "sprites/player.h"
 #include "sprites/fruit.h"
 #include "sprites/flag.h"
+#include "sprites/enemies/slime.h"
 #include "ui/progress.h"
 
 class Level
@@ -18,6 +20,7 @@ public:
     Timer timer;
     vector<Object> grasses = {};
     vector<Fruit> fruits = {};
+    vector<Slime> slimes = {};
     std::map<string, Audio> audios;
     int points = 0, fruitLength = 0;
     double increment = 0.0;
