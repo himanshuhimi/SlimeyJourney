@@ -17,23 +17,17 @@ void Ball::handle(double dt, const vector<Object> &grasses)
     for (auto &grass : grasses)
         if (checkCollision(rect, grass.rect))
             destroy();
-    if (anims.at("explosion").active)
-        anims.at("explosion").handle(dt);
     Sprite::handle(dt, grasses);
 }
 
 void Ball::render(Vector2D Camera)
 {
-    if (used && !anims.at("explosion").complete)
+    if (used)
         return;
-    if (anims.at("explosion").active)
-        anims.at("explosion").render(Camera, rect);
-    else
-        Sprite::render(Camera);
+    Sprite::render(Camera);
 }
 
 void Ball::destroy()
 {
     used = true;
-    anims.at("explosion").active = true;
 }

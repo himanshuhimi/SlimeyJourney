@@ -48,7 +48,7 @@ Vector2D Vector2D::normalise()
     return Vector2D{x, y};
 }
 
-Image::Image(SDL_Renderer *renderer, string source) : renderer(renderer)
+Image::Image(SDL_Renderer *renderer, string source) : renderer(renderer), source(source)
 {
     string path = "data/assets/" + source;
     if (!renderer)
@@ -182,6 +182,32 @@ void Cooldown::handle(double dt)
     }
 }
 
+void Cooldown::reset()
+{
+    timeElapsed = 0;
+    available = false;
+}
+
+Timer::Timer(SDL_Renderer *renderer, double duration)
+    : duration(duration * 60), currentTime(duration * 60),
+      text(renderer, WIDTH / 2, 20, "00:00", colors.white) {}
+
+void Timer::handle(double dt)
+{
+    if (currentTime > 0.0)
+        currentTime -= dt;
+}
+
+void Timer::render()
+{
+    int minutes = static_cast<int>(currentTime) / 60;
+    int seconds = static_cast<int>(currentTime) % 60;
+    char buffer[10];
+    sprintf(buffer, "%02d:%02d", minutes, seconds);
+    text.updateData(buffer);
+    text.render();
+}
+
 LineOfSight::LineOfSight(SDL_Renderer *renderer, float x, float y, float width, float height)
     : renderer(renderer)
 {
@@ -206,24 +232,25 @@ void LineOfSight::render(Vector2D Camera)
     SDL_RenderFillRect(renderer, &dst);
 }
 
-Timer::Timer(SDL_Renderer *renderer, double duration)
-    : duration(duration * 60), currentTime(duration * 60),
-      text(renderer, WIDTH / 2, 20, "00:00", colors.white) {}
-
-void Timer::handle(double dt)
+Object::Object(SDL_Renderer *renderer, float x, float y)
+    : renderer(renderer), image(renderer, "images/object.png")
 {
-    if (currentTime > 0.0)
-        currentTime -= dt;
+    Position.x = x;
+    Position.y = y;
+    rect.x = Position.x - image.width / 2;
+    rect.y = Position.y;
+    rect.w = image.width;
+    rect.h = image.height;
 }
 
-void Timer::render()
+void Object::render(Vector2D Camera)
 {
-    int minutes = static_cast<int>(currentTime) / 60;
-    int seconds = static_cast<int>(currentTime) % 60;
-    char buffer[10];
-    sprintf(buffer, "%02d:%02d", minutes, seconds);
-    text.updateData(buffer);
-    text.render();
+    if (!rendering)
+        return;
+    SDL_FRect dst = rect;
+    dst.x -= Camera.x;
+    dst.y -= Camera.y;
+    image.render(nullptr, &dst);
 }
 
 int _Random_::randint(int begin, int end)

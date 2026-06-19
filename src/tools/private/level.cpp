@@ -4,16 +4,13 @@ Level::Level(SDL_Renderer *renderer, int number)
     : renderer(renderer), player(renderer, 0, 0), flag(renderer, 0, 0),
       timer(renderer, durations.at(number)),
       map(renderer, std::to_string(number) + ".tmx"),
-      fruitBar(renderer, 0, 0, SDL_Color{95, 90, 204, 255},
-               Image(renderer, "ui/bottle.png")),
-      healthBar(renderer, 5, HEIGHT / 16.0f, colors.red,
-                Image(renderer, "ui/heart.png"), 1.0, 150)
+      fruitBar(renderer, WIDTH - SPRITE_SIZE, HEIGHT / 16.0f, SDL_Color{95, 90, 204, 255},
+               Image(renderer, "ui/bottle.png"))
 {
     loadObjects();
     fruitLength = fruits.size();
     increment = (double)1 / fruitLength;
-    fruitBar.rect.x = healthBar.rect.x;
-    fruitBar.rect.y = healthBar.rect.y + SPRITE_SIZE + (SPRITE_SIZE / 2);
+    fruitBar.rect.x -= fruitBar.rect.w + fruitBar.attachmentRect.w;
     audios = {
         {"pickup", Audio("audios/player/pickup.wav")},
         {"hurt", Audio("audios/hurt.wav")}};
@@ -26,16 +23,19 @@ void Level::handle(double dt)
         ball.handle(dt, grasses);
     for (auto &slime : slimes)
         slime.handle(dt, grasses);
+    for (auto &heart : hearts)
+        heart.handle(dt, grasses);
     fruitBar.handle(dt);
-    healthBar.handle(dt);
     flag.handle(dt);
     player.handle(dt, grasses);
     if (player.rect.y >= map.pixelHeight)
-        player.resetPos(healthBar);
+        player.resetPos();
     collision();
     timer.handle(dt);
     if (timer.currentTime <= 0.0)
-        player.damage(healthBar);
+        player.damage();
+    if (player.HP != player.maxHP)
+        hearts.at(player.HP).broken = true;
 }
 
 void Level::render()
@@ -47,13 +47,14 @@ void Level::render()
         fruit.render(Camera);
     for (auto &ball : player.balls)
         ball.render(Camera);
+    for (auto &heart : hearts)
+        heart.render(Camera);
     for (auto &slime : slimes)
         slime.render(Camera);
     fruitBar.render();
-    healthBar.render();
+    timer.render();
     flag.render(Camera);
     player.render(Camera);
-    timer.render();
 }
 
 void Level::collision()
@@ -68,6 +69,21 @@ void Level::collision()
         }
         else
             fruitIt++;
+    for (auto &slime : slimes)
+    {
+        if (checkCollision(player.rect, slime.lineOfSight.rect))
+        {
+            slime.actions.alert = true;
+            if (checkCollision(player.rect, slime.rect))
+            {
+                slime.actions.attacking = true;
+                player.inCombat = true;
+                player.combatEnemy = &slime;
+            }
+        }
+        if (slime.actions.attacking)
+            slime.attack(player.Center);
+    }
 }
 
 void Level::loadObjects()
@@ -86,6 +102,12 @@ void Level::loadObjects()
         else if (name == "object")
             for (int x = 0; x < obj.width; x += SPRITE_SIZE)
                 grasses.push_back(Object(renderer, obj.x + x + SPRITE_SIZE / 2, obj.y));
+    }
+    for (int i = 0; i < player.maxHP; i++)
+    { 
+        float x = 256 + (i * (SPRITE_SIZE + 2));
+        float y = HEIGHT - SPRITE_SIZE;
+        hearts.emplace_back(renderer, x, y);
     }
 }
 

@@ -14,10 +14,13 @@ Enemy::Enemy(SDL_Renderer *renderer, float x, float y, string type, EnemyData da
         data.atkRange, data.atkRange
     };
     lineOfSight.rect.w = data.atkRange;
+    HP = data.maxHP;
 };
 
 void Enemy::handle(double dt, const vector<Object> grasses)
 {
+    if (dead)
+        return;
     Sprite::handle(dt, grasses);
     range.x = rect.x - (rect.w / 2);
     range.y = rect.y - (rect.h / 2);
@@ -25,10 +28,26 @@ void Enemy::handle(double dt, const vector<Object> grasses)
 
 void Enemy::render(Vector2D Camera)
 {
+    if (dead)
+        return;
     Sprite::render(Camera);
-    SDL_SetRenderDrawColor(renderer, colors.red.r, colors.red.g, colors.red.b, colors.red.a);
-    SDL_FRect rangeDst = range;
-    rangeDst.x -= Camera.x;
-    rangeDst.y -= Camera.y;
-    SDL_RenderRect(renderer, &rangeDst);
+    if (data.rangeVisible)
+    {
+        SDL_SetRenderDrawColor(renderer, 
+            colors.red.r, 
+            colors.red.g, 
+            colors.red.b, 
+            colors.red.a);
+        SDL_FRect rangeDst = range;
+        rangeDst.x -= Camera.x;
+        rangeDst.y -= Camera.y;
+        SDL_RenderRect(renderer, &rangeDst);
+    }
+}
+
+void Enemy::damage(int byPoints)
+{
+    if (dead)
+        return;
+    HP -= byPoints;
 }

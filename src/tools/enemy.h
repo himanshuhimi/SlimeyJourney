@@ -9,6 +9,7 @@ struct EnemyData
     float atkRange = 0;
     float alertRange = 0;
     int maxHP = 0;
+    bool rangeVisible = false;
     std::function<void(Vector2D)> onAtk;
     EnemyData(
         float speed = 0.0f,
@@ -23,12 +24,16 @@ class Enemy : public Sprite
 public:
     SDL_FRect range;
     EnemyData data;
-    string type = "";
     struct EnemyActions
     {
         bool alert = false, attacking = false;
     } actions;
+    int HP = 0;
+    string type = "";
+    bool dead = false;
+    Cooldown atkCooldown = {1.0f};
     Enemy(SDL_Renderer *renderer, float x, float y, string type, EnemyData data);
     void handle(double dt, const vector<Object> grasses);
     void render(Vector2D Camera);
+    void damage(int byPoints = 1);
 };

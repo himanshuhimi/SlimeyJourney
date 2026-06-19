@@ -103,17 +103,8 @@ struct Cooldown
     double timeElapsed = 0.0;
     Cooldown(double duration = 2.0);
     void handle(double dt);
+    void reset();
 };
-struct LineOfSight
-{
-    SDL_Renderer *renderer = nullptr;
-    SDL_FRect rect, dst;
-    Vector2D Position;
-    LineOfSight(SDL_Renderer *renderer, float x, float y, float width, float height);
-    void matchPosition(SDL_FRect matchRect);
-    void render(Vector2D Camera);
-};
-
 struct Timer
 {
     SDL_Renderer *renderer = nullptr;
@@ -122,6 +113,26 @@ struct Timer
     Timer(SDL_Renderer *renderer, double duration = 1.0);
     void handle(double dt);
     void render();
+};
+struct Object
+{
+    SDL_Renderer *renderer = nullptr;
+    SDL_FRect rect;
+    Vector2D Position;
+    Image image;
+    bool rendering = false;
+    Object(SDL_Renderer *renderer, float x, float y);
+    void render(Vector2D Camera);
+};
+struct LineOfSight
+{
+    SDL_Renderer *renderer = nullptr;
+    SDL_FRect rect, dst;
+    Vector2D Position;
+    bool visible = false;
+    LineOfSight(SDL_Renderer *renderer, float x, float y, float width, float height);
+    void matchPosition(SDL_FRect matchRect);
+    void render(Vector2D Camera);
 };
 
 extern struct _Random_

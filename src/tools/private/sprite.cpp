@@ -9,6 +9,8 @@ Sprite::Sprite(SDL_Renderer *renderer, string imgSource, float x, float y)
     rect.y = Position.y;
     rect.w = image.width;
     rect.h = image.height;
+    hitbox.w = image.width;
+    hitbox.h = image.height;
     lineOfSight.rect.w = rect.w / 2;
     gravityLOS.rect.h = rect.h / 2;
 }
@@ -27,7 +29,8 @@ void Sprite::render(Vector2D Camera)
     dst.x -= Camera.x;
     dst.y -= Camera.y;
     image.render(nullptr, &dst);
-    lineOfSight.render(Camera);
+    if (lineOfSight.visible)
+        lineOfSight.render(Camera);
 }
 
 void Sprite::handleMovement(double dt)
@@ -40,6 +43,8 @@ void Sprite::handleMovement(double dt)
     rect.y = Position.y;
     Center.x = rect.x + rect.w / 2;
     Center.y = rect.y + rect.h / 2;
+    hitbox.x = Center.x;
+    hitbox.y = Center.y;
 }
 
 void Sprite::handleLOS()

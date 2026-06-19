@@ -56,9 +56,8 @@ void Player::render(Vector2D Camera)
     }
 }
 
-void Player::damage(Progress healthBar, int byPoints)
+void Player::damage(int byPoints)
 {
-    healthBar.update(-(double)1 / maxHP);
     if (dead || immune)
         return;
     if (movable)
@@ -75,16 +74,16 @@ void Player::attack()
     Vector2D mapMouse = {mouseWin.x + Camera.x, mouseWin.y + Camera.y};
     Vector2D Direction = {mapMouse.x - Center.x, mapMouse.y - Center.y};
     Direction.normalise();
-    balls.emplace_back(renderer, rect.x, rect.y, "player", Direction);
+    balls.emplace_back(renderer, Center.x, Center.y, "player", Direction);
     audios.at("shoot").play(Random.randint(50, 80));
 }
 
-void Player::resetPos(Progress healthBar, bool previous)
+void Player::resetPos(bool previous)
 {
     Position = (previous) ? prevPos : Original;
     rect.x = Position.x;
     rect.y = Position.y;
-    damage(healthBar);
+    damage();
 }
 
 void Player::handleMovement(double dt)
@@ -114,7 +113,6 @@ void Player::handleShooting(double dt)
     {
         attack();
         mouseClicked = false;
-        throwCooldown.timeElapsed = 0;
-        throwCooldown.available = false;
+        throwCooldown.reset();
     }
 }
