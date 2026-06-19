@@ -62,10 +62,10 @@ void Level::collision()
     for (auto fruitIt = fruits.begin(); fruitIt != fruits.end();)
         if (!fruitIt->picked && checkCollision(fruitIt->rect, player.rect))
         {
-            fruitIt->picked = true;
             points += 1;
             player.audios.at("pickup").play();
             fruitBar.update(increment);
+            fruitIt = fruits.erase(fruitIt);
         }
         else
             fruitIt++;
@@ -83,6 +83,14 @@ void Level::collision()
         }
         if (slime.actions.attacking)
             slime.attack(player.Center);
+        for (auto bIt = slime.balls.begin(); bIt != slime.balls.end(); )
+            if (!bIt->used && checkCollision(player.rect, bIt->rect))
+            {
+                player.damage();
+                bIt = slime.balls.erase(bIt);
+            }
+            else
+                bIt++;
     }
 }
 
