@@ -15,6 +15,7 @@ Game::Game()
     if (scaled)
         SDL_SetRenderLogicalPresentation(renderer, WIDTH, HEIGHT, logicalPresentation);
     loadLevels();
+    ui = new UI<Game *>(this);
     active = true;
 }
 
@@ -40,7 +41,9 @@ void Game::handle()
             currentLevel->player.mouseClicked = (event.button.button == SDL_BUTTON_LEFT);
             break;
         }
+    collision();
     currentLevel->handle(dt);
+    ui->handle(dt);
     manageUpdation();
 }
 
@@ -52,6 +55,7 @@ void Game::render()
         colors.skyblue.a);
     SDL_RenderClear(renderer);
     currentLevel->render();
+    ui->render();
     SDL_RenderPresent(renderer);
 }
 
@@ -95,8 +99,62 @@ void Game::updateLevel()
 
 void Game::manageUpdation()
 {
-    bool complete = currentLevel->fruitBar.percentage >= 0.8;
+    bool complete = ui->progresses.at("fruit").percentage >= 0.8;
     bool collided = checkCollision(currentLevel->player.rect, currentLevel->flag.rect);
     if (complete && collided)
         updateLevel();
+}
+
+void Game::collision()
+{
+    if (currentLevel == nullptr)
+        return;
+    for (auto fruitIt = currentLevel->fruits.begin(); 
+        fruitIt != currentLevel->fruits.end();)
+        if (!fruitIt->picked && checkCollision(fruitIt->rect, currentLevel->player.rect))
+        {
+            currentLevel->player.audios.at("pickup").play();
+            ui->progresses.at("fruit").update(currentLevel->increment);
+            fruitIt = currentLevel->fruits.erase(fruitIt);
+        }
+        else
+            fruitIt++;
+    for (auto sIt = currentLevel->slimes.begin(); sIt != currentLevel->slimes.end();)
+    {
+        if (sIt->dead)
+        {
+            sIt = currentLevel->slimes.erase(sIt);
+            continue;
+        }
+        if (checkCollision(currentLevel->player.rect, sIt->lineOfSight.rect))
+        {
+            sIt->actions.alert = true;
+            if (checkCollision(currentLevel->player.rect, sIt->rect))
+            {
+                sIt->actions.attacking = true;
+                currentLevel->player.inCombat = true;
+                currentLevel->player.combatEnemy = &(*sIt);
+            }
+        }
+        if (sIt->actions.attacking)
+            sIt->attack(currentLevel->player.Center);
+        for (auto bIt = sIt->balls.begin(); bIt != sIt->balls.end();)
+            if (!bIt->used && checkCollision(currentLevel->player.rect, bIt->rect))
+            {
+                currentLevel->player.damage();
+                bIt = sIt->balls.erase(bIt);
+            }
+            else
+                bIt++;
+        for (auto bIt = currentLevel->player.balls.begin();
+             bIt != currentLevel->player.balls.end();)
+            if (!bIt->used && checkCollision(sIt->rect, bIt->rect))
+            {
+                sIt->damage();
+                bIt = currentLevel->player.balls.erase(bIt);
+            }
+            else
+                bIt++;
+        sIt++;
+    }
 }

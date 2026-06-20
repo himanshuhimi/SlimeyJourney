@@ -12,7 +12,6 @@ class Level
 {
 public:
     SDL_Renderer *renderer = nullptr;
-    Progress fruitBar;
     Vector2D Camera;
     Map map;
     Flag flag;
@@ -21,14 +20,12 @@ public:
     vector<Object> grasses = {};
     vector<Fruit> fruits = {};
     vector<Slime> slimes = {};
-    vector<Heart> hearts = {};
     std::map<string, Audio> audios;
-    int points = 0, fruitLength = 0;
+    int fruitLength = 0;
     double increment = 0.0;
     Level(SDL_Renderer *renderer, int number);
     void handle(double dt);
     void render();
-    void collision();
     void loadObjects();
     void clampCamera();
 };

@@ -3,14 +3,11 @@
 Level::Level(SDL_Renderer *renderer, int number)
     : renderer(renderer), player(renderer, 0, 0), flag(renderer, 0, 0),
       timer(renderer, durations.at(number)),
-      map(renderer, std::to_string(number) + ".tmx"),
-      fruitBar(renderer, WIDTH - SPRITE_SIZE, HEIGHT / 16.0f, SDL_Color{95, 90, 204, 255},
-               Image(renderer, "ui/bottle.png"))
+      map(renderer, std::to_string(number) + ".tmx")
 {
     loadObjects();
     fruitLength = fruits.size();
     increment = (double)1 / fruitLength;
-    fruitBar.rect.x -= fruitBar.rect.w + fruitBar.attachmentRect.w;
     audios = {
         {"pickup", Audio("audios/player/pickup.wav")},
         {"hurt", Audio("audios/hurt.wav")}};
@@ -23,19 +20,13 @@ void Level::handle(double dt)
         ball.handle(dt, grasses);
     for (auto &slime : slimes)
         slime.handle(dt, grasses);
-    for (auto &heart : hearts)
-        heart.handle(dt, grasses);
-    fruitBar.handle(dt);
     flag.handle(dt);
     player.handle(dt, grasses);
     if (player.rect.y >= map.pixelHeight)
         player.resetPos();
-    collision();
     timer.handle(dt);
     if (timer.currentTime <= 0.0)
         player.damage();
-    if (player.HP != player.maxHP)
-        hearts.at(player.HP).broken = true;
 }
 
 void Level::render()
@@ -47,65 +38,11 @@ void Level::render()
         fruit.render(Camera);
     for (auto &ball : player.balls)
         ball.render(Camera);
-    for (auto &heart : hearts)
-        heart.render(Camera);
     for (auto &slime : slimes)
         slime.render(Camera);
-    fruitBar.render();
     timer.render();
     flag.render(Camera);
     player.render(Camera);
-}
-
-void Level::collision()
-{
-    for (auto fruitIt = fruits.begin(); fruitIt != fruits.end();)
-        if (!fruitIt->picked && checkCollision(fruitIt->rect, player.rect))
-        {
-            points += 1;
-            player.audios.at("pickup").play();
-            fruitBar.update(increment);
-            fruitIt = fruits.erase(fruitIt);
-        }
-        else
-            fruitIt++;
-    for (auto sIt = slimes.begin(); sIt != slimes.end(); )
-    {
-        if (sIt->dead)
-        {
-            sIt = slimes.erase(sIt);
-            continue;
-        }
-        if (checkCollision(player.rect, sIt->lineOfSight.rect))
-        {
-            sIt->actions.alert = true;
-            if (checkCollision(player.rect, sIt->rect))
-            {
-                sIt->actions.attacking = true;
-                player.inCombat = true;
-                player.combatEnemy = &(*sIt);
-            }
-        }
-        if (sIt->actions.attacking)
-            sIt->attack(player.Center);
-        for (auto bIt = sIt->balls.begin(); bIt != sIt->balls.end(); )
-            if (!bIt->used && checkCollision(player.rect, bIt->rect))
-            {
-                player.damage();
-                bIt = sIt->balls.erase(bIt);
-            }
-            else
-                bIt++;
-        for (auto bIt = player.balls.begin(); bIt != player.balls.end(); )
-            if (!bIt->used && checkCollision(sIt->rect, bIt->rect))
-            {
-                sIt->damage();
-                bIt = player.balls.erase(bIt);
-            }
-            else
-                bIt++;
-        sIt++;
-    }
 }
 
 void Level::loadObjects()
@@ -124,12 +61,6 @@ void Level::loadObjects()
         else if (name == "object")
             for (int x = 0; x < obj.width; x += SPRITE_SIZE)
                 grasses.push_back(Object(renderer, obj.x + x + SPRITE_SIZE / 2, obj.y));
-    }
-    for (int i = 0; i < player.maxHP; i++)
-    { 
-        float x = (WIDTH / 2 - (player.maxHP / 2 * SPRITE_SIZE)) + (i * (SPRITE_SIZE + 2));
-        float y = HEIGHT - SPRITE_SIZE;
-        hearts.emplace_back(renderer, x, y);
     }
 }
 
