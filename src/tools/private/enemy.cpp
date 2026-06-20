@@ -19,6 +19,7 @@ Enemy::Enemy(SDL_Renderer *renderer, float x, float y, string type, EnemyData da
 
 void Enemy::handle(double dt, const vector<Object> grasses)
 {
+    dead = HP <= 0;
     if (dead)
         return;
     Sprite::handle(dt, grasses);
@@ -43,11 +44,4 @@ void Enemy::render(Vector2D Camera)
         rangeDst.y -= Camera.y;
         SDL_RenderRect(renderer, &rangeDst);
     }
-}
-
-void Enemy::damage(int byPoints)
-{
-    if (dead)
-        return;
-    HP -= byPoints;
 }

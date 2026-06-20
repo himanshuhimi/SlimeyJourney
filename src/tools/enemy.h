@@ -35,5 +35,4 @@ public:
     Enemy(SDL_Renderer *renderer, float x, float y, string type, EnemyData data);
     void handle(double dt, const vector<Object> grasses);
     void render(Vector2D Camera);
-    void damage(int byPoints = 1);
 };

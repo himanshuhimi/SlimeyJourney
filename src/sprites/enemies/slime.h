@@ -11,4 +11,5 @@ public:
     void handle(double dt, const vector<Object> &grasses);
     void render(Vector2D Camera);
     void attack(Vector2D Direction);
+    void damage(int byPoints = 1);
 };

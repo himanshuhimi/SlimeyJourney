@@ -2,7 +2,7 @@
 
 Slime::Slime(SDL_Renderer *renderer, float x, float y)
     : Enemy(renderer, x, y, "slime", EnemyData{
-        (float)Random.randint(5, 15), 1 / 4, 64, 5, 
+        (float)Random.randint(5, 15), 1.0f / 4, 64, 5, 
         [this](Vector2D Direction){ attack(Direction); }
     })
 {
@@ -32,4 +32,11 @@ void Slime::attack(Vector2D Direction)
         return;
     balls.emplace_back(renderer, rect.x, rect.y, "enemies/" + type, Direction);
     atkCooldown.reset();
+}
+
+void Slime::damage(int byPoints)
+{
+    if (dead)
+        return;
+    HP -= byPoints;
 }

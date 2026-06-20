@@ -69,28 +69,42 @@ void Level::collision()
         }
         else
             fruitIt++;
-    for (auto &slime : slimes)
+    for (auto sIt = slimes.begin(); sIt != slimes.end(); )
     {
-        if (checkCollision(player.rect, slime.lineOfSight.rect))
+        if (sIt->dead)
         {
-            slime.actions.alert = true;
-            if (checkCollision(player.rect, slime.rect))
+            sIt = slimes.erase(sIt);
+            continue;
+        }
+        if (checkCollision(player.rect, sIt->lineOfSight.rect))
+        {
+            sIt->actions.alert = true;
+            if (checkCollision(player.rect, sIt->rect))
             {
-                slime.actions.attacking = true;
+                sIt->actions.attacking = true;
                 player.inCombat = true;
-                player.combatEnemy = &slime;
+                player.combatEnemy = &(*sIt);
             }
         }
-        if (slime.actions.attacking)
-            slime.attack(player.Center);
-        for (auto bIt = slime.balls.begin(); bIt != slime.balls.end(); )
+        if (sIt->actions.attacking)
+            sIt->attack(player.Center);
+        for (auto bIt = sIt->balls.begin(); bIt != sIt->balls.end(); )
             if (!bIt->used && checkCollision(player.rect, bIt->rect))
             {
                 player.damage();
-                bIt = slime.balls.erase(bIt);
+                bIt = sIt->balls.erase(bIt);
             }
             else
                 bIt++;
+        for (auto bIt = player.balls.begin(); bIt != player.balls.end(); )
+            if (!bIt->used && checkCollision(sIt->rect, bIt->rect))
+            {
+                sIt->damage();
+                bIt = player.balls.erase(bIt);
+            }
+            else
+                bIt++;
+        sIt++;
     }
 }
 
@@ -113,7 +127,7 @@ void Level::loadObjects()
     }
     for (int i = 0; i < player.maxHP; i++)
     { 
-        float x = 256 + (i * (SPRITE_SIZE + 2));
+        float x = (WIDTH / 2 - (player.maxHP / 2 * SPRITE_SIZE)) + (i * (SPRITE_SIZE + 2));
         float y = HEIGHT - SPRITE_SIZE;
         hearts.emplace_back(renderer, x, y);
     }
