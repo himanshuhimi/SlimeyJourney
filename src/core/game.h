@@ -10,7 +10,7 @@ public:
     SDL_Renderer *renderer = nullptr;
     SDL_Window *window = nullptr;
     SDL_Event event;
-    States nextState;
+    States state = States::HOME, nextState;
     Level *currentLevel = nullptr;
     bool active = false;
     double dt = 0.0;
@@ -18,6 +18,7 @@ public:
     void launch();
     void render();
     void handle();
+    void update(States newState);
     void terminate();
 
 private:

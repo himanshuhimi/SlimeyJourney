@@ -42,7 +42,8 @@ void Game::handle()
             break;
         }
     collision();
-    currentLevel->handle(dt);
+    if (state == States::PLAYING)
+        currentLevel->handle(dt);
     ui->handle(dt);
     manageUpdation();
 }
@@ -54,9 +55,16 @@ void Game::render()
         colors.skyblue.g, colors.skyblue.b,
         colors.skyblue.a);
     SDL_RenderClear(renderer);
-    currentLevel->render();
+    if (state == States::PLAYING)
+        currentLevel->render();
     ui->render();
     SDL_RenderPresent(renderer);
+}
+
+void Game::update(States newState)
+{
+    nextState = newState;
+    state = nextState;
 }
 
 void Game::terminate()
@@ -107,7 +115,7 @@ void Game::manageUpdation()
 
 void Game::collision()
 {
-    if (currentLevel == nullptr)
+    if (currentLevel == nullptr && state != States::PLAYING)
         return;
     for (auto fruitIt = currentLevel->fruits.begin(); 
         fruitIt != currentLevel->fruits.end();)

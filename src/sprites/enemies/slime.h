@@ -6,6 +6,7 @@
 class Slime : public Enemy
 {
 public:
+    map<string, Animation> anims = {};
     vector<Ball> balls = {};
     Slime(SDL_Renderer *renderer, float x, float y);
     void handle(double dt, const vector<Object> &grasses);

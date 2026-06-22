@@ -35,4 +35,9 @@ public:
     Enemy(SDL_Renderer *renderer, float x, float y, string type, EnemyData data);
     void handle(double dt, const vector<Object> grasses);
     void render(Vector2D Camera);
+    template <typename T>
+    void drop(vector<T> droppingList)
+    {
+        droppingList.emplace_back(renderer, Center.x, Center.y);
+    }
 };

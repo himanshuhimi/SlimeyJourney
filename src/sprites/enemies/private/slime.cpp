@@ -1,12 +1,13 @@
 #include "../slime.h"
 
 Slime::Slime(SDL_Renderer *renderer, float x, float y)
-    : Enemy(renderer, x, y, "slime", EnemyData{
-        (float)Random.randint(5, 15), 1.0f / 4, 64, 5, 
-        [this](Vector2D Direction){ attack(Direction); }
-    })
+    : Enemy(renderer, x, y, "slime", EnemyData{(float)Random.randint(5, 15), 1.0f / 4, 64, 5, [this](Vector2D Direction)
+                                               { attack(Direction); }})
 {
     Velocity.x = data.speed;
+    anims = {
+        {"walking", Animation(renderer, "slime/walking.png")},
+        {"damage", Animation(renderer, "slime/damage.png")}};
 }
 
 void Slime::handle(double dt, const vector<Object> &grasses)
