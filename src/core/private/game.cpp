@@ -14,7 +14,6 @@ Game::Game()
         print("Display Unloaded: " + (string)SDL_GetError());
     if (scaled)
         SDL_SetRenderLogicalPresentation(renderer, WIDTH, HEIGHT, logicalPresentation);
-    loadLevels();
     ui = new UI<Game *>(this);
     active = true;
 }
@@ -32,20 +31,34 @@ void Game::handle()
 {
     updateDeltaTime();
     while (SDL_PollEvent(&event))
+    {
         switch (event.type)
         {
         case SDL_EVENT_WINDOW_CLOSE_REQUESTED:
             terminate();
             break;
         case SDL_EVENT_MOUSE_BUTTON_UP:
-            currentLevel->player.mouseClicked = (event.button.button == SDL_BUTTON_LEFT);
+            if (state == States::PLAYING)
+                currentLevel->player.mouseClicked = (event.button.button == SDL_BUTTON_LEFT);
             break;
         }
-    collision();
-    if (state == States::PLAYING)
-        currentLevel->handle(dt);
+        ui->update(event);
+    }
     ui->handle(dt);
-    manageUpdation();
+    switch (state)
+    {
+    case States::LOADING:
+        if (ui->progresses.at("loading").complete)
+        {
+            state = nextState;
+            ui->progresses.at("loading").reset();
+        }
+        break;
+    case States::PLAYING:
+        currentLevel->handle(dt);
+        collision();
+        break;
+    }
 }
 
 void Game::render()
@@ -61,10 +74,12 @@ void Game::render()
     SDL_RenderPresent(renderer);
 }
 
-void Game::update(States newState)
+void Game::update(States newState, bool loading)
 {
     nextState = newState;
-    state = nextState;
+    state = (loading) ? States::LOADING : nextState;
+    if (loading && nextState == States::PLAYING)
+        loadLevels();
 }
 
 void Game::terminate()
@@ -82,8 +97,7 @@ void Game::updateDeltaTime()
 
 void Game::loadLevels()
 {
-    if (!levels.empty())
-        levels.clear();
+    levels.clear();
     string directory = "data/maps";
     if (!fs::exists(directory) && !fs::is_directory(directory))
         return;
@@ -101,24 +115,21 @@ void Game::loadLevels()
 
 void Game::updateLevel()
 {
-    if (levelNum < levels.size())
-        currentLevel = levels.at(levelNum);
-}
-
-void Game::manageUpdation()
-{
-    bool complete = ui->progresses.at("fruit").percentage >= 0.8;
-    bool collided = checkCollision(currentLevel->player.rect, currentLevel->flag.rect);
-    if (complete && collided)
-        updateLevel();
+    levelNum++;
+    if (levelNum <= levels.size())
+        currentLevel = levels.at(levelNum - 1);
+    else
+    {
+        update(States::HOME);
+        levelNum = 0;
+    }
 }
 
 void Game::collision()
 {
-    if (currentLevel == nullptr && state != States::PLAYING)
-        return;
-    for (auto fruitIt = currentLevel->fruits.begin(); 
-        fruitIt != currentLevel->fruits.end();)
+    
+    for (auto fruitIt = currentLevel->fruits.begin();
+         fruitIt != currentLevel->fruits.end();)
         if (!fruitIt->picked && checkCollision(fruitIt->rect, currentLevel->player.rect))
         {
             currentLevel->player.audios.at("pickup").play();
@@ -165,4 +176,7 @@ void Game::collision()
                 bIt++;
         sIt++;
     }
+    bool collided = checkCollision(currentLevel->player.rect, currentLevel->flag.rect);
+    if (ui->progresses.at("fruit").complete && collided)
+        updateLevel();
 }

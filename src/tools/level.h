@@ -27,5 +27,6 @@ public:
     void handle(double dt);
     void render();
     void loadObjects();
+    void reset();
     void clampCamera();
 };

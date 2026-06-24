@@ -71,3 +71,9 @@ void Progress::update(double increment)
         reachPercent = 0.0;
     animSpeed = abs(animSpeed) * ((increment >= 0) ? 1 : -1);
 }
+
+void Progress::reset()
+{
+    percentage = 0.0;
+    reachPercent = 0.0;
+}

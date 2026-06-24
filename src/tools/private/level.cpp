@@ -64,6 +64,8 @@ void Level::loadObjects()
     }
 }
 
+void Level::reset() { loadObjects(); }
+
 void Level::clampCamera()
 {
     float targetX = player.Position.x - CAMERA_X;

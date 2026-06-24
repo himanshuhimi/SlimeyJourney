@@ -13,13 +13,14 @@ public:
     vector<Image> images = {};
     std::function<void()> callback;
     string label;
+    bool resized = false;
     Button(
         SDL_Renderer *renderer, float x, float y,
         std::function<void()> callback, string label,
         SDL_Color color);
-    void handle(SDL_Event event);
+    void handle(double dt);
     void render();
     bool hovered();
     bool clicked(SDL_Event event);
-    void update(double dt);
+    void update(SDL_Event event);
 };

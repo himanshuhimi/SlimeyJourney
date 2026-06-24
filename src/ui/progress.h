@@ -20,4 +20,5 @@ public:
     void update(double increment = 0.2);
     void handle(double dt);
     void render(Vector2D Camera = Vector2D{0.0f, 0.0f});
+    void reset();
 };

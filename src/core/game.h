@@ -18,8 +18,9 @@ public:
     void launch();
     void render();
     void handle();
-    void update(States newState);
+    void update(States newState, bool loading = true);
     void terminate();
+    void loadLevels();
 
 private:
     vector<Level *> levels = {};
@@ -29,8 +30,6 @@ private:
     UI<Game *> * ui = nullptr;
     int levelNum = 0;
     void updateDeltaTime();
-    void loadLevels();
     void updateLevel();
-    void manageUpdation();
     void collision();
 };
