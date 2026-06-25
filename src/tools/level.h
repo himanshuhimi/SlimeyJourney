@@ -8,6 +8,7 @@
 #include "sprites/enemies/slime.h"
 #include "sprites/heart.h"
 #include "sprites/fren.h"
+#include "tools/quest.h"
 
 class Level
 {
@@ -22,6 +23,7 @@ public:
     vector<Object> grasses = {};
     vector<Fruit> fruits = {};
     vector<Slime> slimes = {};
+    vector<Quest> quests = {};
     std::map<string, Audio> audios;
     int fruitLength = 0;
     double increment = 0.0;
