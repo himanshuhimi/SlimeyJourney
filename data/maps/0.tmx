@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.12.2" orientation="orthogonal" renderorder="right-down" width="40" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="10">
+<map version="1.10" tiledversion="1.12.2" orientation="orthogonal" renderorder="right-down" width="40" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="11">
  <tileset firstgid="1" source="tilesets/0.tsx"/>
  <layer id="1" name="ground" width="40" height="20">
   <data encoding="csv">
@@ -19,25 +19,20 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,0,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2
 </data>
  </layer>
- <objectgroup id="2" name="collisionals">
-  <object id="1" name="object" x="608" y="512" width="64" height="32"/>
-  <object id="2" name="object" x="0" y="576" width="576" height="32"/>
-  <object id="3" name="object" x="704" y="576" width="576" height="32"/>
- </objectgroup>
  <objectgroup id="3" name="placements">
   <object id="5" name="player" x="32" y="576">
    <point/>
   </object>
-  <object id="6" name="flag" x="1248" y="576">
+  <object id="6" name="fren" x="1248" y="576">
    <point/>
   </object>
-  <object id="7" name="slime" x="640" y="512">
+  <object id="7" name="fruit" x="640" y="576">
    <point/>
   </object>
   <object id="8" name="fruit" x="288" y="576">
@@ -46,5 +41,8 @@
   <object id="9" name="fruit" x="992" y="576">
    <point/>
   </object>
+ </objectgroup>
+ <objectgroup id="2" name="objects">
+  <object id="10" name="object" x="0" y="576" width="1280" height="32"/>
  </objectgroup>
 </map>

@@ -19,6 +19,9 @@ Map::Map(SDL_Renderer *renderer, string source)
 void Map::render(Vector2D Camera)
 {
     for (Layer &layer : layers)
+    {
+        if (!layer.visible)
+            continue;
         for (int i = 0; i < layer.gids.size(); i++)
         {
             int gid = layer.gids[i];
@@ -37,6 +40,7 @@ void Map::render(Vector2D Camera)
                 (float)(tileHeight)};
             tileset.image->render(&src, &dest);
         }
+    }
     for (auto &text : objectGroup.texts)
         text.render();
 }
@@ -64,6 +68,7 @@ void Map::loadLayer(XMLElement *child)
     Layer layer;
     layer.width = child->IntAttribute("width");
     layer.height = child->IntAttribute("height");
+    layer.visible = child->BoolAttribute("visible", true);
     layer.dataElement = child->FirstChildElement("data");
     if (!layer.dataElement)
         print("No <data> element found in: " + source);
@@ -125,6 +130,22 @@ void Map::loadObjectGroup(XMLElement *child)
         object.width = objectElement->FloatAttribute("width");
         object.height = objectElement->FloatAttribute("height");
         objectGroup.objects.push_back(object);
+        for (
+            XMLElement *propElement = objectElement->FirstChildElement("property");
+            propElement != nullptr;
+            propElement = propElement->NextSiblingElement("property")
+        )
+        {
+            string name = propElement->Attribute("name");
+            string type = propElement->Attribute("type");
+            string value = propElement->Attribute("value");
+            if (type == "int")
+                object.properties[name] = std::stoi(value);
+            else if (type == "float")
+                object.properties[name] = std::stof(value);
+            else
+                object.properties[name] = value;
+        }
     }
 }
 

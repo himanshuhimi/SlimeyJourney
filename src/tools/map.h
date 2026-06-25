@@ -14,6 +14,7 @@ public:
     {
         int width, height;
         string num, csvText;
+        bool visible;
         vector<int> gids;
         XMLElement *dataElement;
     };
@@ -26,6 +27,7 @@ public:
     {
         string name;
         float x, y, width, height;
+        map<string, std::variant<string, bool, int, float>> properties;
     };
     struct ObjectGroup
     {

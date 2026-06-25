@@ -7,6 +7,7 @@
 #include "sprites/flag.h"
 #include "sprites/enemies/slime.h"
 #include "sprites/heart.h"
+#include "sprites/fren.h"
 
 class Level
 {
@@ -16,6 +17,7 @@ public:
     Map map;
     Flag flag;
     Player player;
+    Fren fren;
     Timer timer;
     vector<Object> grasses = {};
     vector<Fruit> fruits = {};

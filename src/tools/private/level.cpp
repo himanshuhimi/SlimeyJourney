@@ -2,7 +2,7 @@
 
 Level::Level(SDL_Renderer *renderer, int number)
     : renderer(renderer), player(renderer, 0, 0), flag(renderer, 0, 0),
-      timer(renderer, durations.at(number)),
+      timer(renderer, durations.at(number)), fren(renderer, 0, 0),
       map(renderer, std::to_string(number) + ".tmx")
 {
     loadObjects();
@@ -22,6 +22,7 @@ void Level::handle(double dt)
         slime.handle(dt, grasses);
     flag.handle(dt);
     player.handle(dt, grasses);
+    fren.handle(dt, grasses);
     if (player.rect.y >= map.pixelHeight)
         player.resetPos();
     timer.handle(dt);
@@ -43,6 +44,7 @@ void Level::render()
     timer.render();
     flag.render(Camera);
     player.render(Camera);
+    fren.render(Camera);
 }
 
 void Level::loadObjects()
@@ -54,6 +56,8 @@ void Level::loadObjects()
             player = Player(renderer, obj.x, obj.y - SPRITE_SIZE);
         else if (name == "flag")
             flag = Flag(renderer, obj.x, obj.y - SPRITE_SIZE);
+        else if (name == "fren")
+            fren = Fren(renderer, obj.x, obj.y - SPRITE_SIZE);
         else if (name == "fruit")
             fruits.push_back(Fruit(renderer, obj.x, obj.y - SPRITE_SIZE));
         else if (name == "slime")

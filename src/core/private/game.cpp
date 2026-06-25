@@ -176,7 +176,9 @@ void Game::collision()
                 bIt++;
         sIt++;
     }
-    bool collided = checkCollision(currentLevel->player.rect, currentLevel->flag.rect);
-    if (ui->progresses.at("fruit").complete && collided)
+    bool collided = checkCollision(currentLevel->player.rect, currentLevel->fren.rect);
+    bool keyPressed = SDL_GetKeyboardState(NULL)[SDL_SCANCODE_F];
+    bool completed = ui->progresses.at("fruit").complete;
+    if (collided && completed && keyPressed)
         updateLevel();
 }
