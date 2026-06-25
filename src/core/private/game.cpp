@@ -180,5 +180,8 @@ void Game::collision()
     bool keyPressed = SDL_GetKeyboardState(NULL)[SDL_SCANCODE_F];
     bool completed = ui->progresses.at("fruit").complete;
     if (collided && completed && keyPressed)
+    {
         updateLevel();
+        currentLevel->fren.helped = true;
+    }
 }
