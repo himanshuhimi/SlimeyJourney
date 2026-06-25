@@ -83,7 +83,13 @@ Text::Text(
     rect.y = y - (rect.h / 2);
 }
 
-void Text::render() { SDL_RenderTexture(renderer, texture, nullptr, &rect); }
+void Text::render(Vector2D Camera) 
+{
+    SDL_FRect dst = rect;
+    dst.x -= Camera.x;
+    dst.y -= Camera.y;
+    SDL_RenderTexture(renderer, texture, nullptr, &dst); 
+}
 
 void Text::updateData(string newData)
 {

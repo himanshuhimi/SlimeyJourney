@@ -8,27 +8,23 @@ Dialogue::Dialogue(
 {
     Position = {x, y};
     rect = {x, y, box.width, box.height};
+    rect.x -= rect.w / 2;
+    rect.y -= rect.h / 2;
     text = new Text(
-        renderer, rect.x - (rect.w / 2), rect.y - (rect.h / 2),
+        renderer, x, y,
         initialText, colors.white,
         10, "fonts/roboto.ttf");
 }
 
-void Dialogue::handle(double dt)
-{
-    // rect.x = Position.x;
-    // rect.y = Position.y;
-    // text->rect.x = Position.x;
-    // text->rect.y = Position.y;
-}
+void Dialogue::handle(double dt) {}
 
 void Dialogue::render(Vector2D Camera) 
 {
-    box.render(nullptr, &rect);
     SDL_FRect dst = rect;
     dst.x -= Camera.x;
     dst.y -= Camera.y;
-    text->render();
+    box.render(nullptr, &dst);
+    text->render(Camera);
 }
 
 void Dialogue::updateText(string newData) { text->updateData(newData); }
