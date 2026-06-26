@@ -14,6 +14,7 @@ public:
     Image *normalHeart, *brokenHeart;
     map<string, Progress> progresses = {};
     vector<Button> buttons = {};
+    vector<Text> texts = {};
     T game;
     UI(T game) : game(game), renderer(game->renderer)
     {
@@ -21,6 +22,7 @@ public:
         brokenHeart = new Image{renderer, "images/hearts/broken.png"};
         loadProgresses();
         loadButtons();
+        loadTexts();
     }
     void handle(double dt)
     {
@@ -31,7 +33,6 @@ public:
             break;
         case States::PLAYING:
         {
-            // hearts.clear();
             if (hearts.size() < game->currentLevel->player.maxHP)
                 for (int i = 0; i < game->currentLevel->player.maxHP; i++)
                     hearts.emplace_back(normalHeart);
@@ -87,6 +88,12 @@ public:
             if (std::find(curBtns.begin(), curBtns.end(), button.label) != curBtns.end())
                 button.render();
         }
+        for (auto &text : texts)
+        {
+            vector<string> curText = getTitleNames();
+            if (std::find(curText.begin(), curText.end(), text.data) != curText.end())
+                text.render();
+        }
         if (game->state == States::LOADING)
             progresses.at("loading").update();
     }
@@ -119,10 +126,19 @@ public:
         for (int i = 0; i < names.size(); i++)
         {
             string label = names.at(i);
-            buttons.emplace_back(
-                renderer, WIDTH / 2, HEIGHT / 2 + (i * SPRITE_SIZE * 2),
+            buttons.emplace_back(renderer, WIDTH / 2, HEIGHT / 2 + (i * SPRITE_SIZE * 2),
                 functions.at(label), label, colors.yellow);
         }
+    }
+    void loadTexts()
+    {
+        vector<string> data = {
+            TITLE,
+            "COMPLETED",
+            "GAME OVER!"
+        };
+        for (auto &str : data)
+            texts.emplace_back(renderer, WIDTH / 2, 96, str, colors.white, 48);
     }
     vector<string> getBtnNames()
     {
@@ -130,7 +146,10 @@ public:
         switch (game->state)
         {
         case States::HOME:
-            res = {"PLAY", "SETTINGS", "QUIT"};
+            res = {"PLAY", "QUIT"};
+            break;
+        case States::OVER:
+            res = {"TRY AGAIN", "HOME"};
             break;
         }
         return res;
@@ -149,16 +168,25 @@ public:
         }
         return res;
     }
+    vector<string> getTitleNames()
+    {
+        vector<string> res = {};
+        switch (game->state)
+        {
+        case States::HOME:
+            res = {(string)TITLE};
+            break;
+        }
+        return res;
+    }
     map<string, std::function<void()>> getBtnFuncs()
     {
         return {
-            {"PLAY", [this]
-             { game->update(States::PLAYING); }},
-            {"SETTINGS", [this]
-             { game->update(States::SETTINGS); }},
-            {"QUIT", [this]
-             { game->terminate(); }},
-            {"HOME", [this]
-             { game->update(States::HOME); }}};
+            {"PLAY", [this] { game->update(States::PLAYING); }},
+            {"TRY AGAIN", [this] { game->update(States::PLAYING); }},
+            {"PLAY AGAIN", [this]{ game->update(States::PLAYING); }},
+            {"SETTINGS", [this] { game->update(States::SETTINGS); }},
+            {"QUIT", [this] { game->terminate(); }},
+            {"HOME", [this] { game->update(States::HOME); }}};
     }
 };

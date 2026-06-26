@@ -72,7 +72,7 @@ Text::Text(
     SDL_Renderer *renderer,
     float x, float y, string data, SDL_Color color,
     int pixelSize, int posMode, Image attachment, string fontSource)
-    : renderer(renderer), x(x), y(y), pixelSize(pixelSize), color(color),
+    : renderer(renderer), x(x), y(y), data(data), pixelSize(pixelSize), color(color),
       attachment(attachment)
 {
     string path = "data/assets/" + fontSource;
@@ -296,7 +296,7 @@ int _Random_::randint(int begin, int end)
 };
 
 map<int, double> durations = {
-    {0, 10.0},
+    {0, 5.0},
     {1, 0.5},
     {2, 0.5},
     {3, 0.5},
