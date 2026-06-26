@@ -127,7 +127,7 @@ void Game::updateLevel()
 
 void Game::collision()
 {
-    
+
     for (auto fruitIt = currentLevel->fruits.begin();
          fruitIt != currentLevel->fruits.end();)
         if (!fruitIt->picked && checkCollision(fruitIt->rect, currentLevel->player.rect))
@@ -178,10 +178,11 @@ void Game::collision()
     }
     bool collided = checkCollision(currentLevel->player.rect, currentLevel->fren.rect);
     bool keyPressed = SDL_GetKeyboardState(NULL)[SDL_SCANCODE_F];
-    bool completed = ui->progresses.at("fruit").complete;
-    if (collided && completed && keyPressed)
-    {
+    bool complete = ui->progresses.at("fruit").complete;
+    currentLevel->quests.at("fruitColl").completed = complete;
+    currentLevel->quests.at("fedFren").completed = collided & keyPressed;
+    if (
+        currentLevel->quests.at("fruitColl").completed &&
+        currentLevel->quests.at("fedFren").completed)
         updateLevel();
-        currentLevel->fren.helped = true;
-    }
 }

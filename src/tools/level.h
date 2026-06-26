@@ -23,7 +23,7 @@ public:
     vector<Object> grasses = {};
     vector<Fruit> fruits = {};
     vector<Slime> slimes = {};
-    vector<Quest> quests = {};
+    std::map<string, Quest> quests = {};
     std::map<string, Audio> audios;
     int fruitLength = 0;
     double increment = 0.0;

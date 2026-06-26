@@ -11,12 +11,10 @@ Level::Level(SDL_Renderer *renderer, int number)
     audios = {
         {"pickup", Audio("audios/player/pickup.wav")},
         {"hurt", Audio("audios/hurt.wav")}};
-    vector<string> labels = {
-        "Collect all fruits",
-        "Feed your friend [Press F]"
+    quests = {
+        {"fruitColl", Quest(renderer, 32, 32, "Collect all fruits")},
+        {"fedFren", Quest(renderer, 32, 64, "Feed your friend, Fren! [Press F]")}
     };
-    for (int i = 0; i < labels.size(); i++)
-        quests.emplace_back(renderer, 32, 32 + (i * 32), labels[i]);
 }
 
 void Level::handle(double dt)
@@ -26,7 +24,7 @@ void Level::handle(double dt)
         ball.handle(dt, grasses);
     for (auto &slime : slimes)
         slime.handle(dt, grasses);
-    for (auto &quest : quests)
+    for (auto &[_, quest] : quests)
         quest.handle(dt);
     flag.handle(dt);
     player.handle(dt, grasses);
@@ -49,7 +47,7 @@ void Level::render()
         ball.render(Camera);
     for (auto &slime : slimes)
         slime.render(Camera);
-    for (auto &quest : quests)
+    for (auto &[_, quest] : quests)
         quest.render();
     timer.render();
     flag.render(Camera);

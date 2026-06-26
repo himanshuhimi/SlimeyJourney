@@ -94,7 +94,7 @@ Text::Text(
     {
         attachRect.w = attachment.width;
         attachRect.h = attachment.height;
-        attachRect.x = rect.x;
+        attachRect.x = rect.x - (attachRect.w + (attachRect.w / 2));
         attachRect.y = rect.y;
     }
 }
@@ -106,7 +106,7 @@ void Text::render(Vector2D Camera)
     dst.y -= Camera.y;
     if (attachment.renderer != nullptr)
     {
-        SDL_FRect attachDst;
+        SDL_FRect attachDst = attachRect;
         attachDst.x -= Camera.x;
         attachDst.y -= Camera.y;
         attachment.render(nullptr, &attachDst);
