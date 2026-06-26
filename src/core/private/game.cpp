@@ -153,6 +153,13 @@ void Game::collision()
             currentLevel->player.inCombat = true;
             currentLevel->player.combatEnemy = &(*sIt);
         }
+        else if (currentLevel->player.inCombat && currentLevel->player.combatEnemy == &(*sIt))
+        {
+            currentLevel->player.inCombat = false;
+            currentLevel->player.combatEnemy = nullptr;
+            sIt->actions.attacking = false;
+            sIt->actions.alert = false;
+        }
         if (sIt->actions.attacking)
             sIt->attack((currentLevel->player.Center - sIt->Center).normalise());
         for (auto bIt = sIt->balls.begin(); bIt != sIt->balls.end();)
