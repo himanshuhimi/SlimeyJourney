@@ -6,7 +6,7 @@ Level::Level(SDL_Renderer *renderer, int number)
       map(renderer, std::to_string(number) + ".tmx")
 {
     loadObjects();
-    fruitLength = fruits.size();
+    fruitLength = slimes.size() + fruits.size();
     increment = (double)1 / fruitLength;
     audios = {
         {"pickup", Audio("audios/player/pickup.wav")},
@@ -68,7 +68,7 @@ void Level::loadObjects()
             fren = Fren(renderer, obj.x, obj.y - SPRITE_SIZE);
         else if (name == "fruit")
             fruits.push_back(Fruit(renderer, obj.x, obj.y - SPRITE_SIZE));
-        else if (name == "slime")
+        else if (name == "enemy" || name == "slime")
             slimes.push_back(Slime(renderer, obj.x, obj.y - SPRITE_SIZE));
         else if (name == "object")
             for (int x = 0; x < obj.width; x += SPRITE_SIZE)

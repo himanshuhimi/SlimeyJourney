@@ -7,7 +7,7 @@ int CHANGED_WIDTH{WIDTH * 3}, CHANGED_HEIGHT{HEIGHT * 3};
 int scaleX{CHANGED_WIDTH / WIDTH}, scaleY{CHANGED_HEIGHT / HEIGHT};
 int CAMERA_X{WIDTH / 2}, CAMERA_Y{HEIGHT / 2};
 bool scaled = true;
-const vector<string> fruits = {
+const vector<string> fruitTypes = {
     "apple",
     "blueberry",
     "mango",

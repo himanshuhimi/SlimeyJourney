@@ -143,6 +143,7 @@ void Game::collision()
         if (sIt->dead)
         {
             sIt = currentLevel->slimes.erase(sIt);
+            sIt->drop<Fruit>(currentLevel->fruits);
             continue;
         }
         if (checkCollision(currentLevel->player.rect, sIt->lineOfSight.rect))

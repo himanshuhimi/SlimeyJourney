@@ -3,7 +3,7 @@
 Fruit::Fruit(SDL_Renderer *renderer, float x, float y)
     : Sprite(renderer, "object.png", x, y)
 {
-    choice = Random.choice<string>(fruits);
+    choice = Random.choice<string>(fruitTypes);
     image = Image(renderer, "images/fruits/" + choice + ".png");
 }
 

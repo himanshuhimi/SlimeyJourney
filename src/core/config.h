@@ -27,7 +27,7 @@ extern int CHANGED_WIDTH, CHANGED_HEIGHT;
 extern int scaleX, scaleY;
 extern int CAMERA_X, CAMERA_Y;
 extern bool scaled;
-extern const vector<string> fruits;
+extern const vector<string> fruitTypes;
 extern SDL_RendererLogicalPresentation logicalPresentation;
 
 template <typename T>
