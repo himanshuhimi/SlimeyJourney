@@ -17,7 +17,7 @@ Player::Player(SDL_Renderer *renderer, float x, float y)
         {"hurt", Audio("audios/hurt.wav")}};
 }
 
-void Player::handle(double dt, const vector<Object> &grasses)
+void Player::handle(double dt, const vector<Object> &objects)
 {
     dead = HP <= 0;
     if (dead)
@@ -32,7 +32,7 @@ void Player::handle(double dt, const vector<Object> &grasses)
         immune = false;
     }
     handleMovement(dt);
-    Sprite::handle(dt, grasses);
+    Sprite::handle(dt, objects);
     handleShooting(dt);
 }
 

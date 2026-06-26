@@ -15,10 +15,10 @@ Sprite::Sprite(SDL_Renderer *renderer, string imgSource, float x, float y)
     gravityLOS.rect.h = rect.h / 2;
 }
 
-void Sprite::handle(double dt, const vector<Object> &grasses)
+void Sprite::handle(double dt, const vector<Object> &objects)
 {
     handleMovement(dt);
-    handleGravity(dt, grasses);
+    handleGravity(dt, objects);
     handleLOS();
 }
 
@@ -55,11 +55,11 @@ void Sprite::handleLOS()
         lineOfSight.rect.w *= -1;
 }
 
-void Sprite::handleGravity(double dt, const vector<Object> &grasses)
+void Sprite::handleGravity(double dt, const vector<Object> &objects)
 {
     bool onGround = false;
     bool prevOnGround = states.onGround;
-    for (auto &grass : grasses)
+    for (auto &grass : objects)
         if (checkCollision(gravityLOS.rect, grass.rect))
         {
             onGround = true;

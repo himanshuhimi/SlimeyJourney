@@ -10,14 +10,14 @@ Slime::Slime(SDL_Renderer *renderer, float x, float y)
         {"damage", Animation(renderer, "slime/damage.png")}};
 }
 
-void Slime::handle(double dt, const vector<Object> &grasses)
+void Slime::handle(double dt, const vector<Object> &objects)
 {
-    Enemy::handle(dt, grasses);
+    Enemy::handle(dt, objects);
     if (states.prevOnGround && !states.onGround)
         Velocity.x *= -1;
     atkCooldown.handle(dt);
     for (auto &ball : balls)
-        ball.handle(dt, grasses);
+        ball.handle(dt, objects);
 }
 
 void Slime::render(Vector2D Camera)

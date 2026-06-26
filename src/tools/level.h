@@ -20,7 +20,7 @@ public:
     Player player;
     Fren fren;
     Timer timer;
-    vector<Object> grasses = {};
+    vector<Object> objects = {};
     vector<Fruit> fruits = {};
     vector<Slime> slimes = {};
     std::map<string, Quest> quests = {};

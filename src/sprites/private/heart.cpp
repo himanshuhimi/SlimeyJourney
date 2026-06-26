@@ -7,7 +7,7 @@ Heart::Heart(SDL_Renderer *renderer, float x, float y)
     images.emplace_back(renderer, "images/hearts/normal.png");
 }
 
-void Heart::handle(double dt, vector<Object> &grasses)
+void Heart::handle(double dt, vector<Object> &objects)
 {
     image = images[(int)!broken];
 }

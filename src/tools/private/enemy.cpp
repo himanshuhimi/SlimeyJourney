@@ -17,12 +17,12 @@ Enemy::Enemy(SDL_Renderer *renderer, float x, float y, string type, EnemyData da
     HP = data.maxHP;
 };
 
-void Enemy::handle(double dt, const vector<Object> grasses)
+void Enemy::handle(double dt, const vector<Object> objects)
 {
     dead = HP <= 0;
     if (dead)
         return;
-    Sprite::handle(dt, grasses);
+    Sprite::handle(dt, objects);
     range.x = rect.x - (rect.w / 2);
     range.y = rect.y - (rect.h / 2);
 }

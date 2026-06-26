@@ -8,6 +8,6 @@ public:
     vector<Image> images = {};
     bool broken = false;
     Heart(SDL_Renderer *renderer, float x, float y);
-    void handle(double dt, vector<Object> &grasses);
+    void handle(double dt, vector<Object> &objects);
     void render(Vector2D Camera);
 };

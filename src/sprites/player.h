@@ -18,7 +18,7 @@ public:
     float speed, jumpStrength;
     bool inCombat = false, dead = false, immune = false, mouseClicked = false;
     Player(SDL_Renderer *renderer, float x, float y);
-    void handle(double dt, const vector<Object> &grasses);
+    void handle(double dt, const vector<Object> &objects);
     void render(Vector2D Camera);
     void damage(int byPoints = 1);
     void attack();

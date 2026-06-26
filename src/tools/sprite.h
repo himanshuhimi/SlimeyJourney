@@ -11,6 +11,7 @@ public:
     SDL_FRect hitbox, rect, dst;
     Image image;
     bool movable = true;
+    float left, right, bottom, top;
     enum Direction
     {
         Left,
@@ -21,10 +22,10 @@ public:
         bool prevOnGround, onGround, inAir, walking;
     } states;
     Sprite(SDL_Renderer *renderer, string imgSource, float x, float y);
-    void handle(double dt, const vector<Object> &grasses);
+    void handle(double dt, const vector<Object> &objects);
     void render(Vector2D Camera);
     void handleMovement(double dt);
     void handleLOS();
-    void handleGravity(double dt, const vector<Object> &grasses);
+    void handleGravity(double dt, const vector<Object> &objects);
     void handleStates(bool onGround, bool prevOnGround);
 };

@@ -33,7 +33,7 @@ public:
     bool dead = false;
     Cooldown atkCooldown = {1.0f};
     Enemy(SDL_Renderer *renderer, float x, float y, string type, EnemyData data);
-    void handle(double dt, const vector<Object> grasses);
+    void handle(double dt, const vector<Object> objects);
     void render(Vector2D Camera);
     template <typename T>
     void drop(vector<T> droppingList)

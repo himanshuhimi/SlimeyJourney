@@ -21,14 +21,14 @@ void Level::handle(double dt)
 {
     clampCamera();
     for (auto &ball : player.balls)
-        ball.handle(dt, grasses);
+        ball.handle(dt, objects);
     for (auto &slime : slimes)
-        slime.handle(dt, grasses);
+        slime.handle(dt, objects);
     for (auto &[_, quest] : quests)
         quest.handle(dt);
     flag.handle(dt);
-    player.handle(dt, grasses);
-    fren.handle(dt, grasses);
+    player.handle(dt, objects);
+    fren.handle(dt, objects);
     if (player.rect.y >= map.pixelHeight)
         player.resetPos();
     timer.handle(dt);
@@ -39,7 +39,7 @@ void Level::handle(double dt)
 void Level::render()
 {
     map.render(Camera);
-    for (auto &grass : grasses)
+    for (auto &grass : objects)
         grass.render(Camera);
     for (auto &fruit : fruits)
         fruit.render(Camera);
@@ -72,7 +72,7 @@ void Level::loadObjects()
             slimes.push_back(Slime(renderer, obj.x, obj.y - SPRITE_SIZE));
         else if (name == "object")
             for (int x = 0; x < obj.width; x += SPRITE_SIZE)
-                grasses.push_back(Object(renderer, obj.x + x + SPRITE_SIZE / 2, obj.y));
+                objects.push_back(Object(renderer, obj.x + x + SPRITE_SIZE / 2, obj.y));
     }
 }
 

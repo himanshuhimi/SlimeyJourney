@@ -10,14 +10,14 @@ Ball::Ball(SDL_Renderer *renderer, float x, float y, string type, Vector2D Direc
     anims = {{"explosion", Animation(renderer, "explosion.png")}};
 }
 
-void Ball::handle(double dt, const vector<Object> &grasses)
+void Ball::handle(double dt, const vector<Object> &objects)
 {
     if (used)
         return;
-    for (auto &grass : grasses)
+    for (auto &grass : objects)
         if (checkCollision(rect, grass.rect))
             destroy();
-    Sprite::handle(dt, grasses);
+    Sprite::handle(dt, objects);
 }
 
 void Ball::render(Vector2D Camera)
