@@ -16,7 +16,7 @@ Level::Level(SDL_Renderer *renderer, int number)
         "Feed your friend [Press F]"
     };
     for (int i = 0; i < labels.size(); i++)
-        quests.emplace_back(renderer, 96, 32 + (i * 32), labels[i]);
+        quests.emplace_back(renderer, 32, 32 + (i * 32), labels[i]);
 }
 
 void Level::handle(double dt)

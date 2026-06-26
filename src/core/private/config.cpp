@@ -3,7 +3,7 @@
 const string TITLE = "Slimey Journey";
 const float SPRITE_SIZE = 32.0f;
 int WIDTH{640}, HEIGHT{360};
-int CHANGED_WIDTH{WIDTH * 3}, CHANGED_HEIGHT{HEIGHT* 3};
+int CHANGED_WIDTH{WIDTH * 3}, CHANGED_HEIGHT{HEIGHT * 3};
 int scaleX{CHANGED_WIDTH / WIDTH}, scaleY{CHANGED_HEIGHT / HEIGHT};
 int CAMERA_X{WIDTH / 2}, CAMERA_Y{HEIGHT / 2};
 bool scaled = true;
@@ -13,8 +13,7 @@ const vector<string> fruits = {
     "mango",
     "melon",
     "orange",
-    "strawberry"
-};
+    "strawberry"};
 SDL_RendererLogicalPresentation logicalPresentation = SDL_LOGICAL_PRESENTATION_INTEGER_SCALE;
 
 bool checkCollision(SDL_FRect A, SDL_FRect B) { return SDL_HasRectIntersectionFloat(&A, &B); }
@@ -25,7 +24,7 @@ SDL_FRect getMousePosition()
     SDL_GetMouseState(&result.x, &result.y);
     if (scaled)
         result.x /= scaleX;
-        result.y /= scaleY;
+    result.y /= scaleY;
     return result;
 }
 
@@ -68,27 +67,51 @@ void Image::render(const SDL_FRect *src, const SDL_FRect *dst)
 Text::Text(
     SDL_Renderer *renderer,
     float x, float y, string data, SDL_Color color,
-    int pixelSize, string fontSource)
-    : renderer(renderer), x(x), y(y), pixelSize(pixelSize), color(color)
+    int pixelSize, int posMode, Image attachment, string fontSource)
+    : renderer(renderer), x(x), y(y), pixelSize(pixelSize), color(color),
+      attachment(attachment)
 {
     string path = "data/assets/" + fontSource;
     font = TTF_OpenFont(path.c_str(), pixelSize);
     if (!font)
         print("Font Uninitialized: " + path);
+    Text::posMode = static_cast<PositionModes>(posMode);
     surface = TTF_RenderText_Blended(font, data.c_str(), data.size(), color);
     texture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_DestroySurface(surface);
     SDL_GetTextureSize(texture, &rect.w, &rect.h);
-    rect.x = x - (rect.w / 2);
-    rect.y = y - (rect.h / 2);
+    if (posMode == PositionModes::CENTERED)
+    {
+        rect.x = x - (rect.w / 2);
+        rect.y = y - (rect.h / 2);
+    }
+    else if (posMode == PositionModes::TOPLEFT)
+    {
+        rect.x = x;
+        rect.y = y;
+    }
+    if (attachment.renderer != nullptr)
+    {
+        attachRect.w = attachment.width;
+        attachRect.h = attachment.height;
+        attachRect.x = rect.x;
+        attachRect.y = rect.y;
+    }
 }
 
-void Text::render(Vector2D Camera) 
+void Text::render(Vector2D Camera)
 {
     SDL_FRect dst = rect;
     dst.x -= Camera.x;
     dst.y -= Camera.y;
-    SDL_RenderTexture(renderer, texture, nullptr, &dst); 
+    if (attachment.renderer != nullptr)
+    {
+        SDL_FRect attachDst;
+        attachDst.x -= Camera.x;
+        attachDst.y -= Camera.y;
+        attachment.render(nullptr, &attachDst);
+    }
+    SDL_RenderTexture(renderer, texture, nullptr, &dst);
 }
 
 void Text::updateData(string newData)
@@ -110,8 +133,10 @@ void Text::updateAlpha(int newAlpha)
         SDL_SetTextureAlphaMod(texture, alpha);
 }
 
+void Text::updateAttach(Image newAttach) { attachment = newAttach; }
+
 Animation::Animation(SDL_Renderer *renderer, string source, float frameTime)
-    : renderer(renderer), frameTime(frameTime), imageSet(renderer, "anims/" + source), 
+    : renderer(renderer), frameTime(frameTime), imageSet(renderer, "anims/" + source),
       maxFrames(imageSet.width / SPRITE_SIZE) {}
 
 void Animation::handle(double dt)
@@ -167,10 +192,10 @@ Audio::Audio(string audioSource)
     MIX_SetTrackAudio(track, audio);
 }
 
-void Audio::play(int volume, int times) 
+void Audio::play(int volume, int times)
 {
     MIX_SetTrackGain(track, (float)volume / 100);
-    MIX_PlayTrack(track, times); 
+    MIX_PlayTrack(track, times);
 }
 
 Cooldown::Cooldown(double duration) : duration(duration) {}
@@ -272,8 +297,7 @@ map<int, double> durations = {
     {2, 0.5},
     {3, 0.5},
     {4, 0.5},
-    {5, 1.0}
-};
+    {5, 1.0}};
 
 _Random_ Random;
 _Colors_ colors;

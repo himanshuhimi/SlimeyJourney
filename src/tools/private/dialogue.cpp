@@ -13,7 +13,7 @@ Dialogue::Dialogue(
     text = new Text(
         renderer, x, y,
         initialText, colors.white,
-        10, "fonts/roboto.ttf");
+        10, 0);
 }
 
 void Dialogue::handle(double dt) {}

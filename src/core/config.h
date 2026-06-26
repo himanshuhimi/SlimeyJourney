@@ -61,17 +61,25 @@ struct Text
     SDL_Surface *surface = nullptr;
     SDL_Texture *texture = nullptr;
     TTF_Font *font = nullptr;
-    SDL_FRect rect;
+    SDL_FRect rect, attachRect;
     SDL_Color color;
+    Image attachment;
     string data, fontSource;
     float x, y;
     int pixelSize, alpha;
+    enum PositionModes
+    {
+        CENTERED,
+        TOPLEFT
+    } posMode;
     Text(SDL_Renderer *renderer, float x, float y,
-         string data, SDL_Color color, int pixelSize = 24,
+         string data, SDL_Color color, int pixelSize = 24, int posMode = 0,
+         Image attachment = {nullptr, ""},
          string fontSource = "fonts/pixel.ttf");
     void render(Vector2D Camera = {0.0f, 0.0f});
     void updateData(string newData);
     void updateAlpha(int newAlpha);
+    void updateAttach(Image newAttach);
 };
 
 struct Animation
