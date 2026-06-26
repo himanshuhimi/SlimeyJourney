@@ -164,16 +164,10 @@
   <object id="113" name="fruit" x="2400" y="576">
    <point/>
   </object>
-  <object id="114" name="enemy" x="2464" y="576">
-   <point/>
-  </object>
   <object id="115" name="enemy" x="2528" y="576">
    <point/>
   </object>
   <object id="116" name="enemy" x="2688" y="576">
-   <point/>
-  </object>
-  <object id="117" name="enemy" x="2752" y="576">
    <point/>
   </object>
   <object id="118" name="fruit" x="2816" y="576">

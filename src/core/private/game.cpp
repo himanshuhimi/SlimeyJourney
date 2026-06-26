@@ -122,6 +122,7 @@ void Game::updateLevel()
     {
         update(States::HOME);
         levelNum = 0;
+        ui->hearts.clear();
     }
 }
 
@@ -142,8 +143,8 @@ void Game::collision()
     {
         if (sIt->dead)
         {
-            sIt->drop<Fruit>(currentLevel->fruits);
             sIt = currentLevel->slimes.erase(sIt);
+            sIt->drop<Fruit>(currentLevel->fruits);
             continue;
         }
         if (checkCollision(currentLevel->player.rect, sIt->range))
@@ -191,5 +192,5 @@ void Game::collision()
         currentLevel->quests.at("fedFren").completed)
         updateLevel();
     if (currentLevel->player.dead)
-        update(States::OVER);
+        update(States::HOME);
 }

@@ -9,7 +9,7 @@ struct EnemyData
     float atkRange = 0;
     float alertRange = 0;
     int maxHP = 0;
-    bool rangeVisible = true;
+    bool rangeVisible = false;
     std::function<void(Vector2D)> onAtk;
     EnemyData(
         float speed = 0.0f,
@@ -31,7 +31,7 @@ public:
     int HP = 0;
     string type = "";
     bool dead = false;
-    Cooldown atkCooldown = {1.0f};
+    Cooldown atkCooldown = {3.0f};
     Enemy(SDL_Renderer *renderer, float x, float y, string type, EnemyData data);
     void handle(double dt, const vector<Object> objects);
     void render(Vector2D Camera);

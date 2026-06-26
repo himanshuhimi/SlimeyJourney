@@ -6,7 +6,7 @@ Level::Level(SDL_Renderer *renderer, int number)
       map(renderer, std::to_string(number) + ".tmx")
 {
     loadObjects();
-    fruitLength = slimes.size() + fruits.size();
+    fruitLength = fruits.size();
     increment = (double)1 / fruitLength;
     audios = {
         {"pickup", Audio("audios/player/pickup.wav")},
