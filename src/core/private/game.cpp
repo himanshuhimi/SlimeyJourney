@@ -142,22 +142,19 @@ void Game::collision()
     {
         if (sIt->dead)
         {
-            sIt = currentLevel->slimes.erase(sIt);
             sIt->drop<Fruit>(currentLevel->fruits);
+            sIt = currentLevel->slimes.erase(sIt);
             continue;
         }
-        if (checkCollision(currentLevel->player.rect, sIt->lineOfSight.rect))
+        if (checkCollision(currentLevel->player.rect, sIt->range))
         {
             sIt->actions.alert = true;
-            if (checkCollision(currentLevel->player.rect, sIt->rect))
-            {
-                sIt->actions.attacking = true;
-                currentLevel->player.inCombat = true;
-                currentLevel->player.combatEnemy = &(*sIt);
-            }
+            sIt->actions.attacking = true;
+            currentLevel->player.inCombat = true;
+            currentLevel->player.combatEnemy = &(*sIt);
         }
         if (sIt->actions.attacking)
-            sIt->attack(currentLevel->player.Center);
+            sIt->attack((currentLevel->player.Center - sIt->Center).normalise());
         for (auto bIt = sIt->balls.begin(); bIt != sIt->balls.end();)
             if (!bIt->used && checkCollision(currentLevel->player.rect, bIt->rect))
             {
@@ -186,4 +183,6 @@ void Game::collision()
         currentLevel->quests.at("fruitColl").completed &&
         currentLevel->quests.at("fedFren").completed)
         updateLevel();
+    if (currentLevel->player.dead)
+        update(States::OVER);
 }

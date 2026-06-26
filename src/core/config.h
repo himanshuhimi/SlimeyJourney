@@ -42,6 +42,8 @@ struct Vector2D
     float distanceFromVec(Vector2D secVector);
     float getLength();
     Vector2D normalise();
+    Vector2D operator+(const Vector2D &rhs);
+    Vector2D operator-(const Vector2D &rhs);
 };
 
 struct Image

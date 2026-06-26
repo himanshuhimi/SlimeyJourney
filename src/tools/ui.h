@@ -31,7 +31,7 @@ public:
             break;
         case States::PLAYING:
         {
-            hearts.clear();
+            // hearts.clear();
             if (hearts.size() < game->currentLevel->player.maxHP)
                 for (int i = 0; i < game->currentLevel->player.maxHP; i++)
                     hearts.emplace_back(normalHeart);

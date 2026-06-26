@@ -9,7 +9,7 @@ struct EnemyData
     float atkRange = 0;
     float alertRange = 0;
     int maxHP = 0;
-    bool rangeVisible = false;
+    bool rangeVisible = true;
     std::function<void(Vector2D)> onAtk;
     EnemyData(
         float speed = 0.0f,

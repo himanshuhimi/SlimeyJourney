@@ -9,10 +9,7 @@ Enemy::Enemy(SDL_Renderer *renderer, float x, float y, string type, EnemyData da
     : Sprite(renderer, "object.png", x, y), type(type), data(data)
 {
     image = Image{renderer, "images/enemies/" + type + "/idle.png"};
-    range = SDL_FRect{
-        x - image.width / 2, y - image.height / 2,
-        data.atkRange, data.atkRange
-    };
+    range = SDL_FRect{rect.x, rect.y, data.atkRange, data.atkRange};
     lineOfSight.rect.w = data.atkRange;
     HP = data.maxHP;
 };
@@ -23,8 +20,8 @@ void Enemy::handle(double dt, const vector<Object> objects)
     if (dead)
         return;
     Sprite::handle(dt, objects);
-    range.x = rect.x - (rect.w / 2);
-    range.y = rect.y - (rect.h / 2);
+    range.x = rect.x - (range.w / 2) + (rect.w / 2);
+    range.y = rect.y - (range.h / 2) + (rect.h / 2);
 }
 
 void Enemy::render(Vector2D Camera)

@@ -47,6 +47,10 @@ Vector2D Vector2D::normalise()
     return Vector2D{x, y};
 }
 
+Vector2D Vector2D::operator+(const Vector2D &rhs) {return Vector2D(x + rhs.x, y +  rhs.y); }
+
+Vector2D Vector2D::operator-(const Vector2D &rhs) {return Vector2D(x - rhs.x, y - rhs.y); }
+
 Image::Image(SDL_Renderer *renderer, string source) : renderer(renderer), source(source)
 {
     string path = "data/assets/" + source;

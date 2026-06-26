@@ -1,7 +1,7 @@
 #include "../slime.h"
 
 Slime::Slime(SDL_Renderer *renderer, float x, float y)
-    : Enemy(renderer, x, y, "slime", EnemyData{(float)Random.randint(5, 15), 1.0f / 4, 64, 5, [this](Vector2D Direction)
+    : Enemy(renderer, x, y, "slime", EnemyData{(float)Random.randint(5, 15), 1.0f / 4, 120, 5, [this](Vector2D Direction)
                                                { attack(Direction); }})
 {
     Velocity.x = data.speed;
@@ -31,7 +31,8 @@ void Slime::attack(Vector2D Direction)
 {
     if (!atkCooldown.available || dead)
         return;
-    balls.emplace_back(renderer, rect.x, rect.y, "enemies/" + type, Direction);
+    balls.emplace_back(renderer, rect.x - rect.w, rect.y - rect.h,
+                       "enemies/" + type, Direction);
     atkCooldown.reset();
 }
 
