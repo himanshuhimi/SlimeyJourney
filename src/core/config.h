@@ -114,6 +114,7 @@ struct Cooldown
     void handle(double dt);
     void reset();
 };
+
 struct Timer
 {
     SDL_Renderer *renderer = nullptr;
@@ -123,6 +124,7 @@ struct Timer
     void handle(double dt);
     void render();
 };
+
 struct Object
 {
     SDL_Renderer *renderer = nullptr;
@@ -133,6 +135,7 @@ struct Object
     Object(SDL_Renderer *renderer, float x, float y);
     void render(Vector2D Camera);
 };
+
 struct LineOfSight
 {
     SDL_Renderer *renderer = nullptr;
