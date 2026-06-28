@@ -3,7 +3,7 @@
 Player::Player(SDL_Renderer *renderer, float x, float y)
     : Sprite(renderer, "player/idle.png", x, y)
 {
-    jumpStrength = 100.0f;
+    jumpStrength = 180.0f;
     speed = 180;
     anims = {
         {"jump", Animation(renderer, "player/jump.png")},
@@ -95,7 +95,7 @@ void Player::handleMovement(double dt)
     anims.at("walking").active = states.walking;
     if (!states.inAir && keys[SDL_SCANCODE_SPACE])
     {
-        Velocity.y -= jumpStrength;
+        Velocity.y = -jumpStrength;
         prevPos = Position;
         audios.at("jump").play(Random.randint(50, 80));
         anims.at("jump").restart();

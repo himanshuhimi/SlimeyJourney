@@ -8,14 +8,15 @@ Level::Level(SDL_Renderer *renderer, int number)
     loadObjects();
     fruitLength = fruits.size();
     increment = (double)1 / fruitLength;
-    print(fruitLength);
     audios = {
         {"pickup", Audio("player/pickup.wav")},
         {"hurt", Audio("player/hurt.wav")}};
     quests = {
         {"fruitColl", Quest(renderer, 32, HEIGHT / 16.0f, "Collect all fruits")},
         {"fedFren", Quest(renderer, 32, (HEIGHT / 16.0f) + 32,
-                          "Feed your friend, Fren! [Press F]")}};
+                          "Feed your friend, Fren! [Press F]")},
+        {"killEnemy", Quest(renderer, 32, (HEIGHT / 16.0f) + 64,
+                            "Kill your enemies! [LMB to shoot]")}};
 }
 
 void Level::handle(double dt)
@@ -23,7 +24,7 @@ void Level::handle(double dt)
     clampCamera();
     for (auto &ball : player.balls)
         ball.handle(dt, objects);
-    for (auto &slime : slimes)
+    for (auto &slime : enemies)
         slime.handle(dt, objects);
     for (auto &[_, quest] : quests)
         quest.handle(dt);
@@ -46,7 +47,7 @@ void Level::render()
         fruit.render(Camera);
     for (auto &ball : player.balls)
         ball.render(Camera);
-    for (auto &slime : slimes)
+    for (auto &slime : enemies)
         slime.render(Camera);
     for (auto &[_, quest] : quests)
         quest.render();
@@ -70,7 +71,7 @@ void Level::loadObjects()
         else if (name == "fruit")
             fruits.push_back(Fruit(renderer, obj.x, obj.y - SPRITE_SIZE));
         else if (name == "enemy" || name == "slime")
-            slimes.push_back(Slime(renderer, obj.x, obj.y - SPRITE_SIZE));
+            enemies.push_back(Slime(renderer, obj.x, obj.y - SPRITE_SIZE));
         else if (name == "object")
             for (int x = 0; x < obj.width; x += SPRITE_SIZE)
                 objects.push_back(Object(renderer, obj.x + x + SPRITE_SIZE / 2, obj.y));

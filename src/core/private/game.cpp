@@ -132,11 +132,11 @@ void Game::collision()
         }
         else
             fruitIt++;
-    for (auto sIt = currentLevel->slimes.begin(); sIt != currentLevel->slimes.end();)
+    for (auto sIt = currentLevel->enemies.begin(); sIt != currentLevel->enemies.end();)
     {
         if (sIt->dead)
         {
-            sIt = currentLevel->slimes.erase(sIt);
+            sIt = currentLevel->enemies.erase(sIt);
             sIt->drop<Fruit>(currentLevel->fruits);
             continue;
         }
@@ -182,8 +182,16 @@ void Game::collision()
         currentLevel->quests.at("fruitColl").completed = true;
     if (collided && keyPressed && currentLevel->quests.at("fruitColl").completed)
         currentLevel->quests.at("fedFren").completed = true;
-    if (currentLevel->quests.at("fruitColl").completed &&
-        currentLevel->quests.at("fedFren").completed)
+    bool allEnemyDead = std::all_of(currentLevel->enemies.begin(),
+                                    currentLevel->enemies.end(),
+                                    [](const auto &e)
+                                    { return e.dead; });
+    if (allEnemyDead)
+        currentLevel->quests.at("killEnemy").completed = true;
+    bool allComplete = std::all_of(currentLevel->quests.begin(),
+                                   currentLevel->quests.end(), [](const auto &entry)
+                                   { return entry.second.completed; });
+    if (allComplete)
         updateLevel();
     if (currentLevel->player.dead)
         update(States::HOME);

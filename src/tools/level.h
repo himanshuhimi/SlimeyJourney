@@ -22,7 +22,7 @@ public:
     Timer timer;
     vector<Object> objects = {};
     vector<Fruit> fruits = {};
-    vector<Slime> slimes = {};
+    vector<Slime> enemies = {};
     std::map<string, Quest> quests = {};
     std::map<string, Audio> audios;
     int fruitLength = 0;
