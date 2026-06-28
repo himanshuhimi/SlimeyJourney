@@ -150,7 +150,7 @@ public:
         switch (game->state)
         {
         case States::HOME:
-            res = {"PLAY", "QUIT"};
+            res = {"PLAY", "SETTINGS", "QUIT"};
             break;
         case States::OVER:
             res = {"TRY AGAIN", "HOME"};

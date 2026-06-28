@@ -4,7 +4,7 @@ Quest::Quest(SDL_Renderer *renderer, float x, float y, string label)
     : renderer(renderer), label(label), completeImage(renderer, "ui/complete.png")
 {
     text = new Text(renderer, x, y, 
-        label, colors.black, 12, 1,
+        label, colors.black, 10, 1,
         Image(renderer, "ui/incomplete.png"));
 }
 
