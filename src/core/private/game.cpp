@@ -178,10 +178,11 @@ void Game::collision()
     bool collided = checkCollision(currentLevel->player.rect, currentLevel->fren.rect);
     bool keyPressed = SDL_GetKeyboardState(NULL)[SDL_SCANCODE_F];
     bool complete = ui->progresses.at("fruit").complete;
-    currentLevel->quests.at("fruitColl").completed = complete;
-    currentLevel->quests.at("fedFren").completed = collided & keyPressed;
-    if (
-        currentLevel->quests.at("fruitColl").completed &&
+    if (complete)
+        currentLevel->quests.at("fruitColl").completed = true;
+    if (collided && keyPressed && currentLevel->quests.at("fruitColl").completed)
+        currentLevel->quests.at("fedFren").completed = true;
+    if (currentLevel->quests.at("fruitColl").completed &&
         currentLevel->quests.at("fedFren").completed)
         updateLevel();
     if (currentLevel->player.dead)

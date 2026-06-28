@@ -8,9 +8,10 @@ Level::Level(SDL_Renderer *renderer, int number)
     loadObjects();
     fruitLength = fruits.size();
     increment = (double)1 / fruitLength;
+    print(fruitLength);
     audios = {
-        {"pickup", Audio("audios/player/pickup.wav")},
-        {"hurt", Audio("audios/hurt.wav")}};
+        {"pickup", Audio("player/pickup.wav")},
+        {"hurt", Audio("player/hurt.wav")}};
     quests = {
         {"fruitColl", Quest(renderer, 32, HEIGHT / 16.0f, "Collect all fruits")},
         {"fedFren", Quest(renderer, 32, (HEIGHT / 16.0f) + 32,
