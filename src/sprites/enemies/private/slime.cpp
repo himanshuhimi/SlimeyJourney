@@ -35,10 +35,3 @@ void Slime::attack(Vector2D Direction)
                        "enemies/" + type, Direction);
     atkCooldown.reset();
 }
-
-void Slime::damage(int byPoints)
-{
-    if (dead)
-        return;
-    HP -= byPoints;
-}

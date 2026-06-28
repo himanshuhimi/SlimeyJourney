@@ -28,13 +28,16 @@ public:
     {
         bool alert = false, attacking = false;
     } actions;
+    Cooldown atkCooldown = {3.0f};
+    map<string, Animation> anims = {};
+    map<string, Audio> audios = {};
+    bool dead = false;
     int HP = 0;
     string type = "";
-    bool dead = false;
-    Cooldown atkCooldown = {3.0f};
     Enemy(SDL_Renderer *renderer, float x, float y, string type, EnemyData data);
     void handle(double dt, const vector<Object> objects);
     void render(Vector2D Camera);
+    void damage(int byPoints = 1);
     template <typename T>
     void drop(vector<T> droppingList)
     {

@@ -155,7 +155,7 @@ void Game::collision()
             sIt->actions.alert = false;
         }
         if (sIt->actions.attacking)
-            sIt->attack((currentLevel->player.Center - sIt->Center).normalise());
+            sIt->attack((currentLevel->player.Position - sIt->Position).normalise());
         for (auto bIt = sIt->balls.begin(); bIt != sIt->balls.end();)
             if (!bIt->used && checkCollision(currentLevel->player.rect, bIt->rect))
             {

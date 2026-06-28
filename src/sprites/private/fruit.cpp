@@ -7,6 +7,13 @@ Fruit::Fruit(SDL_Renderer *renderer, float x, float y)
     image = Image(renderer, "images/fruits/" + choice + ".png");
 }
 
+void Fruit::handle(double dt, const vector<Object> &objects)
+{
+    if (picked)
+        return;
+    Sprite::handle(dt, objects);
+}
+
 void Fruit::render(Vector2D Camera)
 {
     if (picked)

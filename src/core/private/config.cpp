@@ -183,7 +183,7 @@ void Animation::restart()
 
 Audio::Audio(string audioSource)
 {
-    string path = "data/assets/" + audioSource;
+    string path = "data/assets/audios/" + audioSource;
     mixer = MIX_CreateMixerDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, nullptr);
     if (!mixer)
         print("Mixer Unloaded");
