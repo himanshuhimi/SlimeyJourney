@@ -1,20 +1,18 @@
 #pragma once
 
-#include "core/config.h"
+#include "tools/widget.h"
 
-class Progress
+class Progress : public Widget
 {
 public:
-    SDL_Renderer *renderer = nullptr;
-    SDL_FRect attachmentRect, rect, fillRect, dst;
+    SDL_FRect attachmentRect, fillRect;
     Image attachment, image;
     SDL_Color color;
     Vector2D Position;
     double startPercent = 0.0, animSpeed = 0.0, reachPercent = 0.0, percentage = 0.0;
     bool complete = false;
-    Progress(
-        SDL_Renderer *renderer, float x, float y, 
-        SDL_Color color = SDL_Color{255, 255, 255, 255},
+    Progress(SDL_Renderer *renderer, float x, float y, 
+        std::function<void()> callback,  SDL_Color color = SDL_Color{255, 255, 255, 255},
         Image attachment = {nullptr, ""}, double startPercent = 0.0,
         float width = 100, double animSpeed = 2.0);
     void update(double increment = 0.2);

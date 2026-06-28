@@ -1,25 +1,20 @@
 #pragma once
 
-#include "core/config.h"
+#include "tools/widget.h"
 
-class Button
+class Button : public Widget
 {
 public:
-    SDL_Renderer *renderer = nullptr;
-    SDL_FRect rect;
     SDL_Color color;
     Image image;
     Text text;
     vector<Image> images = {};
-    std::function<void()> callback;
     string label;
     bool resized = false;
-    Button(
-        SDL_Renderer *renderer, float x, float y,
-        std::function<void()> callback, string label,
-        SDL_Color color);
+    Button(SDL_Renderer *renderer, float x, float y, std::function<void()> callback, 
+        string label, SDL_Color color);
     void handle(double dt);
-    void render();
+    void render(Vector2D Camera = {0.0f, 0.0f});
     bool hovered();
     bool clicked(SDL_Event event);
     void update(SDL_Event event);

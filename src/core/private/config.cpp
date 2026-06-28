@@ -1,7 +1,7 @@
 #include "../config.h"
 
 const string TITLE = "Slimey Journey";
-const float SPRITE_SIZE = 16.0f;
+const float SPRITE_SIZE = 32.0f;
 int WIDTH{640}, HEIGHT{360};
 int CHANGED_WIDTH{WIDTH * 3}, CHANGED_HEIGHT{HEIGHT * 3};
 int scaleX{CHANGED_WIDTH / WIDTH}, scaleY{CHANGED_HEIGHT / HEIGHT};

@@ -47,13 +47,6 @@ void Game::handle()
     ui->handle(dt);
     switch (state)
     {
-    case States::LOADING:
-        if (ui->progresses.at("loading").complete)
-        {
-            state = nextState;
-            ui->progresses.at("loading").reset();
-        }
-        break;
     case States::PLAYING:
         currentLevel->handle(dt);
         collision();

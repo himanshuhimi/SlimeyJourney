@@ -95,7 +95,9 @@ public:
                 text.render();
         }
         if (game->state == States::LOADING)
+        {
             progresses.at("loading").update();
+        }
     }
     void update(SDL_Event event)
     {
@@ -109,13 +111,15 @@ public:
     void loadProgresses()
     {
         progresses.clear();
+        map<string, std::function<void()>> progFuncs = getProgFuncs();
         Progress fBar = Progress(renderer, WIDTH - SPRITE_SIZE, HEIGHT / 16.0f,
+                                 progFuncs.at("fruit"),
                                  SDL_Color{95, 90, 204, 255},
                                  Image(renderer, "ui/bottle.png"));
         fBar.rect.x -= fBar.rect.w + fBar.attachmentRect.w;
         progresses = {
             {"loading",
-             Progress(renderer, SPRITE_SIZE, HEIGHT - SPRITE_SIZE,
+             Progress(renderer, SPRITE_SIZE, HEIGHT - SPRITE_SIZE, progFuncs.at("loading"),
                       colors.white, Image(nullptr, ""), 0.0, 250.0f, 1.0)},
             {"fruit", fBar}};
     }
@@ -188,5 +192,12 @@ public:
             {"SETTINGS", [this] { game->update(States::SETTINGS); }},
             {"QUIT", [this] { game->terminate(); }},
             {"HOME", [this] { game->update(States::HOME); }}};
+    }
+    map<string, std::function<void()>> getProgFuncs()
+    {
+        return {
+            {"loading", [this]{ game->state = game->nextState; }},
+            {"fruit", [this]{ game->currentLevel->quests.at("fruitColl").completed = true; }}
+        };
     }
 };
