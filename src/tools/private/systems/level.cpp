@@ -1,4 +1,4 @@
-#include "../level.h"
+#include "../../systems/level.h"
 
 Level::Level(SDL_Renderer *renderer, int number)
     : renderer(renderer), player(renderer, 0, 0), flag(renderer, 0, 0),

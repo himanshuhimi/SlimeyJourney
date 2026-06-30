@@ -1,4 +1,4 @@
-#include "../dialogue.h"
+#include "../../systems/dialogue.h"
 
 Dialogue::Dialogue(
     SDL_Renderer *renderer,

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "tools/sprite.h"
-#include "tools/dialogue.h"
+#include "tools/systems/dialogue.h"
 
 class Fren : public Sprite
 {

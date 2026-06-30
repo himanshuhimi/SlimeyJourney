@@ -1,4 +1,4 @@
-#include "../database.h"
+#include "../../database/database.h"
 
 Database::Database(string name)
     : name(name), source("data/" + name + ".db")

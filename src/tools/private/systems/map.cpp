@@ -1,4 +1,4 @@
-#include "../map.h"
+#include "../../systems/map.h"
 
 Map::Map(SDL_Renderer *renderer, string source)
     : renderer(renderer), source(source)

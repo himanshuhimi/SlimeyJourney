@@ -7,7 +7,7 @@
 #include "entities/flag.h"
 #include "entities/enemies/slime.h"
 #include "entities/fren.h"
-#include "tools/quest.h"
+#include "tools/systems/quest.h"
 
 class Level
 {

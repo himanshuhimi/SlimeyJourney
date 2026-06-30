@@ -1,4 +1,4 @@
-#include "../table.h"
+#include "../../database/table.h"
 
 Table::Table(string name, Database database, string content) 
     : name(name), database(&database) 

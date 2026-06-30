@@ -1,4 +1,4 @@
-#include "../quest.h"
+#include "../../systems/quest.h"
 
 Quest::Quest(SDL_Renderer *renderer, float x, float y, string label)
     : renderer(renderer), label(label), completeImage(renderer, "ui/complete.png")
