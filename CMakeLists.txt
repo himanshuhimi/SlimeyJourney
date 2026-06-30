@@ -21,7 +21,7 @@ endforeach()
 
 file(GLOB_RECURSE PRIVATE_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/*/private/*.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/sprites/*/private/*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/entities/*/private/*.cpp
 )
 
 if (CMAKE_BUILD_TYPE STREQUAL "Release")

@@ -2,12 +2,11 @@
 
 #include "map.h"
 #include "ui/progress.h"
-#include "sprites/player.h"
-#include "sprites/fruit.h"
-#include "sprites/flag.h"
-#include "sprites/enemies/slime.h"
-#include "sprites/heart.h"
-#include "sprites/fren.h"
+#include "entities/player.h"
+#include "entities/fruit.h"
+#include "entities/flag.h"
+#include "entities/enemies/slime.h"
+#include "entities/fren.h"
 #include "tools/quest.h"
 
 class Level

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "core/config.h"
-#include "sprites/heart.h"
 #include "ui/progress.h"
 #include "ui/button.h"
 
