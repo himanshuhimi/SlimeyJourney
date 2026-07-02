@@ -2,6 +2,7 @@
 
 Game::Game()
 {
+    settings = new Settings();
     if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO))
         print("SDL Unloaded: " + (string)SDL_GetError());
     if (!TTF_Init())

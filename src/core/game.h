@@ -1,6 +1,7 @@
 #pragma once
 
 #include "config.h"
+#include "tools/systems/settings.h"
 #include "tools/systems/level.h"
 #include "tools/ui.h"
 
@@ -12,6 +13,7 @@ public:
     SDL_Event event;
     States state = States::HOME, nextState;
     Level *currentLevel = nullptr;
+    Settings *settings = nullptr;
     bool active = false;
     double dt = 0.0;
     Game();
