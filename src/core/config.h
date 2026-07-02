@@ -23,7 +23,7 @@ namespace fs = std::filesystem;
 
 extern const string TITLE;
 extern const float SPRITE_SIZE;
-extern int WIDTH, HEIGHT;
+extern const int WIDTH, HEIGHT;
 extern int CHANGED_WIDTH, CHANGED_HEIGHT;
 extern int scaleX, scaleY;
 extern int CAMERA_X, CAMERA_Y;
@@ -31,7 +31,9 @@ extern bool scaled;
 extern const vector<string> fruitTypes;
 extern SDL_RendererLogicalPresentation logicalPresentation;
 
+void updateScale();
 template <typename T>
 void print(const T &message) { std::cout << "[LOG] " << message << std::endl; };
 bool checkCollision(SDL_FRect A, SDL_FRect B);
 SDL_FRect getMousePosition();
+vector<string> partition(string splittingStr, string separator);

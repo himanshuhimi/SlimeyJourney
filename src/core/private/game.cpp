@@ -3,6 +3,11 @@
 Game::Game()
 {
     settings = new Settings();
+    string size = settings->get("graphics", "size");
+    vector<string> partitioned = partition(size, "x");
+    CHANGED_WIDTH = std::stoi(partitioned.at(0));
+    CHANGED_HEIGHT = std::stoi(partitioned.at(partitioned.size() - 1));
+    updateScale();
     if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO))
         print("SDL Unloaded: " + (string)SDL_GetError());
     if (!TTF_Init())
@@ -15,6 +20,7 @@ Game::Game()
         print("Display Unloaded: " + (string)SDL_GetError());
     if (scaled)
         SDL_SetRenderLogicalPresentation(renderer, WIDTH, HEIGHT, logicalPresentation);
+    SDL_SetRenderVSync(renderer, std::stoi(settings->get("graphics", "vsync")));
     ui = new UI<Game *>(this);
     active = true;
 }
