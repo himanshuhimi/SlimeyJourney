@@ -2,7 +2,6 @@
 
 #include "tools/sprite.h"
 #include "ball.h"
-#include "ui/progress.h"
 #include "tools/enemy.h"
 
 class Player : public Sprite

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "map.h"
-#include "ui/progress.h"
 #include "entities/player.h"
 #include "entities/fruit.h"
 #include "entities/flag.h"

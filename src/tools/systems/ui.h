@@ -1,8 +1,8 @@
 #pragma once
 
 #include "core/config.h"
-#include "ui/progress.h"
-#include "ui/button.h"
+#include "widgets/progress.h"
+#include "widgets/button.h"
 
 template <typename T>
 class UI
