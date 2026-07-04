@@ -4,9 +4,10 @@
 #include <random>
 #include <vector>
 #include <map>
+#include <memory>
 #include "graphics.h"
 
-using std::vector, std::map;
+using std::vector, std::map, std::unique_ptr, std::make_unique;
 
 extern struct _Random_
 {

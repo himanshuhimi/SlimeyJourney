@@ -66,7 +66,7 @@ void Progress::render(Vector2D Camera)
     image.render(nullptr, &dst);
 }
 
-void Progress::update(double increment)
+void Progress::advance(double increment)
 {
     reachPercent += increment;
     if (reachPercent > 1.0)

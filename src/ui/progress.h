@@ -15,8 +15,8 @@ public:
         std::function<void()> callback,  SDL_Color color = SDL_Color{255, 255, 255, 255},
         Image attachment = {nullptr, ""}, double startPercent = 0.0,
         float width = 100, double animSpeed = 2.0);
-    void update(double increment = 0.2);
-    void handle(double dt);
-    void render(Vector2D Camera = Vector2D{0.0f, 0.0f});
+    void handle(double dt) override;
+    void render(Vector2D Camera = Vector2D{0.0f, 0.0f}) override;
+    void advance(double increment = 0.2);
     void reset();
 };

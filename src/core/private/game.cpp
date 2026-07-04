@@ -134,7 +134,7 @@ void Game::collision()
         if (!fruitIt->picked && checkCollision(fruitIt->rect, currentLevel->player.rect))
         {
             currentLevel->player.audios.at("pickup").play();
-            ui->progresses.at("fruit").update(currentLevel->increment);
+            ui->progresses.at("fruit").advance(currentLevel->increment);
             fruitIt = currentLevel->fruits.erase(fruitIt);
         }
         else

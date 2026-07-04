@@ -94,9 +94,7 @@ public:
                 text.render();
         }
         if (game->state == States::LOADING)
-        {
-            progresses.at("loading").update();
-        }
+            progresses.at("loading").advance();
     }
     void update(SDL_Event event)
     {

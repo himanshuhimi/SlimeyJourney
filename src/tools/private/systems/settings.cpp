@@ -72,7 +72,6 @@ void Settings::loadData()
             {
                 string key = row.at("key");
                 string value = row.at("value");
-                print(key + "=" + "value");
                 Option option{value, allowedData.at(key)};
                 graphicsData.insert({key, option});
             }
