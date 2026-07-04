@@ -131,7 +131,9 @@ void Game::collision()
 
     for (auto fruitIt = currentLevel->fruits.begin();
          fruitIt != currentLevel->fruits.end();)
-        if (!fruitIt->picked && checkCollision(fruitIt->rect, currentLevel->player.rect))
+    {
+        auto &fruit = *fruitIt;
+        if (!fruit->picked && checkCollision(fruit->rect, currentLevel->player.rect))
         {
             currentLevel->player.audios.at("pickup").play();
             ui->progresses.at("fruit").advance(currentLevel->increment);
@@ -139,43 +141,46 @@ void Game::collision()
         }
         else
             fruitIt++;
+    }
     for (auto sIt = currentLevel->enemies.begin(); sIt != currentLevel->enemies.end();)
     {
-        if (sIt->dead)
+        auto &slime = *sIt;
+        auto rawSlime = slime.get();
+        if (slime->dead)
         {
+            slime->drop<Fruit>(currentLevel->fruits);
             sIt = currentLevel->enemies.erase(sIt);
-            sIt->drop<Fruit>(currentLevel->fruits);
             continue;
         }
-        if (checkCollision(currentLevel->player.rect, sIt->range))
+        if (checkCollision(currentLevel->player.rect, slime->range))
         {
-            sIt->actions.alert = true;
-            sIt->actions.attacking = true;
+            slime->actions.alert = true;
+            slime->actions.attacking = true;
             currentLevel->player.inCombat = true;
-            currentLevel->player.combatEnemy = &(*sIt);
+            currentLevel->player.combatEnemy = rawSlime;
         }
-        else if (currentLevel->player.inCombat && currentLevel->player.combatEnemy == &(*sIt))
+        else if (currentLevel->player.inCombat && currentLevel->player.combatEnemy == rawSlime)
         {
             currentLevel->player.inCombat = false;
             currentLevel->player.combatEnemy = nullptr;
-            sIt->actions.attacking = false;
-            sIt->actions.alert = false;
+            slime->actions.attacking = false;
+            slime->actions.alert = false;
         }
-        if (sIt->actions.attacking)
-            sIt->attack((currentLevel->player.Position - sIt->Position).normalise());
-        for (auto bIt = sIt->balls.begin(); bIt != sIt->balls.end();)
+        if (slime->actions.attacking)
+            slime->attack((currentLevel->player.Position - slime->Position).normalise());
+        for (auto bIt = slime->balls.begin(); bIt != slime->balls.end();)
             if (!bIt->used && checkCollision(currentLevel->player.rect, bIt->rect))
             {
                 currentLevel->player.damage();
-                bIt = sIt->balls.erase(bIt);
+                bIt = slime->balls.erase(bIt);
             }
             else
                 bIt++;
         for (auto bIt = currentLevel->player.balls.begin();
              bIt != currentLevel->player.balls.end();)
-            if (!bIt->used && checkCollision(sIt->rect, bIt->rect))
+            if (!bIt->used && checkCollision(slime->rect, bIt->rect))
             {
-                sIt->damage();
+                slime->damage();
                 bIt = currentLevel->player.balls.erase(bIt);
             }
             else
@@ -192,7 +197,7 @@ void Game::collision()
     bool allEnemyDead = std::all_of(currentLevel->enemies.begin(),
                                     currentLevel->enemies.end(),
                                     [](const auto &e)
-                                    { return e.dead; });
+                                    { return e->dead; });
     if (allEnemyDead)
         currentLevel->quests.at("killEnemy").completed = true;
     bool allComplete = std::all_of(currentLevel->quests.begin(),

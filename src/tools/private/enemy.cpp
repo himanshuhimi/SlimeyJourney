@@ -18,7 +18,7 @@ Enemy::Enemy(SDL_Renderer *renderer, float x, float y, string type, EnemyData da
     audios = {{"hurt", Audio(type + "/hurt.wav")}};
 };
 
-void Enemy::handle(double dt, const vector<Object> objects)
+void Enemy::handle(double dt, const vector<Object> &objects)
 {
     dead = HP <= 0;
     if (dead)

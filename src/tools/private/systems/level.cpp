@@ -25,7 +25,7 @@ void Level::handle(double dt)
     for (auto &ball : player.balls)
         ball.handle(dt, objects);
     for (auto &slime : enemies)
-        slime.handle(dt, objects);
+        slime->handle(dt, objects);
     for (auto &[_, quest] : quests)
         quest.handle(dt);
     flag.handle(dt);
@@ -44,11 +44,11 @@ void Level::render()
     for (auto &grass : objects)
         grass.render(Camera);
     for (auto &fruit : fruits)
-        fruit.render(Camera);
+        fruit->render(Camera);
     for (auto &ball : player.balls)
         ball.render(Camera);
     for (auto &slime : enemies)
-        slime.render(Camera);
+        slime->render(Camera);
     for (auto &[_, quest] : quests)
         quest.render();
     timer.render();
@@ -69,9 +69,9 @@ void Level::loadObjects()
         else if (name == "fren")
             fren = Fren(renderer, obj.x, obj.y - SPRITE_SIZE);
         else if (name == "fruit")
-            fruits.push_back(Fruit(renderer, obj.x, obj.y - SPRITE_SIZE));
+            fruits.emplace_back(make_unique<Fruit>(renderer, obj.x, obj.y - SPRITE_SIZE));
         else if (name == "enemy" || name == "slime")
-            enemies.push_back(Slime(renderer, obj.x, obj.y - SPRITE_SIZE));
+            enemies.emplace_back(make_unique<Slime>(renderer, obj.x, obj.y - SPRITE_SIZE));
         else if (name == "object")
             for (int x = 0; x < obj.width; x += SPRITE_SIZE)
                 objects.push_back(Object(renderer, obj.x + x + SPRITE_SIZE / 2, obj.y));

@@ -35,12 +35,12 @@ public:
     int HP = 0;
     string type = "";
     Enemy(SDL_Renderer *renderer, float x, float y, string type, EnemyData data);
-    void handle(double dt, const vector<Object> objects);
-    void render(Vector2D Camera);
-    void damage(int byPoints = 1);
+    virtual void handle(double dt, const vector<Object> &objects);
+    virtual void render(Vector2D Camera);
+    virtual void damage(int byPoints = 1);
     template <typename T>
-    void drop(vector<T> droppingList)
+    void drop(vector<unique_ptr<T>> &droppingList)
     {
-        droppingList.emplace_back(renderer, Center.x, Center.y);
+        droppingList.emplace_back(make_unique<T>(renderer, Center.x, Center.y));
     }
 };

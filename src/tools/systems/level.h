@@ -20,8 +20,8 @@ public:
     Fren fren;
     Timer timer;
     vector<Object> objects = {};
-    vector<Fruit> fruits = {};
-    vector<Slime> enemies = {};
+    vector<unique_ptr<Fruit>> fruits = {};
+    vector<unique_ptr<Slime>> enemies = {};
     std::map<string, Quest> quests = {};
     std::map<string, Audio> audios;
     int fruitLength = 0;
