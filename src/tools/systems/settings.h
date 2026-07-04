@@ -17,10 +17,14 @@ public:
         Option(string value, vector<string> allowed);
         void update(string value);
     };
-    map<string, Option> graphicsValues = {};
+    map<string, vector<string>> allowedData = {};
+    map<string, Option> graphicsData = {};
+    map<string, string> defaultData = {};
     Settings();
     void load();
+    void uploadData(string tableName);
     void loadTables();
+    void loadData();
     void loadDefaults();
     void update(string tableName, string key, string value);
     string get(string tableName, string key);

@@ -3,10 +3,7 @@
 Table::Table(string name, string dbName, string columns)
     : name(name)
 {
-    database = new Database(dbName);
-    database->execute(
-        "CREATE TABLE IF NOT EXISTS " + name + "(id INT AUTO_INCREMENT PRIMARY KEY, " +
-        columns + ")");
+    db = new Database(dbName);
 }
 
 Database::Database(string name)
@@ -18,19 +15,60 @@ Database::Database(string name)
         print("Database Unloaded: " + (string)sqlite3_errmsg(db));
 }
 
-int Database::execute(string sql)
+int Database::execute(
+    string sql,
+    int (*callback)(void *, int, char **, char **),
+    void *data)
 {
-    print("Executing Database Statement: \n" + sql);
+    print("Executing SQL Statement: \n" + sql);
     char *errMsg = nullptr;
-    return sqlite3_exec(db, sql.c_str(), nullptr, nullptr, &errMsg);
+    return sqlite3_exec(db, sql.c_str(), callback, data, &errMsg);
 };
 
 void Database::createTable(string tableName, string sql)
 {
+    if (existsTable(tableName))
+        return;
+    execute("CREATE TABLE IF NOT EXISTS " + tableName + "(" + sql + ");");
     tables.insert({tableName, Table(tableName, name, sql)});
 };
 
-void Database::deleteTable(string tableName)
+DBResult Database::selectTable(string tableName, string what, string where)
+{
+    string sql = "SELECT " + what + " FROM " + tableName +
+                 (where.empty() ? " WHERE " + where : " ") + ";";
+    print("Executing SQL Statement: \n" + sql);
+    DBResult res;
+    sqlite3_stmt *stmt = nullptr;
+    if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK)
+        print("Cannot prepare Statement");
+    while (sqlite3_step(stmt) == SQLITE_ROW)
+    {
+        DBRow row;
+        int cols = sqlite3_column_count(stmt);
+        for (int i = 0; i < cols; i++)
+        {
+            string columnName = sqlite3_column_name(stmt, i);
+            if (sqlite3_column_type(stmt, i) == SQLITE_NULL)
+                row[columnName] = "";
+            else
+            {
+                const unsigned char *text = sqlite3_column_text(stmt, i);
+                row[columnName] = reinterpret_cast<const char *>(text);
+            }
+        }
+        res.emplace_back(std::move(row));
+    }
+    sqlite3_finalize(stmt);
+    return res;
+}
+
+bool Database::existsTable(string tableName)
+{
+    return tables.find(tableName) != tables.end();
+}
+
+void Database::dropTable(string tableName)
 {
     execute("DROP TABLE " + tableName + ";");
 }

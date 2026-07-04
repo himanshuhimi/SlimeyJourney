@@ -19,10 +19,15 @@ void Settings::Option::update(string value)
 Settings::Settings()
 {
     tableNames = {"graphics"};
-    graphicsValues = {
-        {"size", Option{"1920x1080", {"1920x1080", "1280x720"}}},
-        {"fps", Option{"60", {"30", "60", "120", "Infinite"}}},
-        {"vsync", Option("1", {"0", "1"})}
+    allowedData = {
+        {"size", {"1920x1080", "1280x720"}},
+        {"fps", {"30", "60", "120", "Infinite"}},
+        {"vsync", {"0", "1"}}
+    };
+    defaultData = {
+        {"size", "1920x1080"},
+        {"fps", "60"},
+        {"vsync", "1"}
     };
     db = new Database("settings");
     load();
@@ -31,32 +36,73 @@ Settings::Settings()
 void Settings::load()
 {
     loadTables();
-    loadDefaults();
+    loadData();
+}
+
+void Settings::uploadData(string tableName)
+{
+    bool first = true;
+    string vals = "";
+    for (auto &[key, option] : graphicsData)
+    {
+        if (!first)
+            vals += ",";
+        vals += "('" + key + "','" + option.currentVal + "')";
+        first = false;
+    };
+    db->execute("INSERT INTO " + tableName + "(key, value) VALUES " + vals + ";");
 }
 
 void Settings::loadTables()
 {
     for (auto &tableName : tableNames)
-        db->createTable(tableName, "`key` VARCHAR(600) UNIQUE, value ANY");
+        if (!db->existsTable(tableName))
+            db->createTable(tableName, "`key` VARCHAR(600) UNIQUE, value ANY");
+}
+
+void Settings::loadData()
+{
+    for (auto &tableName : tableNames)
+    {
+        Table table = db->tables.at(tableName);
+        DBResult data = db->selectTable(tableName, "key, value");
+        if (!data.empty())
+        {
+            for (auto &row : data)
+            {
+                string key = row.at("key");
+                string value = row.at("value");
+                print(key + "=" + "value");
+                Option option{value, allowedData.at(key)};
+                graphicsData.insert({key, option});
+            }
+        }
+        else
+        {
+            loadDefaults();
+            uploadData(tableName);
+        }
+    }
 }
 
 void Settings::loadDefaults()
 {
-    for (auto &[setting, option] : graphicsValues)
+    vector<string> graphicKeys = {"size", "fps", "vsync"};
+    for (auto &graphicKey : graphicKeys)
     {
-        string value = "'" + setting + "','" + option.defaultVal + "'";
-        db->execute("INSERT INTO graphics (key, value) VALUES (" + value + ")");
+        Option option{defaultData.at(graphicKey), allowedData.at(graphicKey)};
+        graphicsData.insert({graphicKey, option});
     }
 }
 
 void Settings::update(string tableName, string key, string value)
 {
     db->execute("UPDATE " + tableName + " SET value = '" + value +
-                "' WHERE name = '" + key + "'");
-    graphicsValues.at(key).update(value);
+                "' WHERE key = '" + key + "'");
+    graphicsData.at(key).update(value);
 }
 
 string Settings::get(string tableName, string key)
 {
-    return graphicsValues.at(key).currentVal;
+    return graphicsData.at(key).currentVal;
 }
