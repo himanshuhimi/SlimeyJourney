@@ -50,12 +50,7 @@ void Hearts::load()
         };
 }
 
-UI::UI(Game &game) : game(game), renderer(game.renderer), hearts(game)
-{
-    loadProgresses();
-    loadButtons();
-    loadTexts();
-}
+UI::UI(Game &game) : game(game), renderer(game.renderer), hearts(game) { load(); }
 
 void UI::handle(double dt)
 {
@@ -110,6 +105,13 @@ void UI::update(SDL_Event event)
         buttons.at(button).update(event);
 }
 
+void UI::load()
+{
+    loadProgresses();
+    loadButtons();
+    loadTexts();
+}
+
 void UI::loadProgresses()
 {
     progresses.clear();
@@ -141,10 +143,7 @@ void UI::loadButtons()
 
 void UI::loadTexts()
 {
-    vector<string> data = {
-        TITLE,
-        "COMPLETED",
-        "GAME OVER!"};
+    vector<string> data = {TITLE, "COMPLETED", "GAME OVER!"};
     for (auto &str : data)
         texts.emplace_back(renderer, WIDTH / 2, 96, str, colors.white, 48);
 }

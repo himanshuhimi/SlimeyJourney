@@ -39,6 +39,7 @@ public:
 
 private:
     Game &game;
+    void load();
     void loadProgresses();
     void loadButtons();
     void loadTexts();
