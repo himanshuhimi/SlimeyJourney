@@ -14,7 +14,7 @@ public:
     Button(SDL_Renderer *renderer, float x, float y, std::function<void()> callback, 
         string label, SDL_Color color);
     void handle(double dt) override;
-    void render(Vector2D Camera = {0.0f, 0.0f}) override;
+    void render(Vector2D Camera = {}) override;
     void update(SDL_Event event) override;
     bool hovered();
     bool clicked(SDL_Event event);

@@ -21,7 +21,7 @@ Game::Game()
     if (scaled)
         SDL_SetRenderLogicalPresentation(renderer, WIDTH, HEIGHT, logicalPresentation);
     SDL_SetRenderVSync(renderer, std::stoi(settings->get("graphics", "vsync")));
-    ui = new UI<Game *>(this);
+    ui = new UI(*this);
     active = true;
 }
 
@@ -79,7 +79,10 @@ void Game::update(States newState, bool loading)
     nextState = newState;
     state = (loading) ? States::LOADING : nextState;
     if (loading && nextState == States::PLAYING)
+    {
         loadLevels();
+        ui->hearts.load();
+    }
 }
 
 void Game::terminate()

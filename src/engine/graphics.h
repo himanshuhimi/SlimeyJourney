@@ -54,7 +54,7 @@ struct Text
          string data, SDL_Color color, int pixelSize = 24, int posMode = 0,
          Image attachment = {nullptr, ""},
          string fontSource = "fonts/pixel.ttf");
-    void render(Vector2D Camera = {0.0f, 0.0f});
+    void render(Vector2D Camera = {});
     void updateData(string newData);
     void updateAlpha(int newAlpha);
     void updateAttach(Image newAttach);

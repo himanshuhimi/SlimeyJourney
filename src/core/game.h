@@ -5,6 +5,7 @@
 #include "tools/systems/level.h"
 #include "tools/systems/ui.h"
 
+class UI;
 class Game
 {
 public:
@@ -29,7 +30,7 @@ private:
     vector<Text> texts = {};
     Uint64 LAST = SDL_GetPerformanceCounter();
     Uint64 NOW;
-    UI<Game *> * ui = nullptr;
+    UI *ui = nullptr;
     int levelNum = 0;
     void updateDeltaTime();
     void updateLevel();

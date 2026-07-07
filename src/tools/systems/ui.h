@@ -1,200 +1,62 @@
 #pragma once
 
-#include "core/config.h"
+#include "core/game.h"
 #include "widgets/progress.h"
 #include "widgets/button.h"
 
-template <typename T>
+using UIFunction = std::function<void()>;
+using std::pair;
+
+class Game;
+
+struct Hearts
+{
+    Image normalHeart, brokenHeart;
+    vector<SDL_FRect> rects = {};
+    vector<Image> images = {};
+    Hearts(Game &game);
+    void render();
+    void handle();
+    void clear();
+    void load();
+
+private:
+    Game &game;
+};
+
 class UI
 {
 public:
+    Hearts hearts;
     SDL_Renderer *renderer = nullptr;
-    vector<Image *> hearts;
-    Image *normalHeart, *brokenHeart;
     map<string, Progress> progresses = {};
-    vector<Button> buttons = {};
+    map<string, Button> buttons = {};
     vector<Text> texts = {};
-    T game;
-    UI(T game) : game(game), renderer(game->renderer)
+    UI(Game &game);
+    void handle(double dt);
+    void render();
+    void update(SDL_Event event);
+
+private:
+    Game &game;
+    void loadProgresses();
+    void loadButtons();
+    void loadTexts();
+    vector<string> getBtnNames(States state);
+    vector<string> getProgNames(States state);
+    vector<string> getTitleNames();
+    vector<pair<string, UIFunction>> getBtnFuncs();
+    vector<pair<string, UIFunction>> getProgFuncs();
+    template <typename T>
+    const T &getByName(const vector<pair<string, T>> &vec, const string &name)
     {
-        normalHeart = new Image{renderer, "images/hearts/normal.png"};
-        brokenHeart = new Image{renderer, "images/hearts/broken.png"};
-        loadProgresses();
-        loadButtons();
-        loadTexts();
-    }
-    void handle(double dt)
-    {
-        switch (game->state)
-        {
-        case States::LOADING:
-            progresses.at("loading").handle(dt);
-            break;
-        case States::PLAYING:
-        {
-            if (hearts.size() < game->currentLevel->player.maxHP)
-                for (int i = 0; i < game->currentLevel->player.maxHP; i++)
-                    hearts.emplace_back(normalHeart);
-            if (game->currentLevel->player.HP != game->currentLevel->player.maxHP)
-                hearts.at(game->currentLevel->player.HP) = brokenHeart;
-            break;
-        }
-        }
-        for (auto &[name, progress] : progresses)
-        {
-            vector<string> curProgs = getProgNames();
-            if (std::find(curProgs.begin(), curProgs.end(), name) != curProgs.end())
-                progress.handle(dt);
-        }
-        for (auto &button : buttons)
-        {
-            vector<string> curBtns = getBtnNames();
-            if (std::find(curBtns.begin(), curBtns.end(), button.label) != curBtns.end())
-                button.handle(dt);
-        }
-    }
-    void render()
-    {
-        switch (game->state)
-        {
-        case States::LOADING:
-            progresses.at("loading").render();
-            break;
-        case States::PLAYING:
-            for (int i = 0; i < hearts.size(); i++)
-            {
-                float startX = (WIDTH / 2 -
-                                (game->currentLevel->player.maxHP / 2 * SPRITE_SIZE));
-                hearts.at(i)->render(
-                    nullptr,
-                    new SDL_FRect{
-                        startX + (i * SPRITE_SIZE),
-                        HEIGHT - SPRITE_SIZE,
-                        hearts.at(i)->width,
-                        hearts.at(i)->height});
-            }
-            break;
-        }
-        for (auto &[name, progress] : progresses)
-        {
-            vector<string> curProgs = getProgNames();
-            if (std::find(curProgs.begin(), curProgs.end(), name) != curProgs.end())
-                progress.render();
-        }
-        for (auto &button : buttons)
-        {
-            vector<string> curBtns = getBtnNames();
-            if (std::find(curBtns.begin(), curBtns.end(), button.label) != curBtns.end())
-                button.render();
-        }
-        for (auto &text : texts)
-        {
-            vector<string> curText = getTitleNames();
-            if (std::find(curText.begin(), curText.end(), text.data) != curText.end())
-                text.render();
-        }
-        if (game->state == States::LOADING)
-            progresses.at("loading").advance();
-    }
-    void update(SDL_Event event)
-    {
-        for (auto &button : buttons)
-        {
-            vector<string> curBtns = getBtnNames();
-            if (std::find(curBtns.begin(), curBtns.end(), button.label) != curBtns.end())
-                button.update(event);
-        }
-    }
-    void loadProgresses()
-    {
-        progresses.clear();
-        map<string, std::function<void()>> progFuncs = getProgFuncs();
-        Progress fBar = Progress(renderer, WIDTH - SPRITE_SIZE, HEIGHT / 16.0f,
-                                 progFuncs.at("fruit"),
-                                 SDL_Color{95, 90, 204, 255},
-                                 Image(renderer, "ui/bottle.png"));
-        fBar.rect.x -= fBar.rect.w + fBar.attachmentRect.w;
-        progresses = {
-            {"loading",
-             Progress(renderer, SPRITE_SIZE, HEIGHT - SPRITE_SIZE, progFuncs.at("loading"),
-                      colors.white, Image(nullptr, ""), 0.0, 250.0f, 1.0)},
-            {"fruit", fBar}};
-    }
-    void loadButtons()
-    {
-        vector<string> names = {"PLAY", "SETTINGS", "QUIT", "HOME"};
-        map<string, std::function<void()>> functions = getBtnFuncs();
-        for (int i = 0; i < names.size(); i++)
-        {
-            string label = names.at(i);
-            buttons.emplace_back(renderer, WIDTH / 2, HEIGHT / 2 + (i * SPRITE_SIZE * 2),
-                functions.at(label), label, colors.yellow);
-        }
-    }
-    void loadTexts()
-    {
-        vector<string> data = {
-            TITLE,
-            "COMPLETED",
-            "GAME OVER!"
-        };
-        for (auto &str : data)
-            texts.emplace_back(renderer, WIDTH / 2, 96, str, colors.white, 48);
-    }
-    vector<string> getBtnNames()
-    {
-        vector<string> res = {};
-        switch (game->state)
-        {
-        case States::HOME:
-            res = {"PLAY", "SETTINGS", "QUIT"};
-            break;
-        case States::OVER:
-            res = {"TRY AGAIN", "HOME"};
-            break;
-        }
-        return res;
-    }
-    vector<string> getProgNames()
-    {
-        vector<string> res = {};
-        switch (game->state)
-        {
-        case States::LOADING:
-            res = {"loading"};
-            break;
-        case States::PLAYING:
-            res = {"fruit"};
-            break;
-        }
-        return res;
-    }
-    vector<string> getTitleNames()
-    {
-        vector<string> res = {};
-        switch (game->state)
-        {
-        case States::HOME:
-            res = {(string)TITLE};
-            break;
-        }
-        return res;
-    }
-    map<string, std::function<void()>> getBtnFuncs()
-    {
-        return {
-            {"PLAY", [this] { game->update(States::PLAYING); }},
-            {"TRY AGAIN", [this] { game->update(States::PLAYING); }},
-            {"PLAY AGAIN", [this]{ game->update(States::PLAYING); }},
-            {"SETTINGS", [this] { game->update(States::SETTINGS); }},
-            {"QUIT", [this] { game->terminate(); }},
-            {"HOME", [this] { game->update(States::HOME); }}};
-    }
-    map<string, std::function<void()>> getProgFuncs()
-    {
-        return {
-            {"loading", [this]{ game->state = game->nextState; }},
-            {"fruit", [this]{ game->currentLevel->quests.at("fruitColl").completed = true; }}
-        };
+        auto it = std::find_if(
+            vec.begin(),
+            vec.end(),
+            [&](const auto &p)
+            { return p.first == name; });
+        if (it == vec.end())
+            throw std::out_of_range("Key not found");
+        return it->second;
     }
 };
