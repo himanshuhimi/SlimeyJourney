@@ -1,5 +1,7 @@
 #include "../../systems/settings.h"
 
+vector<string> SettingBool = {"0", "1"};
+
 Settings::Option::Option(string value, vector<string> allowed)
     : defaultVal(value), currentVal(value), allowed(allowed)
 {
@@ -20,12 +22,12 @@ Settings::Settings()
 {
     tableNames = {"graphics"};
     allowedData = {
-        {"size", {"1920x1080", "1280x720"}},
+        {"size", {"1920x1080", "1280x720", "640x360"}},
         {"fps", {"30", "60", "120", "Infinite"}},
-        {"vsync", {"0", "1"}}
+        {"vsync", SettingBool}
     };
     defaultData = {
-        {"size", "1920x1080"},
+        {"size", "640x360"},
         {"fps", "60"},
         {"vsync", "1"}
     };

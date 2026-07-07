@@ -3,6 +3,8 @@
 #include "core/config.h"
 #include "engine/database.h"
 
+extern vector<string> SettingBool;
+
 class Settings
 {
 public:

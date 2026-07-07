@@ -31,6 +31,7 @@ public:
     SDL_Renderer *renderer = nullptr;
     map<string, Progress> progresses = {};
     map<string, Button> buttons = {};
+    map<Image *, SDL_FRect> images = {};
     vector<Text> texts = {};
     UI(Game &game);
     void handle(double dt);
@@ -42,6 +43,7 @@ private:
     void load();
     void loadProgresses();
     void loadButtons();
+    void loadImages();
     void loadTexts();
     vector<string> getBtnNames(States state);
     vector<string> getProgNames(States state);

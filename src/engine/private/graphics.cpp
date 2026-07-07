@@ -96,7 +96,7 @@ Text::Text(
 
 void Text::render(Vector2D Camera)
 {
-    SDL_FRect dst = rect;
+    dst = rect;
     dst.x -= Camera.x;
     dst.y -= Camera.y;
     if (attachment.renderer != nullptr)

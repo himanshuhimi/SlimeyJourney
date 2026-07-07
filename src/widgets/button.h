@@ -5,11 +5,12 @@
 class Button : public Widget
 {
 public:
+    SDL_FRect shadow;
     SDL_Color color;
-    Image image;
     Text text;
-    vector<Image> images = {};
     string label;
+    float scaleX{1}, scaleY{1};
+    float maxScale = 1.1;
     bool resized = false;
     Button(SDL_Renderer *renderer, float x, float y, std::function<void()> callback, 
         string label, SDL_Color color);

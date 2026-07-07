@@ -88,6 +88,13 @@ void UI::render()
     vector<string> curBtns = getBtnNames(game.state);
     for (auto &button : curBtns)
         buttons.at(button).render();
+    if (game.state == States::HOME)
+        for (auto &[image, rect] : images)
+        {
+            rect.w = image->width;
+            rect.h = image->height;
+            image->render(nullptr, &rect);
+        }
     for (auto &text : texts)
     {
         vector<string> curText = getTitleNames();
@@ -95,7 +102,7 @@ void UI::render()
             text.render();
     }
     if (game.state == States::LOADING)
-        progresses.at("loading").advance();
+        progresses.at("loading").advance(0.005);
 }
 
 void UI::update(SDL_Event event)
@@ -109,6 +116,7 @@ void UI::load()
 {
     loadProgresses();
     loadButtons();
+    loadImages();
     loadTexts();
 }
 
@@ -134,18 +142,33 @@ void UI::loadButtons()
     const auto &functions = getBtnFuncs();
     int i = 0;
     for (const auto &[label, function] : functions)
+    {
+        float padding = i++ * 2 * SPRITE_SIZE;
         buttons.insert({label,
                         Button(renderer,
-                               WIDTH / 2,
-                               HEIGHT / 2 + (i++ * 2 * SPRITE_SIZE),
+                               WIDTH / 4 + padding,
+                               HEIGHT / 2 + padding,
                                function, label, colors.yellow)});
+    }
+}
+
+void UI::loadImages()
+{
+    images.insert({
+        new Image(game.renderer, "images/sun.png"),
+        SDL_FRect{SPRITE_SIZE, SPRITE_SIZE}
+    });
+    images.insert({
+        new Image(game.renderer, "images/title.png"),
+        SDL_FRect{(float)WIDTH - (WIDTH / 1.5f), 96}
+    });
 }
 
 void UI::loadTexts()
 {
-    vector<string> data = {TITLE, "COMPLETED", "GAME OVER!"};
+    vector<string> data = {"COMPLETED", "GAME OVER!"};
     for (auto &str : data)
-        texts.emplace_back(renderer, WIDTH / 2, 96, str, colors.white, 48);
+        texts.emplace_back(renderer, WIDTH - (WIDTH / 3), 128, str, colors.white, 48);
 }
 
 vector<string> UI::getBtnNames(States state)

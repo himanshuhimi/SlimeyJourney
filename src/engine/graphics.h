@@ -39,7 +39,7 @@ struct Text
     SDL_Surface *surface = nullptr;
     SDL_Texture *texture = nullptr;
     TTF_Font *font = nullptr;
-    SDL_FRect rect, attachRect;
+    SDL_FRect rect, dst, attachRect;
     SDL_Color color;
     Image attachment;
     string data, fontSource;
