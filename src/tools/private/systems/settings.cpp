@@ -27,7 +27,7 @@ Settings::Settings()
         {"vsync", SettingBool}
     };
     defaultData = {
-        {"size", "640x360"},
+        {"size", "1920x1080"},
         {"fps", "60"},
         {"vsync", "1"}
     };

@@ -63,9 +63,10 @@ void Game::handle()
 
 void Game::render()
 {
-    SDL_SetRenderDrawColor(
-        renderer, colors.skyblue.r,
-        colors.skyblue.g, colors.skyblue.b,
+    SDL_SetRenderDrawColor(renderer,
+        colors.skyblue.r,
+        colors.skyblue.g,
+        colors.skyblue.b,
         colors.skyblue.a);
     SDL_RenderClear(renderer);
     if (state == States::PLAYING)

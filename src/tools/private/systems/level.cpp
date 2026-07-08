@@ -13,9 +13,9 @@ Level::Level(SDL_Renderer *renderer, int number)
         {"hurt", Audio("player/hurt.wav")}};
     quests = {
         {"fruitColl", Quest(renderer, 32, HEIGHT / 16.0f, "Collect all fruits")},
-        {"fedFren", Quest(renderer, 32, (HEIGHT / 16.0f) + 16,
+        {"fedFren", Quest(renderer, 32, (HEIGHT / 16.0f) + 32,
                           "Feed your friend, Fren! [Press F]")},
-        {"killEnemy", Quest(renderer, 32, (HEIGHT / 16.0f) + 32,
+        {"killEnemy", Quest(renderer, 32, (HEIGHT / 16.0f) + 64,
                             "Kill your enemies! [LMB to shoot]")}};
 }
 

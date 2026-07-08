@@ -89,7 +89,7 @@ Text::Text(
     {
         attachRect.w = attachment.width;
         attachRect.h = attachment.height;
-        attachRect.x = rect.x - (attachRect.w + (attachRect.w / 2));
+        attachRect.x = rect.x - (attachRect.w + attachRect.w / 2);
         attachRect.y = rect.y;
     }
 }

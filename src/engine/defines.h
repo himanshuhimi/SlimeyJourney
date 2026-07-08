@@ -29,7 +29,7 @@ extern struct _Colors_
     SDL_Color red = SDL_Color{179, 0, 0, 255};
     SDL_Color green = SDL_Color{0, 255, 0, 255};
     SDL_Color blue = SDL_Color{0, 0, 255, 255};
-    SDL_Color skyblue = SDL_Color{41, 160, 204, 255};
+    SDL_Color skyblue = SDL_Color{97, 185, 222, 255};
     SDL_Color orange = SDL_Color{255, 165, 0, 255};
     SDL_Color yellow = SDL_Color{255, 206, 27, 255};
     SDL_Color pink = SDL_Color{255, 182, 193, 255};
