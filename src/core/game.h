@@ -12,7 +12,7 @@ public:
     SDL_Renderer *renderer = nullptr;
     SDL_Window *window = nullptr;
     SDL_Event event;
-    States state = States::HOME, nextState;
+    Scenes scene, nextScene;
     Level *currentLevel = nullptr;
     Settings *settings = nullptr;
     bool active = false;
@@ -21,7 +21,7 @@ public:
     void launch();
     void render();
     void handle();
-    void update(States newState, bool loading = true);
+    void setScene(Scenes newState, bool loading = true);
     void terminate();
     void loadLevels();
 

@@ -4,10 +4,31 @@
 #include "widgets/progress.h"
 #include "widgets/button.h"
 
-using UIFunction = std::function<void()>;
 using std::pair;
 
 class Game;
+
+struct UIScreen
+{
+    using Widgets = map<string, unique_ptr<Widget>>;
+    using CategoryWid = map<string, Widgets>;
+    CategoryWid ctgWidgets = {};
+    UIScreen(Game &game);
+    virtual void render(Vector2D Camera = {});
+    virtual void handle(double dt);
+    virtual void update(SDL_Event event);
+    template <class T>
+    T &getWidget(string category, string name)
+    {
+        auto &ptr = ctgWidgets.at(category).at(name);
+        if (!ptr)
+            print("Widget is null: " + category + " : " + name);
+        return dynamic_cast<T &>(*ptr);
+    }
+
+protected:
+    Game &game;
+};
 
 struct Hearts
 {
@@ -20,46 +41,44 @@ struct Hearts
     void clear();
     void load();
 
-private:
+protected:
     Game &game;
+};
+
+struct HomeScreen : public UIScreen
+{
+    HomeScreen(Game &game);
+};
+
+struct LoadingScreen : public UIScreen
+{
+    LoadingScreen(Game &game);
+    void handle(double dt) override;
+};
+
+struct PlayingScreen : public UIScreen
+{
+    Hearts hearts;
+    PlayingScreen(Game &game);
+    void render(Vector2D Camera = {}) override;
+    void handle(double dt) override;
 };
 
 class UI
 {
 public:
-    Hearts hearts;
-    SDL_Renderer *renderer = nullptr;
-    map<string, Progress> progresses = {};
-    map<string, Button> buttons = {};
-    map<Image *, SDL_FRect> images = {};
-    vector<Text> texts = {};
+    unique_ptr<UIScreen> activeScreen = nullptr;
     UI(Game &game);
+    void render(Vector2D Camera = {});
     void handle(double dt);
-    void render();
     void update(SDL_Event event);
+    void updateScreen(Scenes scene);
+    template <class T>
+    T &getWidget(string category, string name)
+    {
+        return activeScreen->getWidget<T>(category, name);
+    }
 
 private:
     Game &game;
-    void load();
-    void loadProgresses();
-    void loadButtons();
-    void loadImages();
-    void loadTexts();
-    vector<string> getBtnNames(States state);
-    vector<string> getProgNames(States state);
-    vector<string> getTitleNames();
-    vector<pair<string, UIFunction>> getBtnFuncs();
-    vector<pair<string, UIFunction>> getProgFuncs();
-    template <typename T>
-    const T &getByName(const vector<pair<string, T>> &vec, const string &name)
-    {
-        auto it = std::find_if(
-            vec.begin(),
-            vec.end(),
-            [&](const auto &p)
-            { return p.first == name; });
-        if (it == vec.end())
-            throw std::out_of_range("Key not found");
-        return it->second;
-    }
 };

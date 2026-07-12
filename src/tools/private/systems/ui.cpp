@@ -1,6 +1,41 @@
 #include "../../systems/ui.h"
 
-Hearts::Hearts(Game &game) 
+UIScreen::UIScreen(Game &game) : game(game) {}
+
+void UIScreen::render(Vector2D Camera)
+{
+    for (auto &[category, widgets] : ctgWidgets)
+        for (auto &[name, widget] : widgets)
+        {
+            if (!widget)
+                continue;
+            widget->render(Camera);
+        }
+}
+
+void UIScreen::handle(double dt)
+{
+    for (auto &[category, widgets] : ctgWidgets)
+        for (auto &[name, widget] : widgets)
+        {
+            if (!widget)
+                continue;
+            widget->handle(dt);
+        }
+}
+
+void UIScreen::update(SDL_Event event)
+{
+    for (auto &[category, widgets] : ctgWidgets)
+        for (auto &[name, widget] : widgets)
+        {
+            if (!widget)
+                continue;
+            widget->update(event);
+        }
+}
+
+Hearts::Hearts(Game &game)
     : game(game), brokenHeart{game.renderer, "images/hearts/broken.png"},
       normalHeart(game.renderer, "images/hearts/normal.png")
 {
@@ -50,184 +85,111 @@ void Hearts::load()
         };
 }
 
-UI::UI(Game &game) : game(game), renderer(game.renderer), hearts(game) { load(); }
+HomeScreen::HomeScreen(Game &game) : UIScreen(game)
+{
+    ctgWidgets["btns"];
+    map<string, UIFunction> funcs = {
+        {"PLAY", [this]
+         { this->game.setScene(Scenes::PLAYING); }},
+        {"SETTINGS", [this]
+         { this->game.setScene(Scenes::SETTINGS); }},
+        {"QUIT", [this]
+         { this->game.terminate(); }}
+        };
+    int i = 0;
+    for (auto &[label, func] : funcs)
+    {
+        float padding = i++ * SPRITE_SIZE * 2;
+        ctgWidgets.at("btns").insert({label, make_unique<Button>(
+            game.renderer, WIDTH / 4 + padding, HEIGHT / 2 + padding,
+            func, label, colors.yellow
+        )});
+    }
+}
+
+LoadingScreen::LoadingScreen(Game &game) : UIScreen(game)
+{
+    ctgWidgets["progs"];
+    ctgWidgets.at("progs").insert({
+        "loading",
+        make_unique<Progress>(
+            game.renderer, SPRITE_SIZE, HEIGHT - SPRITE_SIZE,
+            [this]{ this->game.setScene(this->game.nextScene, false); }
+        )
+    });
+}
+
+void LoadingScreen::handle(double dt)
+{
+    getWidget<Progress>("progs", "loading").advance(0.0025);
+    UIScreen::handle(dt);
+}
+
+PlayingScreen::PlayingScreen(Game &game) : UIScreen(game), hearts(game)
+{
+    ctgWidgets["progs"];
+    ctgWidgets.at("progs").insert({
+        "fruit",
+        make_unique<Progress>(
+            game.renderer, WIDTH - SPRITE_SIZE, SPRITE_SIZE,
+            [this]{ this->game.currentLevel->quests.at("fruitColl").completed = true; },
+            colors.violet, Image(game.renderer, "ui/bottle.png")
+        )
+    });
+    auto &fruit = getWidget<Progress>("progs", "fruit");
+    fruit.rect.x -= fruit.rect.w + fruit.attachmentRect.w;
+}
+
+void PlayingScreen::render(Vector2D Camera)
+{
+    hearts.render();
+    UIScreen::render(Camera);
+}
+
+void PlayingScreen::handle(double dt)
+{
+    hearts.handle();
+    UIScreen::handle(dt);
+}
+
+UI::UI(Game &game) : game(game) {}
+
+void UI::render(Vector2D Camera)
+{
+    if (activeScreen == nullptr)
+        return;
+    activeScreen->render(Camera);
+}
 
 void UI::handle(double dt)
 {
-    switch (game.state)
-    {
-    case States::LOADING:
-        progresses.at("loading").handle(dt);
-        break;
-    case States::PLAYING:
-        hearts.handle();
-        break;
-    }
-    vector<string> curProgs = getProgNames(game.state);
-    for (auto &prog : curProgs)
-        progresses.at(prog).handle(dt);
-    vector<string> curBtns = getBtnNames(game.state);
-    for (auto &button : curBtns)
-        buttons.at(button).handle(dt);
-}
-
-void UI::render()
-{
-    switch (game.state)
-    {
-    case States::LOADING:
-        progresses.at("loading").render();
-        break;
-    case States::PLAYING:
-        hearts.render();
-        break;
-    }
-    vector<string> curProgs = getProgNames(game.state);
-    for (auto &name : curProgs)
-        progresses.at(name).render();
-    vector<string> curBtns = getBtnNames(game.state);
-    for (auto &button : curBtns)
-        buttons.at(button).render();
-    if (game.state == States::HOME)
-        for (auto &[image, rect] : images)
-        {
-            rect.w = image->width;
-            rect.h = image->height;
-            image->render(nullptr, &rect);
-        }
-    for (auto &text : texts)
-    {
-        vector<string> curText = getTitleNames();
-        if (std::find(curText.begin(), curText.end(), text.data) != curText.end())
-            text.render();
-    }
-    if (game.state == States::LOADING)
-        progresses.at("loading").advance(0.005);
+    if (activeScreen == nullptr)
+        return;
+    activeScreen->handle(dt);
 }
 
 void UI::update(SDL_Event event)
 {
-    vector<string> curBtns = getBtnNames(game.state);
-    for (auto &button : curBtns)
-        buttons.at(button).update(event);
+    if (activeScreen == nullptr)
+        return;
+    activeScreen->update(event);
 }
 
-void UI::load()
+void UI::updateScreen(Scenes scene)
 {
-    loadProgresses();
-    loadButtons();
-    loadImages();
-    loadTexts();
-}
-
-void UI::loadProgresses()
-{
-    progresses.clear();
-    const auto &progFuncs = getProgFuncs();
-    Progress fBar = Progress(renderer, WIDTH - SPRITE_SIZE, HEIGHT / 16.0f,
-                             getByName(progFuncs, "fruit"),
-                             SDL_Color{95, 90, 204, 255},
-                             Image(renderer, "ui/bottle.png"));
-    fBar.rect.x -= fBar.rect.w + fBar.attachmentRect.w;
-    progresses = {
-        {"loading",
-         Progress(renderer, SPRITE_SIZE, HEIGHT - SPRITE_SIZE, 
-            getByName(progFuncs, "loading"), colors.white, Image(nullptr, ""), 
-            0.0, 250.0f, 1.0)},
-        {"fruit", fBar}};
-}
-
-void UI::loadButtons()
-{
-    const auto &functions = getBtnFuncs();
-    int i = 0;
-    for (const auto &[label, function] : functions)
+    switch (scene)
     {
-        float padding = i++ * 2 * SPRITE_SIZE;
-        buttons.insert({label,
-                        Button(renderer,
-                               WIDTH / 4 + padding,
-                               HEIGHT / 2 + padding,
-                               function, label, colors.yellow)});
-    }
-}
-
-void UI::loadImages()
-{
-    images.insert({
-        new Image(game.renderer, "images/sun.png"),
-        SDL_FRect{SPRITE_SIZE, SPRITE_SIZE}
-    });
-    images.insert({
-        new Image(game.renderer, "images/title.png"),
-        SDL_FRect{(float)WIDTH - (WIDTH / 1.5f), 96}
-    });
-}
-
-void UI::loadTexts()
-{
-    vector<string> data = {"COMPLETED", "GAME OVER!"};
-    for (auto &str : data)
-        texts.emplace_back(renderer, WIDTH - (WIDTH / 3), 128, str, colors.white, 48);
-}
-
-vector<string> UI::getBtnNames(States state)
-{
-    map<States, vector<string>> data = {
-        {States::HOME, {"PLAY", "SETTINGS", "QUIT"}},
-        {States::OVER, {"TRY AGAIN", "HOME"}}};
-    auto iterator = data.find(state);
-    if (iterator == data.end())
-        return {};
-    return iterator->second;
-}
-
-vector<string> UI::getProgNames(States state)
-{
-    map<States, vector<string>> data = {
-        {States::LOADING, {"loading"}},
-        {States::PLAYING, {"fruit"}}};
-    auto iterator = data.find(state);
-    if (iterator == data.end())
-        return {};
-    return iterator->second;
-}
-
-vector<string> UI::getTitleNames()
-{
-    vector<string> res = {};
-    switch (game.state)
-    {
-    case States::HOME:
-        res = {(string)TITLE};
+    case Scenes::HOME:
+        activeScreen = make_unique<HomeScreen>(game);
         break;
-    }
-    return res;
-}
-
-vector<pair<string, UIFunction>> UI::getBtnFuncs()
-{
-    return {
-        {"PLAY", [this]
-         { game.update(States::PLAYING); }},
-        {"SETTINGS", [this]
-         { game.update(States::SETTINGS); }},
-        {"QUIT", [this]
-         { game.terminate(); }},
-        {"TRY AGAIN", [this]
-         { game.update(States::PLAYING); }},
-        {"PLAY AGAIN", [this]
-         { game.update(States::PLAYING); }},
-        {"HOME", [this]
-         { game.update(States::HOME); }}};
-}
-
-vector<pair<string, UIFunction>> UI::getProgFuncs()
-{
-    return {
-        {"loading", [this]()
-         { this->game.update(this->game.nextState, false); }},
-        {"fruit",
-         [this]()
-         { this->game.currentLevel->quests.at("fruitColl").completed = true; }}};
+    case Scenes::LOADING:
+        activeScreen = make_unique<LoadingScreen>(game);
+        break;
+    case Scenes::PLAYING:
+        activeScreen = make_unique<PlayingScreen>(game);
+        break;
+    default:
+        activeScreen = nullptr;
+        break;
+    };
 }

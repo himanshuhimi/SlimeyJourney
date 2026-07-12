@@ -50,7 +50,7 @@ extern struct _Consts_
     double gravity = 245;
 } constants;
 
-enum States
+enum Scenes
 {
     HOME,
     LOADING,

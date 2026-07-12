@@ -23,6 +23,7 @@ Game::Game()
     SDL_SetRenderVSync(renderer, std::stoi(settings->get("graphics", "vsync")));
     ui = new UI(*this);
     active = true;
+    setScene(Scenes::HOME, false);
 }
 
 void Game::launch()
@@ -45,16 +46,16 @@ void Game::handle()
             terminate();
             break;
         case SDL_EVENT_MOUSE_BUTTON_UP:
-            if (state == States::PLAYING)
+            if (scene == Scenes::PLAYING)
                 currentLevel->player.mouseClicked = (event.button.button == SDL_BUTTON_LEFT);
             break;
         }
         ui->update(event);
     }
     ui->handle(dt);
-    switch (state)
+    switch (scene)
     {
-    case States::PLAYING:
+    case Scenes::PLAYING:
         currentLevel->handle(dt);
         collision();
         break;
@@ -69,21 +70,19 @@ void Game::render()
         colors.skyblue.b,
         colors.skyblue.a);
     SDL_RenderClear(renderer);
-    if (state == States::PLAYING)
+    if (scene == Scenes::PLAYING)
         currentLevel->render();
     ui->render();
     SDL_RenderPresent(renderer);
 }
 
-void Game::update(States newState, bool loading)
+void Game::setScene(Scenes newScene, bool loading)
 {
-    nextState = newState;
-    state = (loading) ? States::LOADING : nextState;
-    if (loading && nextState == States::PLAYING)
-    {
+    nextScene = newScene;
+    scene = (loading) ? Scenes::LOADING : nextScene;
+    if (loading && nextScene == Scenes::PLAYING)
         loadLevels();
-        ui->hearts.load();
-    }
+    ui->updateScreen(scene);
 }
 
 void Game::terminate()
@@ -124,9 +123,8 @@ void Game::updateLevel()
         currentLevel = levels.at(levelNum - 1);
     else
     {
-        update(States::HOME);
+        setScene(Scenes::HOME);
         levelNum = 0;
-        ui->hearts.clear();
     }
 }
 
@@ -140,7 +138,7 @@ void Game::collision()
         if (!fruit->picked && checkCollision(fruit->rect, currentLevel->player.rect))
         {
             currentLevel->player.audios.at("pickup").play();
-            ui->progresses.at("fruit").advance(currentLevel->increment);
+            ui->getWidget<Progress>("progs", "fruit").advance(currentLevel->increment);
             fruitIt = currentLevel->fruits.erase(fruitIt);
         }
         else
@@ -193,7 +191,7 @@ void Game::collision()
     }
     bool collided = checkCollision(currentLevel->player.rect, currentLevel->fren.rect);
     bool keyPressed = SDL_GetKeyboardState(NULL)[SDL_SCANCODE_F];
-    bool complete = ui->progresses.at("fruit").complete;
+    bool complete = ui->getWidget<Progress>("progs", "fruit").complete;
     if (complete)
         currentLevel->quests.at("fruitColl").completed = true;
     if (collided && keyPressed && currentLevel->quests.at("fruitColl").completed)
@@ -210,5 +208,5 @@ void Game::collision()
     if (allComplete)
         updateLevel();
     if (currentLevel->player.dead)
-        update(States::HOME);
+        setScene(Scenes::HOME);
 }
