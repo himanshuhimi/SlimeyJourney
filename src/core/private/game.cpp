@@ -65,10 +65,10 @@ void Game::handle()
 void Game::render()
 {
     SDL_SetRenderDrawColor(renderer,
-        colors.skyblue.r,
-        colors.skyblue.g,
-        colors.skyblue.b,
-        colors.skyblue.a);
+                           colors.skyblue.r,
+                           colors.skyblue.g,
+                           colors.skyblue.b,
+                           colors.skyblue.a);
     SDL_RenderClear(renderer);
     if (scene == Scenes::PLAYING)
         currentLevel->render();
@@ -111,7 +111,7 @@ void Game::loadLevels()
             continue;
         string filename = path.stem().string();
         int number = std::stoi(filename);
-        levels.emplace_back(new Level(renderer, number));
+        levels.insert({number, new Level(renderer, number)});
     }
     updateLevel();
 }
@@ -130,7 +130,26 @@ void Game::updateLevel()
 
 void Game::collision()
 {
-
+    for (auto stoneIt = currentLevel->stones.begin();
+         stoneIt != currentLevel->stones.end(); stoneIt++)
+    {
+        auto stone = *stoneIt;
+        for (auto bIt = currentLevel->player.balls.begin();
+             bIt != currentLevel->player.balls.end();)
+        {
+            auto ball = *bIt;
+            if (checkCollision(stone.rect, ball.rect))
+            {
+                stoneIt->destruct();
+                bIt = currentLevel->player.balls.erase(bIt);
+            }
+            else
+                bIt++;
+        }
+    }
+    for (auto &spike : currentLevel->spikes)
+        if (checkCollision(currentLevel->player.rect, spike.rect))
+            currentLevel->player.damage();
     for (auto fruitIt = currentLevel->fruits.begin();
          fruitIt != currentLevel->fruits.end();)
     {

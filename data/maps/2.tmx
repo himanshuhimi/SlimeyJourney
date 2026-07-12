@@ -26,15 +26,15 @@
 </data>
  </layer>
  <objectgroup id="2" name="objects">
-  <object id="1" name="player" x="32" y="576">
+  <object id="1" name="object" x="0" y="576" width="640" height="32"/>
+  <object id="2" name="player" x="32" y="576">
    <point/>
   </object>
-  <object id="2" name="fren" x="608" y="576">
+  <object id="3" name="fren" x="608" y="576">
    <point/>
   </object>
-  <object id="3" name="fruit" x="320" y="576">
+  <object id="4" name="slime" x="320" y="576">
    <point/>
   </object>
-  <object id="4" name="object" x="0" y="576" width="640" height="32"/>
  </objectgroup>
 </map>

@@ -76,8 +76,6 @@ void Level::loadObjects()
             flag = Flag(renderer, obj.x, obj.y - SPRITE_SIZE);
         else if (name == "fren")
             fren = Fren(renderer, obj.x, obj.y - SPRITE_SIZE);
-        else if (name == "spike")
-            spikes.emplace_back(renderer, obj.x, obj.y);
         else if (name == "fruit")
             fruits.emplace_back(make_unique<Fruit>(renderer, obj.x, obj.y - SPRITE_SIZE));
         else if (name == "enemy" || name == "slime")
@@ -88,6 +86,9 @@ void Level::loadObjects()
         else if (name == "stone")
             for (int y = 0; y < obj.height; y += SPRITE_SIZE)
                 stones.emplace_back(renderer, obj.x, obj.y + y + SPRITE_SIZE / 2);
+        else if (name == "spike")
+            for (int x = 0; x < obj.width; x += SPRITE_SIZE)
+                spikes.emplace_back(renderer, obj.x + x + SPRITE_SIZE / 2, obj.y);
     }
 }
 

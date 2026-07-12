@@ -26,12 +26,11 @@ public:
     void loadLevels();
 
 private:
-    vector<Level *> levels = {};
-    vector<Text> texts = {};
+    map<int, Level *> levels = {};
     Uint64 LAST = SDL_GetPerformanceCounter();
     Uint64 NOW;
     UI *ui = nullptr;
-    int levelNum = 0;
+    int levelNum = 3;
     void updateDeltaTime();
     void updateLevel();
     void collision();
