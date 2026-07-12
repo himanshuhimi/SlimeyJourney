@@ -22,8 +22,12 @@ Level::Level(SDL_Renderer *renderer, int number)
 void Level::handle(double dt)
 {
     clampCamera();
+    for (auto &stone : stones)
+        stone.handle(dt, objects);
     for (auto &ball : player.balls)
         ball.handle(dt, objects);
+    for (auto &spike : spikes)
+        spike.handle(dt, objects);
     for (auto &slime : enemies)
         slime->handle(dt, objects);
     for (auto &[_, quest] : quests)
@@ -43,10 +47,14 @@ void Level::render()
     map.render(Camera);
     for (auto &grass : objects)
         grass.render(Camera);
+    for (auto &stone : stones)
+        stone.render(Camera);
     for (auto &fruit : fruits)
         fruit->render(Camera);
     for (auto &ball : player.balls)
         ball.render(Camera);
+    for (auto &spike : spikes)
+        spike.render(Camera);
     for (auto &slime : enemies)
         slime->render(Camera);
     for (auto &[_, quest] : quests)
@@ -68,13 +76,18 @@ void Level::loadObjects()
             flag = Flag(renderer, obj.x, obj.y - SPRITE_SIZE);
         else if (name == "fren")
             fren = Fren(renderer, obj.x, obj.y - SPRITE_SIZE);
+        else if (name == "spike")
+            spikes.emplace_back(renderer, obj.x, obj.y);
         else if (name == "fruit")
             fruits.emplace_back(make_unique<Fruit>(renderer, obj.x, obj.y - SPRITE_SIZE));
         else if (name == "enemy" || name == "slime")
             enemies.emplace_back(make_unique<Slime>(renderer, obj.x, obj.y - SPRITE_SIZE));
         else if (name == "object")
             for (int x = 0; x < obj.width; x += SPRITE_SIZE)
-                objects.push_back(Object(renderer, obj.x + x + SPRITE_SIZE / 2, obj.y));
+                objects.emplace_back(renderer, obj.x + x + SPRITE_SIZE / 2, obj.y);
+        else if (name == "stone")
+            for (int y = 0; y < obj.height; y += SPRITE_SIZE)
+                stones.emplace_back(renderer, obj.x, obj.y + y + SPRITE_SIZE / 2);
     }
 }
 

@@ -4,8 +4,10 @@
 #include "entities/player.h"
 #include "entities/fruit.h"
 #include "entities/flag.h"
-#include "entities/enemies/slime.h"
 #include "entities/fren.h"
+#include "entities/spike.h"
+#include "entities/stone.h"
+#include "entities/enemies/slime.h"
 #include "tools/systems/quest.h"
 
 class Level
@@ -19,6 +21,8 @@ public:
     Fren fren;
     Timer timer;
     vector<Object> objects = {};
+    vector<Spike> spikes = {};
+    vector<Stone> stones = {};
     vector<unique_ptr<Fruit>> fruits = {};
     vector<unique_ptr<Slime>> enemies = {};
     std::map<string, Quest> quests = {};

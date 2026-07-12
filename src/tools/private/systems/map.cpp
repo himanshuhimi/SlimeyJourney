@@ -130,22 +130,22 @@ void Map::loadObjectGroup(XMLElement *child)
         object.width = objectElement->FloatAttribute("width");
         object.height = objectElement->FloatAttribute("height");
         objectGroup.objects.push_back(object);
-        for (
-            XMLElement *propElement = objectElement->FirstChildElement("property");
-            propElement != nullptr;
-            propElement = propElement->NextSiblingElement("property")
-        )
-        {
-            string name = propElement->Attribute("name");
-            string type = propElement->Attribute("type");
-            string value = propElement->Attribute("value");
-            if (type == "int")
-                object.properties[name] = std::stoi(value);
-            else if (type == "float")
-                object.properties[name] = std::stof(value);
-            else
-                object.properties[name] = value;
-        }
+        // for (
+        //     XMLElement *propElement = objectElement->FirstChildElement("property");
+        //     propElement != nullptr;
+        //     propElement = propElement->NextSiblingElement("property")
+        // )
+        // {
+        //     string name = propElement->Attribute("name");
+        //     string type = propElement->Attribute("type");
+        //     string value = propElement->Attribute("value");
+        //     if (type == "int")
+        //         object.properties[name] = std::stoi(value);
+        //     else if (type == "float")
+        //         object.properties[name] = std::stof(value);
+        //     else
+        //         object.properties[name] = value;
+        // }
     }
 }
 
