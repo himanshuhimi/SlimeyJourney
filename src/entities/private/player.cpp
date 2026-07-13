@@ -33,7 +33,7 @@ void Player::handle(double dt, const vector<Object> &objects)
     }
     handleMovement(dt);
     Sprite::handle(dt, objects);
-    handleShooting(dt);
+    handleAttacking(dt);
 }
 
 void Player::render(Vector2D Camera)
@@ -106,7 +106,7 @@ void Player::handleMovement(double dt)
         anims.at("walking").handle(dt);
 }
 
-void Player::handleShooting(double dt)
+void Player::handleAttacking(double dt)
 {
     throwCooldown.handle(dt);
     if (mouseClicked && throwCooldown.available)

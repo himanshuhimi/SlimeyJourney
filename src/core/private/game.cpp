@@ -149,7 +149,7 @@ void Game::collision()
     }
     for (auto &spike : currentLevel->spikes)
         if (checkCollision(currentLevel->player.rect, spike.rect))
-            currentLevel->player.damage();
+            currentLevel->player.resetPos();
     for (auto fruitIt = currentLevel->fruits.begin();
          fruitIt != currentLevel->fruits.end();)
     {
@@ -208,24 +208,29 @@ void Game::collision()
                 bIt++;
         sIt++;
     }
-    bool collided = checkCollision(currentLevel->player.rect, currentLevel->fren.rect);
     bool keyPressed = SDL_GetKeyboardState(NULL)[SDL_SCANCODE_F];
-    bool complete = ui->getWidget<Progress>("progs", "fruit").complete;
-    if (complete)
-        currentLevel->quests.at("fruitColl").completed = true;
-    if (collided && keyPressed && currentLevel->quests.at("fruitColl").completed)
-        currentLevel->quests.at("fedFren").completed = true;
-    bool allEnemyDead = std::all_of(currentLevel->enemies.begin(),
-                                    currentLevel->enemies.end(),
-                                    [](const auto &e)
-                                    { return e->dead; });
-    if (allEnemyDead)
-        currentLevel->quests.at("killEnemy").completed = true;
-    bool allComplete = std::all_of(currentLevel->quests.begin(),
-                                   currentLevel->quests.end(), [](const auto &entry)
-                                   { return entry.second.completed; });
-    if (allComplete)
-        updateLevel();
-    if (currentLevel->player.dead)
-        setScene(Scenes::HOME);
+    bool collided = checkCollision(currentLevel->player.rect, currentLevel->fren.rect);
+    if (keyPressed && collided)
+    {
+        auto fruitProg = ui->getWidget<Progress>("progs", "fruit");
+        auto fruitQuest = &currentLevel->quests.at("fruitColl");
+        auto frenQuest = &currentLevel->quests.at("frenQuest");
+        if (fruitProg.complete)
+            fruitQuest->completed = true;
+        if (fruitQuest->completed)
+            frenQuest->completed = true;
+        bool allEnemyDead = std::all_of(currentLevel->enemies.begin(),
+                                        currentLevel->enemies.end(),
+                                        [](const auto &e)
+                                        { return e->dead; });
+        if (allEnemyDead)
+            currentLevel->quests.at("killEnemy").completed = true;
+        bool allComplete = std::all_of(currentLevel->quests.begin(),
+                                       currentLevel->quests.end(), [](const auto &entry)
+                                       { return entry.second.completed; });
+        if (allComplete)
+            updateLevel();
+        if (currentLevel->player.dead)
+            setScene(Scenes::HOME);
+    }
 }

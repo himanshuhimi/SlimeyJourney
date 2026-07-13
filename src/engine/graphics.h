@@ -53,7 +53,7 @@ struct Text
     Text(SDL_Renderer *renderer, float x, float y,
          string data, SDL_Color color, int pixelSize = 24, int posMode = 0,
          Image attachment = {nullptr, ""},
-         string fontSource = "fonts/pixel.ttf");
+         string fontSource = "fonts/sans.ttf");
     void render(Vector2D Camera = {});
     void updateData(string newData);
     void updateAlpha(int newAlpha);
