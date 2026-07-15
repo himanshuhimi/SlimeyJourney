@@ -47,7 +47,10 @@ protected:
 
 struct HomeScreen : public UIScreen
 {
+    Image titleImage;
+    SDL_FRect titleRect;
     HomeScreen(Game &game);
+    void render(Vector2D Camera = {}) override;
 };
 
 struct LoadingScreen : public UIScreen

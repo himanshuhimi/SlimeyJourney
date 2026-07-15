@@ -85,7 +85,8 @@ void Hearts::load()
         };
 }
 
-HomeScreen::HomeScreen(Game &game) : UIScreen(game)
+HomeScreen::HomeScreen(Game &game) 
+    : UIScreen(game), titleImage(game.renderer, "images/title.png")
 {
     ctgWidgets["btns"];
     map<string, UIFunction> funcs = {
@@ -101,10 +102,22 @@ HomeScreen::HomeScreen(Game &game) : UIScreen(game)
     {
         float padding = i++ * SPRITE_SIZE * 2;
         ctgWidgets.at("btns").insert({label, make_unique<Button>(
-            game.renderer, WIDTH / 4 + padding, HEIGHT / 2 + padding,
-            func, label, colors.yellow
+            game.renderer, 
+            WIDTH / 4 + padding, 
+            HEIGHT / 2 + padding,
+            func, 
+            label, 
+            colors.yellow
         )});
     }
+    titleRect = SDL_FRect{(float)WIDTH, SPRITE_SIZE * 3, titleImage.width, titleImage.height};
+    titleRect.x -= titleRect.w + SPRITE_SIZE;
+}
+
+void HomeScreen::render(Vector2D Camera)
+{
+    titleImage.render(nullptr, &titleRect);
+    UIScreen::render(Camera);
 }
 
 LoadingScreen::LoadingScreen(Game &game) : UIScreen(game)
