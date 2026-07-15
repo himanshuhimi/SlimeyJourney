@@ -29,7 +29,7 @@ public:
     std::map<string, Audio> audios;
     int fruitLength = 0;
     double increment = 0.0;
-    Level(SDL_Renderer *renderer, int number);
+    Level(SDL_Renderer *renderer, string region, int number);
     void handle(double dt);
     void render();
     void loadObjects();

@@ -55,6 +55,7 @@ enum Scenes
     HOME,
     LOADING,
     SETTINGS,
+    SELECTION,
     PLAYING,
     PAUSED,
     PROGRESSING,

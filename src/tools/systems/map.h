@@ -10,6 +10,7 @@ public:
     SDL_Renderer *renderer = nullptr;
     tinyxml2::XMLDocument doc;
     XMLElement *mapElement;
+    fs::path mapPath;
     struct Layer
     {
         int width, height;

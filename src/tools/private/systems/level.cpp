@@ -1,22 +1,32 @@
 #include "../../systems/level.h"
 
-Level::Level(SDL_Renderer *renderer, int number)
+Level::Level(SDL_Renderer *renderer, string region, int number)
     : renderer(renderer), player(renderer, 0, 0), flag(renderer, 0, 0),
       timer(renderer, WIDTH / 2, 20, durations.at(number)), fren(renderer, 0, 0),
-      map(renderer, std::to_string(number) + ".tmx")
+      map(renderer, region + "/" + std::to_string(number) + ".tmx")
 {
     loadObjects();
     fruitLength = fruits.size();
-    increment = (double)1 / fruitLength;
+    if (fruitLength > 0)
+        increment = (double)1 / fruitLength;
     audios = {
         {"pickup", Audio("player/pickup.wav")},
         {"hurt", Audio("player/hurt.wav")}};
-    quests = {
-        {"fruitColl", Quest(renderer, 32, HEIGHT / 16.0f, "Collect all fruits")},
-        {"fedFren", Quest(renderer, 32, (HEIGHT / 16.0f) + 32,
-                          "Feed your friend, Fren! [Press F]")},
-        {"killEnemy", Quest(renderer, 32, (HEIGHT / 16.0f) + 64,
-                            "Kill your enemies! [LMB to shoot]")}};
+    quests = {{"fed", 
+        Quest(renderer, SPRITE_SIZE, SPRITE_SIZE, 
+            "Find & Feed Your friend, Fren!")}};
+    if (fruitLength > 0)
+        quests.insert({"fruit", Quest(renderer, SPRITE_SIZE, 0, "Collect All Fruits")});
+    if (enemies.size() > 0)
+        quests.insert({"enemies", Quest(renderer, SPRITE_SIZE, 0, "Kill All Enemies")});
+    int i = 0;
+    for (auto [name, quest] : quests)
+    {
+        i++;
+        float y = SPRITE_SIZE * i;
+        quest.text->rect.y = y;
+        quest.text->attachRect.y = y;
+    }
 }
 
 void Level::handle(double dt)
