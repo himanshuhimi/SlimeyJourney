@@ -58,7 +58,6 @@ enum Scenes
     SELECTION,
     PLAYING,
     PAUSED,
-    PROGRESSING,
     OVER
 };
 

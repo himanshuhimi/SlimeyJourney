@@ -10,9 +10,8 @@ public:
     SDL_Renderer *renderer = nullptr;
     SDL_FRect rect, dst;
     UIFunction onCallback;
-    string type = "";
     Widget(SDL_Renderer *renderer, float x, float y,
-           UIFunction callback, string type);
+           UIFunction callback);
     virtual void render(Vector2D Camera = {}) {};
     virtual void handle(double dt) {};
     virtual void update(SDL_Event event) {};

@@ -32,6 +32,7 @@ extern const vector<string> fruitTypes;
 extern SDL_RendererLogicalPresentation logicalPresentation;
 
 void updateScale();
+string capitalize(string s);
 template <typename T>
 void print(const T &message) { std::cout << "[LOG] " << message << std::endl; };
 bool checkCollision(SDL_FRect A, SDL_FRect B);

@@ -26,6 +26,7 @@ public:
     void setScene(Scenes newState, bool loading = true);
     void terminate();
     void loadLevels();
+    void setLevel(string region, int number);
 
 private:
     Uint64 LAST = SDL_GetPerformanceCounter();
@@ -35,9 +36,9 @@ private:
     map<string, vector<int>> lvlNums = {};
     map<string, int> rgnMaxLvls = {};
     UI *ui = nullptr;
-    string crntRgnName = "tutorial";
+    string crntRgnName = "";
     int lvlNum = 0;
     void updateDeltaTime();
-    void updateLevel();
     void collision();
+    void nextLevel();
 };

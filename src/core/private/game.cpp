@@ -80,7 +80,7 @@ void Game::setScene(Scenes newScene, bool loading)
 {
     nextScene = newScene;
     scene = (loading) ? Scenes::LOADING : nextScene;
-    if (loading && nextScene == Scenes::PLAYING)
+    if (loading && nextScene == Scenes::SELECTION)
         loadLevels();
     ui->updateScreen(scene);
 }
@@ -127,26 +127,32 @@ void Game::loadLevels()
     }
     for (auto &[region, nums] : lvlNums)
         rgnMaxLvls[region] = *std::max_element(nums.begin(), nums.end());
-    updateLevel();
 }
 
-void Game::updateLevel()
+void Game::setLevel(string region, int number)
 {
+    print(crntRgnName);
+    crntRgnName = region;
+    print(crntRgnName);
+    lvlNum = number;
     int rgnMax = rgnMaxLvls.at(crntRgnName);
     if (lvlNum < rgnMax)
     {
-        lvlNum++;
-        print(lvlNum);
         auto &crntLvls = regions.at(crntRgnName);
-        crntLvl = crntLvls.at(lvlNum - 1);
+        crntLvl = crntLvls.at(lvlNum);
     }
     else if (lvlNum >= rgnMax)
     {
-        lvlNum = 0;
         crntRgn = nullptr;
         crntLvl = nullptr;
         setScene(Scenes::SELECTION);
     }
+}
+
+void Game::nextLevel()
+{
+    lvlNum++;
+    setLevel(crntRgnName, lvlNum);
 }
 
 void Game::collision()
@@ -251,7 +257,7 @@ void Game::collision()
                                     level->quests.end(),
                                     [](auto &q) { return q.second.completed; });
         if (complete)
-            updateLevel();
+            nextLevel();
     }
     if (level->player.dead)
         setScene(Scenes::OVER);

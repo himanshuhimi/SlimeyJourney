@@ -3,7 +3,7 @@
 Button::Button(SDL_Renderer *renderer, float x, float y,
                std::function<void()> callback, string label,
                SDL_Color color)
-    : Widget(renderer, x, y, callback, "button"), label(label), color(color),
+    : Widget(renderer, x, y, callback), label(label), color(color),
         text(renderer, 0, 0, "", colors.white)
 {
     rect = SDL_FRect{x, y, SPRITE_SIZE * 4, SPRITE_SIZE};

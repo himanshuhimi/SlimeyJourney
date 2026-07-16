@@ -3,6 +3,7 @@
 #include "core/game.h"
 #include "widgets/progress.h"
 #include "widgets/button.h"
+#include "widgets/card.h"
 
 using std::pair;
 
@@ -10,7 +11,7 @@ class Game;
 
 struct UIScreen
 {
-    using Widgets = map<string, unique_ptr<Widget>>;
+    using Widgets = vector<pair<string, unique_ptr<Widget>>>;
     using CategoryWid = map<string, Widgets>;
     CategoryWid ctgWidgets = {};
     UIScreen(Game &game);
@@ -20,10 +21,11 @@ struct UIScreen
     template <class T>
     T &getWidget(string category, string name)
     {
-        auto &ptr = ctgWidgets.at(category).at(name);
-        if (!ptr)
-            print("Widget is null: " + category + " : " + name);
-        return dynamic_cast<T &>(*ptr);
+        auto &ctg = ctgWidgets.at(category);
+        for (auto &[label, widget] : ctg)
+            if (label == name)
+                return dynamic_cast<T &>(*widget);
+        throw std::runtime_error("Widget not found: " + category + ": " + name);
     }
 
 protected:
@@ -59,6 +61,16 @@ struct LoadingScreen : public UIScreen
     void handle(double dt) override;
 };
 
+struct SettingsScreen : public UIScreen
+{
+    SettingsScreen(Game &game);
+};
+
+struct SelectionScreen : public UIScreen
+{
+    SelectionScreen(Game &game);
+};
+
 struct PlayingScreen : public UIScreen
 {
     Hearts hearts;
@@ -67,10 +79,25 @@ struct PlayingScreen : public UIScreen
     void handle(double dt) override;
 };
 
+struct PausedScreen : public UIScreen
+{
+    Text title;
+    PausedScreen(Game &game);
+    void render(Vector2D Camera = {}) override;
+};
+
+struct OverScreen : public UIScreen
+{
+    Text title;
+    OverScreen(Game &game);
+    void render(Vector2D Camera = {}) override;
+};
+
 class UI
 {
 public:
-    unique_ptr<UIScreen> activeScreen = nullptr;
+    map<Scenes, unique_ptr<UIScreen>> screens = {};
+    UIScreen *activeScreen = nullptr;
     UI(Game &game);
     void render(Vector2D Camera = {});
     void handle(double dt);

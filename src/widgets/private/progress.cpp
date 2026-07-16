@@ -3,7 +3,7 @@
 Progress::Progress(
     SDL_Renderer *renderer, float x, float y, std::function<void()> callback,
     SDL_Color color, Image attachment, double startPercent, float width, double animSpeed)
-: Widget(renderer, x, y, callback, "progress"), image(renderer, "ui/bar.png"), 
+: Widget(renderer, x, y, callback), image(renderer, "ui/bar.png"), 
   attachment(attachment), percentage(startPercent), animSpeed(animSpeed), color(color)
 {
     Position.x = x;
