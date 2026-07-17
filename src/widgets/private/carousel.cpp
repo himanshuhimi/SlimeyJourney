@@ -1,7 +1,8 @@
 #include "../carousel.h"
 
-Carousel::Carousel(SDL_Renderer *renderer, float x, float y, vector<string> &data)
-    : Widget(renderer, x, y), data(data),
+Carousel::Carousel(SDL_Renderer *renderer, float x, float y, 
+    UIFunction callback, vector<string> &data)
+    : Widget(renderer, x, y, callback), data(data),
       text(renderer, x, y, data.at(index), colors.white, 8),
       rightArrow(renderer, "ui/arrows/right.png"),
       leftArrow(renderer, "ui/arrows/left.png")
@@ -33,6 +34,7 @@ void Carousel::update(SDL_Event event)
             index = 0;
         else
             index++;
+        onCallback();
     }
     else if (clicked(leftRect, event))
     {
@@ -40,6 +42,7 @@ void Carousel::update(SDL_Event event)
             index = maxIdx - 1;
         else
             index--;
+        onCallback();
     }
 }
 

@@ -162,27 +162,35 @@ SettingsScreen::SettingsScreen(Game &game)
                 HEIGHT / 2,
                 capitalize(name),
                 colors.white,
-                12, 1
-            );
+                12, 1);
             text.rect.y += i++ * text.rect.h;
             texts.emplace_back(text);
             float widgetX = text.rect.x + (text.rect.w * 2);
             float widgetY = text.rect.y;
             if (options == SettingBool)
-                ctgWidgets.at("toggles").emplace_back(
-                    name,
-                    make_unique<Toggle>(
-                        game.renderer,
-                        widgetX,
-                        widgetY));
+            {
+                unique_ptr<Widget> toggle = make_unique<Toggle>(
+                    game.renderer,
+                    widgetX,
+                    widgetY);
+                ctgWidgets.at("toggles").emplace_back(name, std::move(toggle));
+            }
             else
-                ctgWidgets.at("carousels").emplace_back(
-                    name,
-                    make_unique<Carousel>(
-                        game.renderer,
-                        widgetX,
-                        widgetY,
-                        options));
+            {
+                unique_ptr<Carousel> carousel = make_unique<Carousel>(
+                    game.renderer,
+                    widgetX,
+                    widgetY,
+                    [this] {},
+                    options);
+                Carousel *carouselPtr = carousel.get();
+                carousel->onCallback = [this, category, name, carouselPtr]
+                {
+                    auto currentVal = carouselPtr->data.at(carouselPtr->index);
+                    this->game.settings->update(category, name, currentVal);
+                };
+                ctgWidgets.at("carousels").emplace_back(name, std::move(carousel));
+            }
         }
     }
 }
@@ -194,7 +202,7 @@ void SettingsScreen::render(Vector2D Camera)
     UIScreen::render(Camera);
 }
 
-SelectionScreen::SelectionScreen(Game &game) : UIScreen(game) 
+SelectionScreen::SelectionScreen(Game &game) : UIScreen(game)
 {
     ctgWidgets["cards"];
     vector<pair<string, UIFunction>> funcs = {};
@@ -228,9 +236,7 @@ SelectionScreen::SelectionScreen(Game &game) : UIScreen(game)
                 WIDTH / 2,
                 SPRITE_SIZE + SPRITE_SIZE * (2 * i++),
                 capitalize(name),
-                func
-            )
-        );
+                func));
 }
 
 PlayingScreen::PlayingScreen(Game &game) : UIScreen(game), hearts(game)
