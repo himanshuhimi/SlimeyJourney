@@ -142,6 +142,56 @@ void LoadingScreen::handle(double dt)
 SettingsScreen::SettingsScreen(Game &game)
     : UIScreen(game)
 {
+    ctgWidgets["toggles"];
+    ctgWidgets["carousels"];
+    for (auto &[category, data] : game.settings->allowedData)
+    {
+        texts.emplace_back(
+            game.renderer,
+            WIDTH / 4,
+            HEIGHT / 2 - 32,
+            capitalize(category),
+            colors.white,
+            32);
+        int i = 0;
+        for (auto &[name, options] : data)
+        {
+            Text text(
+                game.renderer,
+                WIDTH / 4,
+                HEIGHT / 2,
+                capitalize(name),
+                colors.white,
+                12, 1
+            );
+            text.rect.y += i++ * text.rect.h;
+            texts.emplace_back(text);
+            float widgetX = text.rect.x + (text.rect.w * 2);
+            float widgetY = text.rect.y;
+            if (options == SettingBool)
+                ctgWidgets.at("toggles").emplace_back(
+                    name,
+                    make_unique<Toggle>(
+                        game.renderer,
+                        widgetX,
+                        widgetY));
+            else
+                ctgWidgets.at("carousels").emplace_back(
+                    name,
+                    make_unique<Carousel>(
+                        game.renderer,
+                        widgetX,
+                        widgetY,
+                        options));
+        }
+    }
+}
+
+void SettingsScreen::render(Vector2D Camera)
+{
+    for (auto &text : texts)
+        text.render(Camera);
+    UIScreen::render(Camera);
 }
 
 SelectionScreen::SelectionScreen(Game &game) : UIScreen(game) 

@@ -19,9 +19,10 @@ public:
         Option(string value, vector<string> allowed);
         void update(string value);
     };
-    map<string, vector<string>> allowedData = {};
-    map<string, Option> graphicsData = {};
+    using SettingType = map<string, Option>;
+    map<string, SettingType> data = {};
     map<string, string> defaultData = {};
+    map<string, map<string, vector<string>>> allowedData = {};
     Settings();
     void load();
     void uploadData(string tableName);

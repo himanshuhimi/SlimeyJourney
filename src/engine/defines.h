@@ -6,6 +6,7 @@
 #include <map>
 #include <unordered_map>
 #include <memory>
+#include <cctype>
 #include "graphics.h"
 
 using std::vector, std::map, std::unique_ptr, std::make_unique, std::unordered_map;

@@ -22,9 +22,12 @@ Settings::Settings()
 {
     tableNames = {"graphics"};
     allowedData = {
-        {"size", {"1920x1080", "1280x720", "640x360"}},
-        {"fps", {"30", "60", "120", "Infinite"}},
-        {"vsync", SettingBool}
+        {
+            "graphics",
+            {{"size", {"1920x1080", "1280x720", "640x360"}},
+            {"fps", {"30", "60", "120", "Infinite"}},
+            {"vsync", SettingBool}}
+        }
     };
     defaultData = {
         {"size", "1920x1080"},
@@ -45,7 +48,7 @@ void Settings::uploadData(string tableName)
 {
     bool first = true;
     string vals = "";
-    for (auto &[key, option] : graphicsData)
+    for (auto &[key, option] : data.at(tableName))
     {
         if (!first)
             vals += ",";
@@ -67,15 +70,23 @@ void Settings::loadData()
     for (auto &tableName : tableNames)
     {
         Table table = db->tables.at(tableName);
-        DBResult data = db->selectTable(tableName, "key, value");
-        if (!data.empty())
+        DBResult dbData = db->selectTable(tableName, "key, value");
+        if (!dbData.empty())
         {
-            for (auto &row : data)
+            for (auto &row : dbData)
             {
                 string key = row.at("key");
                 string value = row.at("value");
-                Option option{value, allowedData.at(key)};
-                graphicsData.insert({key, option});
+                Option option{value, allowedData.at(tableName).at(key)};
+                try
+                {
+                    data.at(tableName).insert({key, option});
+                }
+                catch (std::exception &e)
+                {
+                    data[tableName];
+                    data.at(tableName).insert({key, option});
+                }
             }
         }
         else
@@ -88,22 +99,25 @@ void Settings::loadData()
 
 void Settings::loadDefaults()
 {
-    vector<string> graphicKeys = {"size", "fps", "vsync"};
-    for (auto &graphicKey : graphicKeys)
-    {
-        Option option{defaultData.at(graphicKey), allowedData.at(graphicKey)};
-        graphicsData.insert({graphicKey, option});
-    }
+    map<string, vector<string>> tableKeys = {
+        {"graphics", {"size", "fps", "vsync"}}
+    };
+    for (auto &[table, keys] : tableKeys)
+        for (auto &key : keys)
+        {
+            Option option{defaultData.at(key), allowedData.at(table).at(key)};
+            data.insert({table, {{key, option}}});
+        }
 }
 
 void Settings::update(string tableName, string key, string value)
 {
     db->execute("UPDATE " + tableName + " SET value = '" + value +
                 "' WHERE key = '" + key + "'");
-    graphicsData.at(key).update(value);
+    data.at(tableName).at(key).update(value);
 }
 
 string Settings::get(string tableName, string key)
 {
-    return graphicsData.at(key).currentVal;
+    return data.at(tableName).at(key).currentVal;
 }

@@ -4,6 +4,8 @@
 #include "widgets/progress.h"
 #include "widgets/button.h"
 #include "widgets/card.h"
+#include "widgets/toggle.h"
+#include "widgets/carousel.h"
 
 using std::pair;
 
@@ -63,7 +65,9 @@ struct LoadingScreen : public UIScreen
 
 struct SettingsScreen : public UIScreen
 {
+    vector<Text> texts = {};
     SettingsScreen(Game &game);
+    void render(Vector2D Camera = {}) override;
 };
 
 struct SelectionScreen : public UIScreen
