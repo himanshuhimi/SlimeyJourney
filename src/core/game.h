@@ -14,7 +14,7 @@ public:
     SDL_Window *window = nullptr;
     SDL_Event event;
     Settings *settings = nullptr;
-    Scenes scene, nextScene;
+    Scenes scene = Scenes::HOME, prevScene = Scenes::HOME, nextScene = Scenes::HOME;
     Level *crntLvl = nullptr;
     Region *crntRgn = nullptr;
     bool active = false;

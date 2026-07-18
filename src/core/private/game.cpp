@@ -49,6 +49,12 @@ void Game::handle()
             if (scene == Scenes::PLAYING)
                 crntLvl->player.mouseClicked = (event.button.button == SDL_BUTTON_LEFT);
             break;
+        case SDL_EVENT_KEY_UP:
+            if (event.key.key == SDLK_ESCAPE &&
+                scene != Scenes::PLAYING && 
+                scene != Scenes::LOADING &&
+                scene != Scenes::HOME)
+                setScene(Scenes::HOME);
         }
         ui->update(event);
     }
@@ -78,6 +84,7 @@ void Game::render()
 
 void Game::setScene(Scenes newScene, bool loading)
 {
+    prevScene = scene;
     nextScene = newScene;
     scene = (loading) ? Scenes::LOADING : nextScene;
     if (loading && nextScene == Scenes::SELECTION)
@@ -131,9 +138,7 @@ void Game::loadLevels()
 
 void Game::setLevel(string region, int number)
 {
-    print(crntRgnName);
     crntRgnName = region;
-    print(crntRgnName);
     lvlNum = number;
     int rgnMax = rgnMaxLvls.at(crntRgnName);
     if (lvlNum < rgnMax)
@@ -163,7 +168,7 @@ void Game::collision()
     {
         auto stone = *stoneIt;
         for (auto bIt = level->player.balls.begin();
-            bIt != level->player.balls.end();)
+             bIt != level->player.balls.end();)
         {
             auto ball = *bIt;
             if (checkCollision(stone.rect, ball.rect))
@@ -255,7 +260,8 @@ void Game::collision()
         }
         bool complete = std::all_of(level->quests.begin(),
                                     level->quests.end(),
-                                    [](auto &q) { return q.second.completed; });
+                                    [](auto &q)
+                                    { return q.second.completed; });
         if (complete)
             nextLevel();
     }

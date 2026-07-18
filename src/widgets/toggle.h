@@ -8,7 +8,8 @@ public:
     Image checkedImg, uncheckedImg;
     Image image;
     bool value = false;
-    Toggle(SDL_Renderer *renderer, float x, float y);
+    Toggle(SDL_Renderer *renderer, float x, float y, 
+        UIFunction callback, bool initial = false);
     void render(Vector2D Camera = {}) override;
     void handle(double dt) override;
     void update(SDL_Event event) override;

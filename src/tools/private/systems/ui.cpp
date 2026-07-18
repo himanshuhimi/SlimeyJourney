@@ -169,10 +169,19 @@ SettingsScreen::SettingsScreen(Game &game)
             float widgetY = text.rect.y;
             if (options == SettingBool)
             {
-                unique_ptr<Widget> toggle = make_unique<Toggle>(
+                auto prevVal = this->game.settings->get("graphics", "vsync");
+                unique_ptr<Toggle> toggle = make_unique<Toggle>(
                     game.renderer,
                     widgetX,
-                    widgetY);
+                    widgetY,
+                    [this]{},
+                    (prevVal != "0") ? true : false);
+                Toggle *togglePtr = toggle.get();
+                toggle->onCallback = [this, category, name, togglePtr]
+                {
+                    auto crntVal = togglePtr->value;
+                    this->game.settings->update(category, name, (crntVal) ? "1" : "0");
+                };
                 ctgWidgets.at("toggles").emplace_back(name, std::move(toggle));
             }
             else
@@ -186,8 +195,8 @@ SettingsScreen::SettingsScreen(Game &game)
                 Carousel *carouselPtr = carousel.get();
                 carousel->onCallback = [this, category, name, carouselPtr]
                 {
-                    auto currentVal = carouselPtr->data.at(carouselPtr->index);
-                    this->game.settings->update(category, name, currentVal);
+                    auto crntVal = carouselPtr->data.at(carouselPtr->index);
+                    this->game.settings->update(category, name, crntVal);
                 };
                 ctgWidgets.at("carousels").emplace_back(name, std::move(carousel));
             }
