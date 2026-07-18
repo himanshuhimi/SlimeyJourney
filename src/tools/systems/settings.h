@@ -25,7 +25,7 @@ public:
     map<string, map<string, vector<string>>> allowedData = {};
     Settings();
     void load();
-    void uploadData(string tableName);
+    void uploadData(string tableName, SettingType data);
     void loadTables();
     void loadData();
     void loadDefaults();

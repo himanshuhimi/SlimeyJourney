@@ -20,7 +20,7 @@ Game::Game()
         print("Display Unloaded: " + (string)SDL_GetError());
     if (scaled)
         SDL_SetRenderLogicalPresentation(renderer, WIDTH, HEIGHT, logicalPresentation);
-    SDL_SetRenderVSync(renderer, std::stoi(settings->get("graphics", "vsync")));
+    // SDL_SetRenderVSync(renderer, std::stoi(settings->get("graphics", "vsync")));
     ui = new UI(*this);
     active = true;
     setScene(Scenes::HOME, false);

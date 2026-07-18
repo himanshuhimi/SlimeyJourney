@@ -1,17 +1,24 @@
 #include "../carousel.h"
 
-Carousel::Carousel(SDL_Renderer *renderer, float x, float y, 
-    UIFunction callback, vector<string> &data)
+Carousel::Carousel(SDL_Renderer *renderer, float x, float y,
+                   UIFunction callback, vector<string> &data)
     : Widget(renderer, x, y, callback), data(data),
-      text(renderer, x, y, data.at(index), colors.white, 8),
+      text(renderer, x, y, "", colors.white, 8),
       rightArrow(renderer, "ui/arrows/right.png"),
       leftArrow(renderer, "ui/arrows/left.png")
 {
-    rightRect = {x + (text.rect.w / 2), y, rightArrow.width, rightArrow.height};
-    leftRect = {x - (text.rect.w / 2), y, leftArrow.width, leftArrow.height};
-    text.rect.x += text.rect.w / 2;
-    text.rect.y += text.rect.h / 2;
+    text.updateData(data.at(index));
     maxIdx = data.size() - 1;
+    maxElem = *std::max_element(
+        data.begin(),
+        data.end(),
+        [](string &a, string &b)
+        {
+            return a.size() < b.size();
+        });
+    Text maxText(renderer, x, y, maxElem, colors.white, text.pixelSize);
+    rightRect = {x + (maxText.rect.w), y, rightArrow.width, rightArrow.height};
+    leftRect = {x - (maxText.rect.w / 4), y, leftArrow.width, leftArrow.height};
 }
 
 void Carousel::render(Vector2D Camera)
@@ -46,9 +53,9 @@ void Carousel::update(SDL_Event event)
     }
 }
 
-bool Carousel::hovered(SDL_FRect rect) 
-{ 
-    return checkCollision(getMousePosition(), rect); 
+bool Carousel::hovered(SDL_FRect rect)
+{
+    return checkCollision(getMousePosition(), rect);
 }
 
 bool Carousel::clicked(SDL_FRect rect, SDL_Event event)

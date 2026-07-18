@@ -44,11 +44,11 @@ void Settings::load()
     loadData();
 }
 
-void Settings::uploadData(string tableName)
+void Settings::uploadData(string tableName, SettingType data)
 {
     bool first = true;
     string vals = "";
-    for (auto &[key, option] : data.at(tableName))
+    for (auto &[key, option] : data)
     {
         if (!first)
             vals += ",";
@@ -90,10 +90,7 @@ void Settings::loadData()
             }
         }
         else
-        {
             loadDefaults();
-            uploadData(tableName);
-        }
     }
 }
 
@@ -103,21 +100,39 @@ void Settings::loadDefaults()
         {"graphics", {"size", "fps", "vsync"}}
     };
     for (auto &[table, keys] : tableKeys)
+    {
         for (auto &key : keys)
         {
             Option option{defaultData.at(key), allowedData.at(table).at(key)};
-            data.insert({table, {{key, option}}});
+            data[table].insert({{key, option}});
         }
+    }
+    for (auto &[table, _] : tableKeys)
+        uploadData(table, data.at(table));
 }
 
 void Settings::update(string tableName, string key, string value)
 {
     db->execute("UPDATE " + tableName + " SET value = '" + value +
                 "' WHERE key = '" + key + "'");
-    data.at(tableName).at(key).update(value);
+    try
+    {
+        data.at(tableName).at(key).update(value);
+    }
+    catch (std::exception &e)
+    {
+        print("");
+    }
 }
 
 string Settings::get(string tableName, string key)
 {
-    return data.at(tableName).at(key).currentVal;
-}
+    try
+    {
+        return data.at(tableName).at(key).currentVal;
+    }
+    catch (std::exception &e)
+    {
+        return "";
+    }
+};

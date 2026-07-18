@@ -144,7 +144,7 @@ SettingsScreen::SettingsScreen(Game &game)
 {
     ctgWidgets["toggles"];
     ctgWidgets["carousels"];
-    for (auto &[category, data] : game.settings->allowedData)
+    for (auto &[category, data] : game.settings->data)
     {
         texts.emplace_back(
             game.renderer,
@@ -154,7 +154,7 @@ SettingsScreen::SettingsScreen(Game &game)
             colors.white,
             32);
         int i = 0;
-        for (auto &[name, options] : data)
+        for (auto &[name, options] : game.settings->allowedData.at(category))
         {
             Text text(
                 game.renderer,
@@ -165,11 +165,11 @@ SettingsScreen::SettingsScreen(Game &game)
                 12, 1);
             text.rect.y += i++ * text.rect.h;
             texts.emplace_back(text);
-            float widgetX = text.rect.x + (text.rect.w * 2);
+            float widgetX = text.rect.x + (SPRITE_SIZE * 2);
             float widgetY = text.rect.y;
             if (options == SettingBool)
             {
-                auto prevVal = this->game.settings->get("graphics", "vsync");
+                auto prevVal = this->game.settings->get(category, name);
                 unique_ptr<Toggle> toggle = make_unique<Toggle>(
                     game.renderer,
                     widgetX,

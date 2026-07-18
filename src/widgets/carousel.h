@@ -10,6 +10,7 @@ public:
     SDL_FRect rightRect, leftRect;
     vector<string> data = {};
     int index = 0, maxIdx = 0;
+    string maxElem = "";
     Carousel(SDL_Renderer *renderer, float x, float y,
         UIFunction callback, vector<string> &data);
     void render(Vector2D Camera = {}) override;
