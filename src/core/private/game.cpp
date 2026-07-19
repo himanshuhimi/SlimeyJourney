@@ -23,6 +23,7 @@ Game::Game()
     SDL_SetRenderVSync(renderer, std::stoi(settings->get("graphics", "vsync")));
     ui = new UI(*this);
     active = true;
+    SDL_AddTimer(5000, cloudTimerCallback, this);
     setScene(Scenes::HOME, false);
 }
 
@@ -55,9 +56,16 @@ void Game::handle()
                 scene != Scenes::LOADING &&
                 scene != Scenes::HOME)
                 setScene(Scenes::HOME);
+            break;
+        case SDL_EVENT_USER:
+            if (event.type == CLOUD_EVENT)
+                clouds.emplace_back(renderer);
+            break;
         }
         ui->update(event);
     }
+    for (auto &cloud : clouds)
+        cloud.handle(dt);
     ui->handle(dt);
     switch (scene)
     {
@@ -76,6 +84,8 @@ void Game::render()
                            colors.skyblue.b,
                            colors.skyblue.a);
     SDL_RenderClear(renderer);
+    for (auto &cloud : clouds)
+        cloud.render();
     if (scene == Scenes::PLAYING)
         crntLvl->render();
     ui->render();
@@ -268,3 +278,13 @@ void Game::collision()
     if (level->player.dead)
         setScene(Scenes::OVER);
 }
+
+Uint32 Game::cloudTimerCallback(void *userdata, SDL_TimerID id, Uint32 interval)
+{
+    Game *game = static_cast<Game *>(userdata);
+    SDL_Event cloudEvent;
+    SDL_zero(cloudEvent);
+    cloudEvent.type = game->CLOUD_EVENT;
+    SDL_PushEvent(&cloudEvent);
+    return Random.randint(0, 5000);
+};

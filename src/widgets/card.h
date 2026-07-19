@@ -5,7 +5,7 @@
 class Card : public Widget
 {
 public:
-    Image bgImage;
+    Image bgUnhovered, bgHovered;
     Text displayText;
     string label = "";
     Card(SDL_Renderer *renderer, float x, float y, string label, UIFunction callback);

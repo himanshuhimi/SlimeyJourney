@@ -7,11 +7,12 @@ Card::Card(
     string label,
     UIFunction callback)
     : Widget(renderer, x, y, callback), label(label),
-      bgImage(renderer, "ui/card.png"),
+      bgUnhovered(renderer, "ui/card/unhovered.png"),
+      bgHovered(renderer, "ui/card/hovered.png"),
       displayText(renderer, 0, 0, label, colors.white)
 {
-    rect.w = bgImage.width;
-    rect.h = bgImage.height;
+    rect.w = bgUnhovered.width;
+    rect.h = bgUnhovered.height;
     rect.x -= rect.w / 2;
     rect.y -= rect.h / 2;
     displayText.rect.x = x - displayText.rect.w / 2;
@@ -22,7 +23,10 @@ void Card::handle(double dt) {}
 
 void Card::render(Vector2D Camera)
 {
-    bgImage.render(nullptr, &rect);
+    if (hovered())
+        bgHovered.render(nullptr, &rect);
+    else
+        bgUnhovered.render(nullptr, &rect);
     displayText.render(Camera);
 }
 

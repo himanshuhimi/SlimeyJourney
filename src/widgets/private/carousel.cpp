@@ -1,7 +1,8 @@
 #include "../carousel.h"
 
 Carousel::Carousel(SDL_Renderer *renderer, float x, float y,
-                   UIFunction callback, vector<string> &data)
+                   UIFunction callback, vector<string> &data,
+                   string defaultVal)
     : Widget(renderer, x, y, callback), data(data),
       text(renderer, x, y, "", colors.white, 8),
       rightUnhovered(renderer, "ui/arrows/right/unhovered.png"),
@@ -11,6 +12,11 @@ Carousel::Carousel(SDL_Renderer *renderer, float x, float y,
       rightArrow(renderer, "ui/arrows/right/unhovered.png"),
       leftArrow(renderer, "ui/arrows/left/unhovered.png")
 {
+    if (defaultVal != "")
+    {
+        auto it = std::find(data.begin(), data.end(), defaultVal);
+        index = (it != data.end()) ? (it - data.begin()) : -1;
+    }
     text.updateData(data.at(index));
     maxIdx = data.size() - 1;
     maxElem = *std::max_element(

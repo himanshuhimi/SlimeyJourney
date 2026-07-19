@@ -12,7 +12,7 @@ public:
     int index = 0, maxIdx = 0;
     string maxElem = "";
     Carousel(SDL_Renderer *renderer, float x, float y,
-        UIFunction callback, vector<string> &data);
+        UIFunction callback, vector<string> &data, string defaultVal = "");
     void render(Vector2D Camera = {}) override;
     void handle(double dt) override;
     void update(SDL_Event event) override;

@@ -4,6 +4,7 @@
 #include "tools/systems/settings.h"
 #include "tools/systems/level.h"
 #include "tools/systems/region.h"
+#include "entities/cloud.h"
 #include "tools/systems/ui.h"
 
 class UI;
@@ -29,11 +30,13 @@ public:
     void setLevel(string region, int number);
 
 private:
-    Uint64 LAST = SDL_GetPerformanceCounter();
-    Uint64 NOW;
+    vector<Cloud> clouds = {};
     using Levels = map<int, Level *>;
     map<string, Levels> regions = {};
     map<string, vector<int>> lvlNums = {};
+    Uint64 LAST = SDL_GetPerformanceCounter();
+    Uint64 NOW;
+    const Uint32 CLOUD_EVENT = SDL_RegisterEvents(1);
     map<string, int> rgnMaxLvls = {};
     UI *ui = nullptr;
     string crntRgnName = "";
@@ -41,4 +44,5 @@ private:
     void updateDeltaTime();
     void collision();
     void nextLevel();
+    static Uint32 cloudTimerCallback(void *userData, SDL_TimerID id, Uint32 interval);
 };

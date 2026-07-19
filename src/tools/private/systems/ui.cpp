@@ -208,7 +208,8 @@ SettingsScreen::SettingsScreen(Game &game)
                     widgetX,
                     widgetY,
                     [this] {},
-                    options);
+                    options,
+                    this->game.settings->get(category, name));
                 Carousel *carouselPtr = carousel.get();
                 carousel->onCallback = [this, category, name, carouselPtr]
                 {
