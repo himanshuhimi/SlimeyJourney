@@ -4,7 +4,8 @@ Toggle::Toggle(SDL_Renderer *renderer, float x, float y,
     UIFunction callback, bool initial)
     : Widget(renderer, x, y, [this, callback]{ value = !value; callback(); }),
       uncheckedImg(renderer, "ui/toggle/unchecked.png"), 
-      checkedImg(renderer, "ui/toggle/checked.png"), 
+      checkedImg(renderer, "ui/toggle/checked.png"),
+      hoveredImg(renderer, "ui/toggle/hovered.png"),
       image(uncheckedImg), value(initial)
 {
     rect.w = image.width;
@@ -14,6 +15,8 @@ Toggle::Toggle(SDL_Renderer *renderer, float x, float y,
 void Toggle::render(Vector2D Camera)
 {
     image.render(nullptr, &rect);
+    if (hovered())
+        hoveredImg.render(nullptr, &rect);
 }
 
 void Toggle::handle(double dt)

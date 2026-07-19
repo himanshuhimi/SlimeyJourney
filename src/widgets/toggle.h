@@ -5,7 +5,7 @@
 class Toggle : public Widget
 {
 public:
-    Image checkedImg, uncheckedImg;
+    Image checkedImg, uncheckedImg, hoveredImg;
     Image image;
     bool value = false;
     Toggle(SDL_Renderer *renderer, float x, float y, 

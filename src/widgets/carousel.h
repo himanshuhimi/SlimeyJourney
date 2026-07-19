@@ -6,7 +6,7 @@ class Carousel : public Widget
 {
 public:
     Text text;
-    Image rightArrow, leftArrow;
+    Image rightArrow, leftArrow, rightHovered, rightUnhovered, leftHovered, leftUnhovered;
     SDL_FRect rightRect, leftRect;
     vector<string> data = {};
     int index = 0, maxIdx = 0;

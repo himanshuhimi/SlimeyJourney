@@ -4,8 +4,12 @@ Carousel::Carousel(SDL_Renderer *renderer, float x, float y,
                    UIFunction callback, vector<string> &data)
     : Widget(renderer, x, y, callback), data(data),
       text(renderer, x, y, "", colors.white, 8),
-      rightArrow(renderer, "ui/arrows/right.png"),
-      leftArrow(renderer, "ui/arrows/left.png")
+      rightUnhovered(renderer, "ui/arrows/right/unhovered.png"),
+      leftUnhovered(renderer, "ui/arrows/left/unhovered.png"),
+      leftHovered(renderer, "ui/arrows/left/hovered.png"),
+      rightHovered(renderer, "ui/arrows/right/hovered.png"),
+      rightArrow(renderer, "ui/arrows/right/unhovered.png"),
+      leftArrow(renderer, "ui/arrows/left/unhovered.png")
 {
     text.updateData(data.at(index));
     maxIdx = data.size() - 1;
@@ -17,8 +21,16 @@ Carousel::Carousel(SDL_Renderer *renderer, float x, float y,
             return a.size() < b.size();
         });
     Text maxText(renderer, x, y, maxElem, colors.white, text.pixelSize);
-    rightRect = {x + (maxText.rect.w), y, rightArrow.width, rightArrow.height};
-    leftRect = {x - (maxText.rect.w / 4), y, leftArrow.width, leftArrow.height};
+    rightRect = {
+        x + (maxText.rect.w), 
+        y, 
+        rightArrow.width, 
+        rightArrow.height};
+    leftRect = {
+        x - (maxText.rect.w / 4), 
+        y, 
+        leftArrow.width, 
+        leftArrow.height};
 }
 
 void Carousel::render(Vector2D Camera)
@@ -30,6 +42,15 @@ void Carousel::render(Vector2D Camera)
 
 void Carousel::handle(double dt)
 {
+    if (hovered(rightRect))
+        rightArrow = rightHovered;
+    else if (hovered(leftRect))
+        leftArrow = leftHovered;
+    else
+    {
+        rightArrow = rightUnhovered;
+        leftArrow = leftUnhovered;
+    }
     text.updateData(data.at(index));
 }
 
