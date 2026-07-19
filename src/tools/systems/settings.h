@@ -4,12 +4,12 @@
 #include "engine/database.h"
 
 extern vector<string> SettingBool;
+extern vector<string> SettingProgress;
 
 class Settings
 {
 public:
     Database *db = nullptr;
-    vector<string> tableNames = {};
     struct Option
     {
         string defaultVal;

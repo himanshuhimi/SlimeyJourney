@@ -110,7 +110,11 @@ HomeScreen::HomeScreen(Game &game)
                                                       label,
                                                       colors.yellow));
     }
-    titleRect = SDL_FRect{(float)WIDTH, SPRITE_SIZE * 3, titleImage.width, titleImage.height};
+    titleRect = SDL_FRect{
+        (float)WIDTH, 
+        SPRITE_SIZE * 3, 
+        titleImage.width, 
+        titleImage.height};
     titleRect.x -= titleRect.w + SPRITE_SIZE;
 }
 
@@ -144,36 +148,39 @@ SettingsScreen::SettingsScreen(Game &game)
 {
     ctgWidgets["toggles"];
     ctgWidgets["carousels"];
+    int i = 0;
     for (auto &[category, data] : game.settings->data)
     {
         Text title(
             game.renderer,
-            WIDTH / 6,
-            32,
+            WIDTH / 12,
+            16 + (SPRITE_SIZE * 3 * i++),
             capitalize(category),
             colors.white,
-            28
+            18,
+            1
         );
         texts.emplace_back(title);
         int count = game.settings->allowedData.at(category).size();
         const float padding = SPRITE_SIZE;
-        containers.emplace_back(SDL_FRect{
-            (float)WIDTH / 8.0f - (SPRITE_SIZE / 2),
-            SPRITE_SIZE * 2 - 8,
-            WIDTH / 2 + (SPRITE_SIZE * ((count - 1) * 3)),
-            (count - 1) * (SPRITE_SIZE)
-        });
-        int i = 0;
+        SDL_FRect container = SDL_FRect{
+            title.rect.x + (SPRITE_SIZE / 2),
+            title.rect.y + SPRITE_SIZE,
+            WIDTH / 2 + (SPRITE_SIZE * 6),
+            (count) * (SPRITE_SIZE)
+        };
+        containers.emplace_back(container);
+        int j = 0;
         for (auto &[name, options] : game.settings->allowedData.at(category))
         {
             Text text(
                 game.renderer,
-                WIDTH / 8,
-                64,
+                container.x + (SPRITE_SIZE / 2),
+                container.y + (SPRITE_SIZE / 2),
                 toUppercase(name),
                 colors.white,
                 12, 1);
-            text.rect.y += i++ * text.rect.h;
+            text.rect.y += j++ * text.rect.h;
             texts.emplace_back(text);
             float widgetX = WIDTH / 2 + text.rect.x + (SPRITE_SIZE * 3);
             float widgetY = text.rect.y;

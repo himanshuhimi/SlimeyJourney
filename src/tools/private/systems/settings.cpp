@@ -1,6 +1,9 @@
 #include "../../systems/settings.h"
 
 vector<string> SettingBool = {"0", "1"};
+vector<string> SettingProgress = {
+    "1", "2", "3", "4", "5",
+    "6", "7", "8", "9", "10"};
 
 Settings::Option::Option(string value, vector<string> allowed)
     : defaultVal(value), currentVal(value), allowed(allowed)
@@ -20,20 +23,20 @@ void Settings::Option::update(string value)
 
 Settings::Settings()
 {
-    tableNames = {"graphics"};
     allowedData = {
-        {
-            "graphics",
-            {{"size", {"1920x1080", "1280x720", "640x360"}},
-            {"fps", {"30", "60", "120", "Infinite"}},
-            {"vsync", SettingBool}}
-        }
-    };
+        {"graphics",
+         {{"size", {"1920x1080", "1280x720", "640x360"}},
+          {"fps", {"30", "60", "120", "Infinite"}},
+          {"vsync", SettingBool}}},
+        {"audio",
+         {
+             {"master", SettingProgress},
+         }}};
     defaultData = {
         {"size", "1920x1080"},
         {"fps", "60"},
-        {"vsync", "1"}
-    };
+        {"vsync", "1"},
+        {"master", "10"}};
     db = new Database("settings");
     load();
 }
@@ -60,14 +63,14 @@ void Settings::uploadData(string tableName, SettingType data)
 
 void Settings::loadTables()
 {
-    for (auto &tableName : tableNames)
+    for (auto &[tableName, _] : allowedData)
         if (!db->existsTable(tableName))
             db->createTable(tableName, "`key` VARCHAR(600) UNIQUE, value ANY");
 }
 
 void Settings::loadData()
 {
-    for (auto &tableName : tableNames)
+    for (auto &[tableName, _] : allowedData)
     {
         Table table = db->tables.at(tableName);
         DBResult dbData = db->selectTable(tableName, "key, value");
@@ -96,18 +99,13 @@ void Settings::loadData()
 
 void Settings::loadDefaults()
 {
-    map<string, vector<string>> tableKeys = {
-        {"graphics", {"size", "fps", "vsync"}}
-    };
-    for (auto &[table, keys] : tableKeys)
-    {
-        for (auto &key : keys)
+    for (auto &[table, allowed] : allowedData)
+        for (auto &[key, type] : allowed)
         {
             Option option{defaultData.at(key), allowedData.at(table).at(key)};
             data[table].insert({{key, option}});
         }
-    }
-    for (auto &[table, _] : tableKeys)
+    for (auto &[table, _] : allowedData)
         uploadData(table, data.at(table));
 }
 
