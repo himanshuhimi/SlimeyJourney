@@ -65,6 +65,7 @@ struct LoadingScreen : public UIScreen
 
 struct SettingsScreen : public UIScreen
 {
+    vector<SDL_FRect> containers;
     vector<Text> texts = {};
     SettingsScreen(Game &game);
     void render(Vector2D Camera = {}) override;

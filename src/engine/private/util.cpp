@@ -85,3 +85,18 @@ void LineOfSight::render(Vector2D Camera)
     SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
     SDL_RenderFillRect(renderer, &dst);
 }
+
+string capitalize(string s)
+{
+    if (!s.empty())
+        s[0] = std::toupper(static_cast<unsigned char>(s[0]));
+    return s;
+}
+
+string toUppercase(string s)
+{
+    if (!s.empty())
+        for (int i = 0; i < s.size(); i++)
+            s[i] = std::toupper(static_cast<unsigned char>(s[i]));
+    return s;
+}

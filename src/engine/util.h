@@ -44,3 +44,7 @@ struct LineOfSight
     void matchPosition(SDL_FRect matchRect);
     void render(Vector2D Camera);
 };
+
+string capitalize(string s);
+
+string toUppercase(string s);

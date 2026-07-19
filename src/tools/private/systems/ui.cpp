@@ -146,26 +146,36 @@ SettingsScreen::SettingsScreen(Game &game)
     ctgWidgets["carousels"];
     for (auto &[category, data] : game.settings->data)
     {
-        texts.emplace_back(
+        Text title(
             game.renderer,
-            WIDTH / 4,
-            HEIGHT / 2 - 32,
+            WIDTH / 6,
+            32,
             capitalize(category),
             colors.white,
-            32);
+            28
+        );
+        texts.emplace_back(title);
+        int count = game.settings->allowedData.at(category).size();
+        const float padding = SPRITE_SIZE;
+        containers.emplace_back(SDL_FRect{
+            (float)WIDTH / 8.0f - (SPRITE_SIZE / 2),
+            SPRITE_SIZE * 2 - 8,
+            WIDTH / 2 + (SPRITE_SIZE * ((count - 1) * 3)),
+            (count - 1) * (SPRITE_SIZE)
+        });
         int i = 0;
         for (auto &[name, options] : game.settings->allowedData.at(category))
         {
             Text text(
                 game.renderer,
-                WIDTH / 4,
-                HEIGHT / 2,
-                capitalize(name),
+                WIDTH / 8,
+                64,
+                toUppercase(name),
                 colors.white,
                 12, 1);
             text.rect.y += i++ * text.rect.h;
             texts.emplace_back(text);
-            float widgetX = text.rect.x + (SPRITE_SIZE * 2);
+            float widgetX = WIDTH / 2 + text.rect.x + (SPRITE_SIZE * 3);
             float widgetY = text.rect.y;
             if (options == SettingBool)
             {
@@ -208,6 +218,11 @@ void SettingsScreen::render(Vector2D Camera)
 {
     for (auto &text : texts)
         text.render(Camera);
+    for (auto &container : containers)
+    {
+        SDL_SetRenderDrawColor(game.renderer, 255, 255, 255, 255);
+        SDL_RenderRect(game.renderer, &container);
+    }
     UIScreen::render(Camera);
 }
 

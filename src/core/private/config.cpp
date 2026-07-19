@@ -19,13 +19,6 @@ void updateScale()
     scaleY = CHANGED_HEIGHT / HEIGHT;
 }
 
-string capitalize(string s)
-{
-    if (!s.empty())
-        s[0] = std::toupper(static_cast<unsigned char>(s[0]));
-    return s;
-}
-
 bool checkCollision(SDL_FRect A, SDL_FRect B) { return SDL_HasRectIntersectionFloat(&A, &B); }
 
 SDL_FRect getMousePosition()
