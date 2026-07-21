@@ -72,6 +72,8 @@ void Game::handle()
     case Scenes::PLAYING:
         crntLvl->handle(dt);
         collision();
+        if (crntLvl->timer.currentTime <= 0.0)
+            setScene(Scenes::OVER);
         break;
     }
 }
@@ -85,7 +87,7 @@ void Game::render()
                            colors.skyblue.a);
     SDL_RenderClear(renderer);
     for (auto &cloud : clouds)
-        cloud.render();
+        cloud.render((scene == Scenes::PLAYING) ? crntLvl->Camera : Vector2D{});
     if (scene == Scenes::PLAYING)
         crntLvl->render();
     ui->render();

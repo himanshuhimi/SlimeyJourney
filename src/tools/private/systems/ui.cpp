@@ -333,7 +333,7 @@ void PausedScreen::render(Vector2D Camera)
 
 OverScreen::OverScreen(Game &game)
     : UIScreen(game),
-      title(game.renderer, SPRITE_SIZE * 2, HEIGHT / 2, "Game Over!", colors.red, 48)
+      title(game.renderer, WIDTH / 2, 128, "Game Over!", colors.red, 48)
 {
     ctgWidgets["btns"];
     vector<pair<string, UIFunction>> funcs = {
@@ -349,8 +349,8 @@ OverScreen::OverScreen(Game &game)
             name,
             make_unique<Button>(
                 game.renderer,
-                (WIDTH / 4) + SPRITE_SIZE * (i++),
-                HEIGHT / 2,
+                (WIDTH / 2 - 196) + SPRITE_SIZE * 6 * (i++),
+                HEIGHT / 2 + 32,
                 function,
                 name,
                 colors.yellow));

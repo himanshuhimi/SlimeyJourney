@@ -16,7 +16,6 @@ public:
     SDL_Renderer *renderer = nullptr;
     Vector2D Camera;
     Map map;
-    Flag flag;
     Player player;
     Fren fren;
     Timer timer;

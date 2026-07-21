@@ -14,8 +14,3 @@ void Cloud::handle(double dt)
 {
     handleMovement(dt);
 }
-
-void Cloud::render()
-{
-    image.render(nullptr, &rect);
-}

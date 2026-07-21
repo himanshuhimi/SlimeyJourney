@@ -1,7 +1,7 @@
 #include "../../systems/level.h"
 
 Level::Level(SDL_Renderer *renderer, string region, int number)
-    : renderer(renderer), player(renderer, 0, 0), flag(renderer, 0, 0),
+    : renderer(renderer), player(renderer, 0, 0),
       timer(renderer, WIDTH / 2, 20, durations.at(number)), fren(renderer, 0, 0),
       map(renderer, region + "/" + std::to_string(number) + ".tmx")
 {
@@ -42,14 +42,11 @@ void Level::handle(double dt)
         slime->handle(dt, objects);
     for (auto &[_, quest] : quests)
         quest.handle(dt);
-    flag.handle(dt);
     player.handle(dt, objects);
     fren.handle(dt, objects);
     if (player.rect.y >= map.pixelHeight)
         player.resetPos();
     timer.handle(dt);
-    if (timer.currentTime <= 0.0)
-        player.damage();
 }
 
 void Level::render()
@@ -70,7 +67,6 @@ void Level::render()
     for (auto &[_, quest] : quests)
         quest.render();
     timer.render();
-    flag.render(Camera);
     player.render(Camera);
     fren.render(Camera);
 }
@@ -82,8 +78,6 @@ void Level::loadObjects()
         string name = obj.name;
         if (name == "player")
             player = Player(renderer, obj.x, obj.y - SPRITE_SIZE);
-        else if (name == "flag")
-            flag = Flag(renderer, obj.x, obj.y - SPRITE_SIZE);
         else if (name == "fren")
             fren = Fren(renderer, obj.x, obj.y - SPRITE_SIZE);
         else if (name == "fruit")
