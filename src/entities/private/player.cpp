@@ -3,8 +3,8 @@
 Player::Player(SDL_Renderer *renderer, float x, float y)
     : Sprite(renderer, "player/idle.png", x, y)
 {
-    jumpStrength = 180.0f;
-    speed = 180;
+    jumpStrength = 32.0f * 5;
+    speed = 32 * 5;
     anims = {
         {"jump", Animation(renderer, "player/jump.png")},
         {"damage", Animation(renderer, "player/damage.png", 0.1)},

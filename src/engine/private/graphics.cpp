@@ -128,23 +128,12 @@ void Text::updateAlpha(int newAlpha)
 
 void Text::updateAttach(Image newAttach) { attachment = newAttach; }
 
-Object::Object(SDL_Renderer *renderer, float x, float y)
-    : renderer(renderer), image(renderer, "images/object.png")
+Object::Object(float x, float y, float width, float height)
 {
     Position.x = x;
     Position.y = y;
     rect.x = Position.x;
     rect.y = Position.y;
-    rect.w = image.width;
-    rect.h = image.height;
-}
-
-void Object::render(Vector2D Camera)
-{
-    if (!rendering)
-        return;
-    SDL_FRect dst = rect;
-    dst.x -= Camera.x;
-    dst.y -= Camera.y;
-    image.render(nullptr, &dst);
+    rect.w = width;
+    rect.h = height;
 }

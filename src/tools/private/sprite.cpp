@@ -103,8 +103,6 @@ void Sprite::handleLOS()
 
 void Sprite::handleGravity(double dt)
 {
-    bool onGround = false;
-    bool prevOnGround = states.onGround;
     if (states.inAir || !states.onGround)
         Velocity.y += constants.gravity * dt;
 }

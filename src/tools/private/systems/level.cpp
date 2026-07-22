@@ -52,8 +52,6 @@ void Level::handle(double dt)
 void Level::render()
 {
     map.render(Camera);
-    for (auto &grass : objects)
-        grass.render(Camera);
     for (auto &stone : stones)
         stone.render(Camera);
     for (auto &fruit : fruits)
@@ -85,8 +83,7 @@ void Level::loadObjects()
         else if (name == "enemy" || name == "slime")
             enemies.emplace_back(make_unique<Slime>(renderer, obj.x, obj.y - SPRITE_SIZE));
         else if (name == "object")
-            for (int x = 0; x < obj.width; x += SPRITE_SIZE)
-                objects.emplace_back(renderer, obj.x + x + SPRITE_SIZE / 2, obj.y);
+            objects.emplace_back(obj.x, obj.y, obj.width, obj.height);
         else if (name == "stone")
             for (int y = 0; y < obj.height; y += SPRITE_SIZE)
                 stones.emplace_back(renderer, obj.x, obj.y + y + SPRITE_SIZE / 2);
