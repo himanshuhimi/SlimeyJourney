@@ -26,8 +26,9 @@ public:
     virtual void render(Vector2D Camera);
 
 protected:
-    void handleMovement(double dt);
+    void moveX(double dt, const vector<Object> &objects);
+    void moveY(double dt, const vector<Object> &objects);
+    void handleMovement(double dt, const vector<Object> &objects);
     void handleLOS();
-    void handleGravity(double dt, const vector<Object> &objects);
-    void handleStates(bool onGround, bool prevOnGround);
+    void handleGravity(double dt);
 };

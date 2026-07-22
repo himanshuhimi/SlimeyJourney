@@ -72,8 +72,6 @@ void Game::handle()
     case Scenes::PLAYING:
         crntLvl->handle(dt);
         collision();
-        if (crntLvl->timer.currentTime <= 0.0)
-            setScene(Scenes::OVER);
         break;
     }
 }
@@ -99,8 +97,13 @@ void Game::setScene(Scenes newScene, bool loading)
     prevScene = scene;
     nextScene = newScene;
     scene = (loading) ? Scenes::LOADING : nextScene;
-    if (loading && nextScene == Scenes::SELECTION)
-        loadLevels();
+    if (loading)
+    {
+        if (nextScene == Scenes::SELECTION)
+           loadLevels();
+        else if (nextScene != Scenes::PLAYING)
+            unloadLevels();
+    }
     ui->updateScreen(scene);
 }
 
@@ -119,7 +122,7 @@ void Game::updateDeltaTime()
 
 void Game::loadLevels()
 {
-    regions.clear();
+    unloadLevels();
     string directory = "data/maps";
     if (!fs::exists(directory))
         return;
@@ -146,6 +149,11 @@ void Game::loadLevels()
     }
     for (auto &[region, nums] : lvlNums)
         rgnMaxLvls[region] = *std::max_element(nums.begin(), nums.end());
+}
+
+void Game::unloadLevels()
+{
+    regions.clear();
 }
 
 void Game::setLevel(string region, int number)
@@ -277,8 +285,8 @@ void Game::collision()
         if (complete)
             nextLevel();
     }
-    if (level->player.dead)
-        setScene(Scenes::OVER);
+    if (level->player.dead || crntLvl->timer.currentTime <= 0.0)
+        setScene(Scenes::OVER, false);
 }
 
 Uint32 Game::cloudTimerCallback(void *userdata, SDL_TimerID id, Uint32 interval)

@@ -12,5 +12,5 @@ Cloud::Cloud(SDL_Renderer *renderer)
 
 void Cloud::handle(double dt)
 {
-    handleMovement(dt);
+    Position.x += Velocity.x * dt;
 }

@@ -80,7 +80,7 @@ void Player::attack()
 
 void Player::resetPos(bool previous)
 {
-    Position = (previous) ? prevPos : Original;
+    Position = (previous) ? prevJumpPos : Original;
     rect.x = Position.x;
     rect.y = Position.y;
     damage();
@@ -96,7 +96,7 @@ void Player::handleMovement(double dt)
     if (!states.inAir && keys[SDL_SCANCODE_SPACE])
     {
         Velocity.y = -jumpStrength;
-        prevPos = Position;
+        prevJumpPos = Position;
         audios.at("jump").play(Random.randint(50, 80));
         anims.at("jump").restart();
     }

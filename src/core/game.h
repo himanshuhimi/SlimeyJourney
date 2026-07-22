@@ -27,6 +27,7 @@ public:
     void setScene(Scenes newState, bool loading = true);
     void terminate();
     void loadLevels();
+    void unloadLevels();
     void setLevel(string region, int number);
 
 private:

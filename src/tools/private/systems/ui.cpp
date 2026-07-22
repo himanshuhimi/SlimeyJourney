@@ -337,8 +337,8 @@ OverScreen::OverScreen(Game &game)
 {
     ctgWidgets["btns"];
     vector<pair<string, UIFunction>> funcs = {
-        {"TRY AGAIN!", [this]
-         { this->game.setScene(Scenes::PLAYING); }},
+        {"TRY AGAIN", [this]
+         { this->game.setScene(Scenes::SELECTION); }},
         {"HOME", [this]
          { this->game.setScene(Scenes::HOME); }},
         {"QUIT", [this]

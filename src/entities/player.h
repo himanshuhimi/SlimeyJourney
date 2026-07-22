@@ -7,7 +7,7 @@
 class Player : public Sprite
 {
 public:
-    Vector2D prevPos;
+    Vector2D prevJumpPos;
     vector<Ball> balls = {};
     Enemy *combatEnemy = nullptr;
     map<string, Audio> audios = {};
