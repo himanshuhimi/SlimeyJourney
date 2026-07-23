@@ -167,11 +167,7 @@ void Game::setLevel(string region, int number)
         crntLvl = crntLvls.at(lvlNum);
     }
     else if (lvlNum >= rgnMax)
-    {
-        crntRgn = nullptr;
-        crntLvl = nullptr;
         setScene(Scenes::SELECTION);
-    }
 }
 
 void Game::nextLevel()

@@ -20,7 +20,7 @@ int Database::execute(
     int (*callback)(void *, int, char **, char **),
     void *data)
 {
-    print("Executing SQL Statement: \n" + sql);
+    // print("Executing SQL Statement: \n" + sql);
     char *errMsg = nullptr;
     return sqlite3_exec(db, sql.c_str(), callback, data, &errMsg);
 };
@@ -37,7 +37,7 @@ DBResult Database::selectTable(string tableName, string what, string where)
 {
     string sql = "SELECT " + what + " FROM " + tableName +
                  (where.empty() ? " WHERE " + where : " ") + ";";
-    print("Executing SQL Statement: \n" + sql);
+    // print("Executing SQL Statement: \n" + sql);
     DBResult res;
     sqlite3_stmt *stmt = nullptr;
     if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK)
