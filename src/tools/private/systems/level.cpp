@@ -7,6 +7,7 @@ Level::Level(SDL_Renderer *renderer, string region, int number)
 {
     loadObjects();
     fruitLength = fruits.size();
+    enemyLength = enemies.size();
     if (fruitLength > 0)
         increment = (double)1 / fruitLength;
     audios = {
@@ -84,12 +85,20 @@ void Level::loadObjects()
             enemies.emplace_back(make_unique<Slime>(renderer, obj.x, obj.y - SPRITE_SIZE));
         else if (name == "object")
             objects.emplace_back(obj.x, obj.y, obj.width, obj.height);
-        else if (name == "stone")
-            for (int y = 0; y < obj.height; y += SPRITE_SIZE)
-                stones.emplace_back(renderer, obj.x, obj.y + y + SPRITE_SIZE / 2);
         else if (name == "spike")
-            for (int x = 0; x < obj.width; x += SPRITE_SIZE)
-                spikes.emplace_back(renderer, obj.x + x + SPRITE_SIZE / 2, obj.y);
+            spikes.emplace_back(
+                renderer, 
+                obj.x + SPRITE_SIZE / 2, obj.y,
+                obj.width, obj.height);
+        else if (name == "stone")
+        {
+            if (obj.width > SPRITE_SIZE && obj.height == SPRITE_SIZE)
+                for (int x = 0; x < obj.width; x++)
+                    stones.emplace_back(renderer, x, obj.y);
+            else if (obj.height > SPRITE_SIZE && obj.width == SPRITE_SIZE)
+                for (int y = 0; y < obj.height; y++)
+                    stones.emplace_back(renderer, obj.x, y);
+        }
     }
 }
 

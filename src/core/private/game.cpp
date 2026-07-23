@@ -220,6 +220,7 @@ void Game::collision()
         {
             slime->drop<Fruit>(level->fruits);
             sIt = level->enemies.erase(sIt);
+            level->player.enemiesKilled++;
             continue;
         }
         if (checkCollision(level->player.rect, slime->range))
@@ -265,15 +266,9 @@ void Game::collision()
         frenQuest->completed = true;
         if (level->fruitLength > 0 && ui->getWidget<Progress>("progs", "fruit").complete)
             level->quests.at("fruit").completed = true;
-        if (level->enemies.size() > 0)
-        {
-            bool allEnemyDead = std::all_of(level->enemies.begin(),
-                                            level->enemies.end(),
-                                            [](const auto &e)
-                                            { return e->dead; });
-            if (allEnemyDead)
+        if (level->enemyLength > 0)
+            if (level->enemyLength >= level->player.enemiesKilled)
                 level->quests.at("enemies").completed = true;
-        }
         bool complete = std::all_of(level->quests.begin(),
                                     level->quests.end(),
                                     [](auto &q)

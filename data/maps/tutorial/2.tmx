@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.12.2" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="3" nextobjectid="5">
+<map version="1.10" tiledversion="1.12.2" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="3" nextobjectid="9">
  <tileset firstgid="1" source="../tilesets/0.tsx"/>
  <layer id="1" name="ground" width="20" height="20">
   <data encoding="csv">
@@ -21,17 +21,19 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,3,
+1,2,2,2,2,2,2,2,2,4,4,2,2,2,2,2,2,2,2,3,
 17,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,19
 </data>
  </layer>
  <objectgroup id="2" name="objects">
-  <object id="2" name="object" x="0" y="576" width="640" height="32"/>
   <object id="3" name="player" x="32" y="576">
    <point/>
   </object>
   <object id="4" name="fren" x="608" y="576">
    <point/>
   </object>
+  <object id="6" name="object" x="0" y="576" width="288" height="32"/>
+  <object id="7" name="object" x="352" y="576" width="288" height="32"/>
+  <object id="8" name="spike" x="288" y="576" width="64" height="32"/>
  </objectgroup>
 </map>

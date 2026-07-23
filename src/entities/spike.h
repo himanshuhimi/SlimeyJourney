@@ -5,5 +5,5 @@
 class Spike : public Sprite
 {
 public:
-    Spike(SDL_Renderer *renderer, float x, float y);
+    Spike(SDL_Renderer *renderer, float x, float y, float width, float height);
 };

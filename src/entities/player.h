@@ -11,7 +11,7 @@ public:
     vector<Ball> balls = {};
     Enemy *combatEnemy = nullptr;
     map<string, Audio> audios = {};
-    int maxHP = 5, HP = maxHP;
+    int maxHP = 5, HP = maxHP, enemiesKilled = 0;
     bool inCombat = false, dead = false, immune = false, mouseClicked = false;
     Player(SDL_Renderer *renderer, float x, float y);
     void handle(double dt, const vector<Object> &objects) override;

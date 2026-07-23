@@ -26,7 +26,7 @@ public:
     vector<unique_ptr<Slime>> enemies = {};
     std::map<string, Quest> quests = {};
     std::map<string, Audio> audios;
-    int fruitLength = 0;
+    int fruitLength = 0, enemyLength = 0;
     double increment = 0.0;
     Level(SDL_Renderer *renderer, string region, int number);
     void handle(double dt);
