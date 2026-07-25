@@ -3,15 +3,15 @@
 Progress::Progress(
     SDL_Renderer *renderer, float x, float y, std::function<void()> callback,
     SDL_Color color, Image attachment, double startPercent, float width, double animSpeed)
-: Widget(renderer, x, y, callback), image(renderer, "ui/bar.png"), 
-  attachment(attachment), percentage(startPercent), animSpeed(animSpeed), color(color)
+    : Widget(renderer, x, y, callback),
+      attachment(attachment), percentage(startPercent), animSpeed(animSpeed), color(color)
 {
     Position.x = x;
     Position.y = y;
     rect.x = (attachment.width) + Position.x;
     rect.y = Position.y;
     rect.w = width;
-    rect.h = image.height;
+    rect.h = 8;
     fillRect.x = rect.x;
     fillRect.y = rect.y;
     fillRect.h = rect.h;
@@ -63,7 +63,13 @@ void Progress::render(Vector2D Camera)
         attachmentRect.y = dst.y - (attachment.height / 2);
         attachment.render(nullptr, &attachmentRect);
     }
-    image.render(nullptr, &dst);
+    SDL_SetRenderDrawColor(
+        renderer,
+        colors.black.r,
+        colors.black.g,
+        colors.black.b,
+        colors.black.a);
+    SDL_RenderRect(renderer, &rect);
 }
 
 void Progress::advance(double increment)

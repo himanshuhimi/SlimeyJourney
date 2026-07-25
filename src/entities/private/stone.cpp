@@ -3,7 +3,7 @@
 Stone::Stone(SDL_Renderer *renderer, float x, float y)
     : Sprite(renderer, "stones/0.png", x, y)
 {
-    destructLvl = maxDestructLvl;
+    movable = false;
 }
 
 void Stone::render(Vector2D Camera)

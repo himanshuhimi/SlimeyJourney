@@ -53,8 +53,6 @@ void Level::handle(double dt)
 void Level::render()
 {
     map.render(Camera);
-    for (auto &stone : stones)
-        stone.render(Camera);
     for (auto &fruit : fruits)
         fruit->render(Camera);
     for (auto &ball : player.balls)
@@ -63,6 +61,8 @@ void Level::render()
         spike.render(Camera);
     for (auto &slime : enemies)
         slime->render(Camera);
+    for (auto &stone : stones)
+        stone.render(Camera);
     for (auto &[_, quest] : quests)
         quest.render();
     timer.render();
@@ -93,11 +93,11 @@ void Level::loadObjects()
         else if (name == "stone")
         {
             if (obj.width > SPRITE_SIZE && obj.height == SPRITE_SIZE)
-                for (int x = 0; x < obj.width; x++)
-                    stones.emplace_back(renderer, x, obj.y);
+                for (int x = 0; x < obj.width; x += SPRITE_SIZE)
+                    stones.emplace_back(renderer, obj.x + x + SPRITE_SIZE / 2, obj.y);
             else if (obj.height > SPRITE_SIZE && obj.width == SPRITE_SIZE)
-                for (int y = 0; y < obj.height; y++)
-                    stones.emplace_back(renderer, obj.x, y);
+                for (int y = 0; y < obj.height; y += SPRITE_SIZE)
+                    stones.emplace_back(renderer, obj.x, obj.y + y + SPRITE_SIZE / 2);
         }
     }
 }

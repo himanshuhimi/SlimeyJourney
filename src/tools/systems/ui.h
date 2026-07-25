@@ -101,8 +101,7 @@ struct OverScreen : public UIScreen
 class UI
 {
 public:
-    map<Scenes, unique_ptr<UIScreen>> screens = {};
-    UIScreen *activeScreen = nullptr;
+    unique_ptr<UIScreen> activeScreen = nullptr;
     UI(Game &game);
     void render(Vector2D Camera = {});
     void handle(double dt);

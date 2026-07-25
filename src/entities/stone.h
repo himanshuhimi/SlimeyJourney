@@ -5,7 +5,7 @@
 class Stone : public Sprite
 {
 public:
-    int destructLvl = 0, maxDestructLvl = 5;
+    int destructLvl = 0, maxDestructLvl = 2;
     bool destructed = false;
     Stone(SDL_Renderer *renderer, float x, float y);
     void render(Vector2D Camera = {});

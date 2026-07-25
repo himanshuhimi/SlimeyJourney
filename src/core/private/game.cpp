@@ -52,7 +52,7 @@ void Game::handle()
             break;
         case SDL_EVENT_KEY_UP:
             if (event.key.key == SDLK_ESCAPE &&
-                scene != Scenes::PLAYING && 
+                scene != Scenes::PLAYING &&
                 scene != Scenes::LOADING &&
                 scene != Scenes::HOME)
                 setScene(Scenes::HOME);
@@ -78,11 +78,12 @@ void Game::handle()
 
 void Game::render()
 {
-    SDL_SetRenderDrawColor(renderer,
-                           colors.skyblue.r,
-                           colors.skyblue.g,
-                           colors.skyblue.b,
-                           colors.skyblue.a);
+    SDL_SetRenderDrawColor(
+        renderer,
+        colors.skyblue.r,
+        colors.skyblue.g,
+        colors.skyblue.b,
+        colors.skyblue.a);
     SDL_RenderClear(renderer);
     for (auto &cloud : clouds)
         cloud.render((scene == Scenes::PLAYING) ? crntLvl->Camera : Vector2D{});
@@ -100,7 +101,7 @@ void Game::setScene(Scenes newScene, bool loading)
     if (loading)
     {
         if (nextScene == Scenes::SELECTION)
-           loadLevels();
+            loadLevels();
         else if (nextScene != Scenes::PLAYING)
             unloadLevels();
     }

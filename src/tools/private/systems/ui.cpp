@@ -111,9 +111,9 @@ HomeScreen::HomeScreen(Game &game)
                                                       colors.yellow));
     }
     titleRect = SDL_FRect{
-        (float)WIDTH, 
-        SPRITE_SIZE * 3, 
-        titleImage.width, 
+        (float)WIDTH,
+        SPRITE_SIZE * 3,
+        titleImage.width,
         titleImage.height};
     titleRect.x -= titleRect.w + SPRITE_SIZE;
 }
@@ -134,12 +134,16 @@ LoadingScreen::LoadingScreen(Game &game) : UIScreen(game)
             SPRITE_SIZE,
             HEIGHT - SPRITE_SIZE,
             [this]
-            { this->game.setScene(this->game.nextScene, false); }));
+            { this->game.setScene(this->game.nextScene, false); },
+            colors.white,
+            Image{nullptr, ""},
+            0.0,
+            WIDTH - 64));
 }
 
 void LoadingScreen::handle(double dt)
 {
-    getWidget<Progress>("progs", "loading").advance(0.0025);
+    getWidget<Progress>("progs", "loading").advance(dt);
     UIScreen::handle(dt);
 }
 
@@ -158,8 +162,7 @@ SettingsScreen::SettingsScreen(Game &game)
             capitalize(category),
             colors.white,
             18,
-            1
-        );
+            1);
         texts.emplace_back(title);
         int count = game.settings->allowedData.at(category).size();
         const float padding = SPRITE_SIZE;
@@ -167,8 +170,7 @@ SettingsScreen::SettingsScreen(Game &game)
             title.rect.x + (SPRITE_SIZE / 2),
             title.rect.y + SPRITE_SIZE,
             WIDTH / 2 + (SPRITE_SIZE * 6),
-            (count) * (SPRITE_SIZE)
-        };
+            (count) * (SPRITE_SIZE)};
         containers.emplace_back(container);
         int j = 0;
         for (auto &[name, options] : game.settings->allowedData.at(category))
@@ -191,7 +193,7 @@ SettingsScreen::SettingsScreen(Game &game)
                     game.renderer,
                     widgetX,
                     widgetY,
-                    [this]{},
+                    [this] {},
                     (prevVal != "0") ? true : false);
                 Toggle *togglePtr = toggle.get();
                 toggle->onCallback = [this, category, name, togglePtr]
@@ -228,6 +230,9 @@ void SettingsScreen::render(Vector2D Camera)
         text.render(Camera);
     for (auto &container : containers)
     {
+        SDL_SetRenderDrawBlendMode(game.renderer, SDL_BLENDMODE_BLEND);
+        SDL_SetRenderDrawColor(game.renderer, 0, 0, 0, 32);
+        SDL_RenderFillRect(game.renderer, &container);
         SDL_SetRenderDrawColor(game.renderer, 255, 255, 255, 255);
         SDL_RenderRect(game.renderer, &container);
     }
@@ -364,13 +369,6 @@ void OverScreen::render(Vector2D Camera)
 
 UI::UI(Game &game) : game(game)
 {
-    screens.insert({Scenes::HOME, make_unique<HomeScreen>(game)});
-    screens.insert({Scenes::LOADING, make_unique<LoadingScreen>(game)});
-    screens.insert({Scenes::SETTINGS, make_unique<SettingsScreen>(game)});
-    screens.insert({Scenes::SELECTION, make_unique<SelectionScreen>(game)});
-    screens.insert({Scenes::PLAYING, make_unique<PlayingScreen>(game)});
-    screens.insert({Scenes::PAUSED, make_unique<PausedScreen>(game)});
-    screens.insert({Scenes::OVER, make_unique<OverScreen>(game)});
 }
 
 void UI::render(Vector2D Camera)
@@ -396,12 +394,31 @@ void UI::update(SDL_Event event)
 
 void UI::updateScreen(Scenes scene)
 {
-    try
+    switch (scene)
     {
-        activeScreen = screens.at(scene).get();
-    }
-    catch (std::exception &e)
-    {
+    case Scenes::HOME:
+        activeScreen = make_unique<HomeScreen>(game);
+        break;
+    case Scenes::LOADING:
+        activeScreen = make_unique<LoadingScreen>(game);
+        break;
+    case Scenes::SETTINGS:
+        activeScreen = make_unique<SettingsScreen>(game);
+        break;
+    case Scenes::SELECTION:
+        activeScreen = make_unique<SelectionScreen>(game);
+        break;
+    case Scenes::PLAYING:
+        activeScreen = make_unique<PlayingScreen>(game);
+        break;
+    case Scenes::PAUSED:
+        activeScreen = make_unique<PausedScreen>(game);
+        break;
+    case Scenes::OVER:
+        activeScreen = make_unique<OverScreen>(game);
+        break;
+    default:
         activeScreen = nullptr;
+        break;
     }
 }
