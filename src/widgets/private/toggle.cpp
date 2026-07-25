@@ -30,6 +30,7 @@ void Toggle::update(SDL_Event event)
     {
         value = !value;
         onCallback();
+        clickAudio.play();
     }
 }
 

@@ -68,5 +68,8 @@ bool Button::clicked(SDL_Event event)
 void Button::update(SDL_Event event)
 {
     if (clicked(event))
+    {
         onCallback();
+        clickAudio.play();
+    }
 }

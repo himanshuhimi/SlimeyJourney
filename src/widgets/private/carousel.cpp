@@ -69,6 +69,7 @@ void Carousel::update(SDL_Event event)
         else
             index++;
         onCallback();
+        clickAudio.play();
     }
     else if (clicked(leftRect, event))
     {
@@ -77,6 +78,7 @@ void Carousel::update(SDL_Event event)
         else
             index--;
         onCallback();
+        clickAudio.play();
     }
 }
 

@@ -271,7 +271,7 @@ SelectionScreen::SelectionScreen(Game &game) : UIScreen(game)
             make_unique<Card>(
                 game.renderer,
                 WIDTH / 2,
-                SPRITE_SIZE + SPRITE_SIZE * (2 * i++),
+                SPRITE_SIZE / 2 + SPRITE_SIZE * (1.5 * i++),
                 capitalize(name),
                 func));
 }
@@ -312,7 +312,7 @@ PausedScreen::PausedScreen(Game &game)
     ctgWidgets["btns"];
     vector<pair<string, UIFunction>> funcs = {
         {"CONTINUE", [this]
-         { this->game.setScene(Scenes::PLAYING); }},
+         { this->game.setScene(Scenes::PLAYING, false); }},
         {"HOME", [this]
          { this->game.setScene(Scenes::HOME); }},
         {"QUIT", [this]
@@ -323,8 +323,8 @@ PausedScreen::PausedScreen(Game &game)
             name,
             make_unique<Button>(
                 game.renderer,
-                (WIDTH / 4) + SPRITE_SIZE * (i++),
-                HEIGHT / 2,
+                (WIDTH / 2 - 196) + SPRITE_SIZE * 6 * (i++),
+                HEIGHT / 2 + SPRITE_SIZE,
                 function,
                 name,
                 colors.yellow));
@@ -355,7 +355,7 @@ OverScreen::OverScreen(Game &game)
             make_unique<Button>(
                 game.renderer,
                 (WIDTH / 2 - 196) + SPRITE_SIZE * 6 * (i++),
-                HEIGHT / 2 + 32,
+                HEIGHT / 2 + SPRITE_SIZE,
                 function,
                 name,
                 colors.yellow));

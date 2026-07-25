@@ -10,6 +10,7 @@ public:
     SDL_Renderer *renderer = nullptr;
     SDL_FRect rect, dst;
     UIFunction onCallback;
+    Audio clickAudio;
     Widget(SDL_Renderer *renderer, float x, float y,
            UIFunction callback = []{});
     virtual void render(Vector2D Camera = {}) {};

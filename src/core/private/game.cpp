@@ -51,11 +51,15 @@ void Game::handle()
                 crntLvl->player.mouseClicked = (event.button.button == SDL_BUTTON_LEFT);
             break;
         case SDL_EVENT_KEY_UP:
-            if (event.key.key == SDLK_ESCAPE &&
-                scene != Scenes::PLAYING &&
+            if (event.key.key == SDLK_ESCAPE)
+            {
+                if (scene != Scenes::PLAYING &&
                 scene != Scenes::LOADING &&
-                scene != Scenes::HOME)
+                scene != Scenes::HOME) 
                 setScene(Scenes::HOME);
+                if (scene == Scenes::PLAYING)
+                    setScene(Scenes::PAUSED, false);
+            }
             break;
         case SDL_EVENT_USER:
             if (event.type == CLOUD_EVENT)

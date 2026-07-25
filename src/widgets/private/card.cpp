@@ -23,10 +23,7 @@ void Card::handle(double dt) {}
 
 void Card::render(Vector2D Camera)
 {
-    if (hovered())
-        bgHovered.render(nullptr, &rect);
-    else
-        bgUnhovered.render(nullptr, &rect);
+    (hovered()) ? bgHovered.render(nullptr, &rect) : bgUnhovered.render(nullptr, &rect);
     displayText.render(Camera);
 }
 
@@ -41,5 +38,8 @@ bool Card::clicked(SDL_Event event)
 void Card::update(SDL_Event event)
 {
     if (clicked(event))
+    {
         onCallback();
+        clickAudio.play();
+    }
 }
