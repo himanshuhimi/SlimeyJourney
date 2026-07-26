@@ -266,6 +266,13 @@ SelectionScreen::SelectionScreen(Game &game) : UIScreen(game)
     }
     int i = 1;
     for (auto &[name, func] : funcs)
+    {
+        Image image{game.renderer, "images/cards/default.png"};
+        string path = "data/assets/images/cards/" + name + ".png";
+        if (fs::exists(path))
+            image = Image{game.renderer, path};
+        else
+            image = Image(game.renderer, "images/cards/default.png");
         ctgWidgets.at("cards").emplace_back(
             name,
             make_unique<Card>(
@@ -273,8 +280,9 @@ SelectionScreen::SelectionScreen(Game &game) : UIScreen(game)
                 WIDTH / 2,
                 SPRITE_SIZE / 2 + SPRITE_SIZE * (1.5 * i++),
                 capitalize(name),
-                func));
-                // Image{game.renderer, "ui/cards/" + name + ".png"}));
+                func,
+                image));
+    }
 }
 
 PlayingScreen::PlayingScreen(Game &game) : UIScreen(game), hearts(game)

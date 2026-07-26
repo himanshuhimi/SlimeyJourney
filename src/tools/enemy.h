@@ -5,7 +5,6 @@
 struct EnemyData
 {
     float speed = 0;
-    float atkDmg = 0;
     float atkRange = 0;
     float alertRange = 0;
     int maxHP = 0;
@@ -13,7 +12,6 @@ struct EnemyData
     std::function<void(Vector2D)> onAtk;
     EnemyData(
         float speed = 0.0f,
-        float atkDmg = 0.0f,
         float atkRange = 0.0f,
         int maxHP = 0,
         std::function<void(Vector2D)> atkMethod = [](Vector2D Direction) {});
@@ -31,9 +29,10 @@ public:
     Cooldown atkCooldown = {3.0f};
     map<string, Animation> anims = {};
     map<string, Audio> audios = {};
+    float knockback = 0.0f;
+    string type = "";
     bool dead = false;
     int HP = 0;
-    string type = "";
     Enemy(SDL_Renderer *renderer, float x, float y, string type, EnemyData data);
     virtual void handle(double dt, const vector<Object> &objects);
     virtual void render(Vector2D Camera);

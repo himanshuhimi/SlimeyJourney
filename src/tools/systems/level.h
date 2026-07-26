@@ -7,6 +7,7 @@
 #include "entities/fren.h"
 #include "entities/spike.h"
 #include "entities/stone.h"
+#include "entities/pad.h"
 #include "entities/enemies/slime.h"
 #include "tools/systems/quest.h"
 
@@ -22,6 +23,7 @@ public:
     vector<Object> objects = {};
     vector<Spike> spikes = {};
     vector<Stone> stones = {};
+    vector<Pad> pads = {};
     vector<unique_ptr<Fruit>> fruits = {};
     vector<unique_ptr<Slime>> enemies = {};
     std::map<string, Quest> quests = {};

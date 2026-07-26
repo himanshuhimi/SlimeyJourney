@@ -24,6 +24,7 @@ void Card::handle(double dt) {}
 
 void Card::render(Vector2D Camera)
 {
+    bgImage.render(nullptr, &rect);
     (hovered()) ? bgHovered.render(nullptr, &rect) : bgUnhovered.render(nullptr, &rect);
     displayText.render(Camera);
 }

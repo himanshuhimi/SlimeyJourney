@@ -11,6 +11,7 @@ public:
     vector<Ball> balls = {};
     Enemy *combatEnemy = nullptr;
     map<string, Audio> audios = {};
+    float speed = 0.0f, jumpStrength = 0.0f, knockback = 0.0f;
     int maxHP = 5, HP = maxHP, enemiesKilled = 0;
     bool inCombat = false, dead = false, immune = false, mouseClicked = false;
     Player(SDL_Renderer *renderer, float x, float y);
@@ -22,7 +23,6 @@ public:
 private:
     Cooldown throwCooldown = {1.0};
     map<string, Animation> anims = {};
-    float speed = 0.0f, jumpStrength = 0.0f;
     void handleMovement(double dt);
     void handleAttacking(double dt);
 };

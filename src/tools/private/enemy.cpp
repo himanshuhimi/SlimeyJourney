@@ -1,9 +1,14 @@
 #include "../enemy.h"
 
 EnemyData::EnemyData(
-    float speed, float atkDmg, float atkRange, int maxHP,
+    float speed,
+    float atkRange,
+    int maxHP,
     std::function<void(Vector2D)> atkMethod)
-    : speed(speed), atkDmg(atkDmg), atkRange(atkRange), maxHP(maxHP), onAtk(atkMethod) {};
+    : speed(speed),
+      atkRange(atkRange),
+      maxHP(maxHP),
+      onAtk(atkMethod) {};
 
 Enemy::Enemy(SDL_Renderer *renderer, float x, float y, string type, EnemyData data)
     : Sprite(renderer, "object.png", x, y), type(type), data(data)
@@ -12,6 +17,7 @@ Enemy::Enemy(SDL_Renderer *renderer, float x, float y, string type, EnemyData da
     range = SDL_FRect{rect.x, rect.y, data.atkRange, data.atkRange};
     lineOfSight.rect.w = data.atkRange;
     HP = data.maxHP;
+    knockback = 32.0f;
     anims = {
         {"walking", Animation(renderer, type + "/walking.png", 0.1)},
         {"damage", Animation(renderer, type + "/damage.png", 0.1)}};
@@ -63,6 +69,8 @@ void Enemy::damage(int byPoints)
     if (dead)
         return;
     HP -= byPoints;
+    knockback *= (Velocity.x > 0) ? 1 : -1;
+    Position.x += knockback;
     anims.at("damage").restart();
     audios.at("hurt").play(Random.randint(50, 100));
 }

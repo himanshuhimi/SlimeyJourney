@@ -213,6 +213,21 @@ void Game::collision()
     for (auto &spike : level->spikes)
         if (checkCollision(level->player.rect, spike.rect))
             level->player.resetPos();
+    for (auto &pad : level->pads)
+    {
+        bool buffed = false;
+        if (checkCollision(level->player.rect, pad.rect) && !buffed)
+        {
+            buffed = true;
+            level->player.jumpStrength += 0.2 * level->player.jumpStrength;
+        }
+        else
+        {
+            buffed = false;
+            level->player.jumpStrength -= 0.2 * level->player.jumpStrength;
+        }
+        
+    }
     for (auto fruitIt = level->fruits.begin();
          fruitIt != level->fruits.end();)
     {

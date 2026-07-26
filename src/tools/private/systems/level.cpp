@@ -80,7 +80,7 @@ void Level::loadObjects()
         else if (name == "fren")
             fren = Fren(renderer, obj.x, obj.y - SPRITE_SIZE);
         else if (name == "fruit")
-            fruits.emplace_back(make_unique<Fruit>(renderer, obj.x, obj.y - SPRITE_SIZE));
+            fruits.emplace_back(make_unique<Fruit>(renderer, obj.x, obj.y - SPRITE_SIZE / 2));
         else if (name == "enemy" || name == "slime")
             enemies.emplace_back(make_unique<Slime>(renderer, obj.x, obj.y - SPRITE_SIZE));
         else if (name == "object")
@@ -90,6 +90,8 @@ void Level::loadObjects()
                 renderer, 
                 obj.x + SPRITE_SIZE / 2, obj.y,
                 obj.width, obj.height);
+        else if (name == "pad")
+            pads.emplace_back(renderer, obj.x, obj.y);
         else if (name == "stone")
         {
             if (obj.width > SPRITE_SIZE && obj.height == SPRITE_SIZE)
