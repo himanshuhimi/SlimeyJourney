@@ -4,7 +4,9 @@ Progress::Progress(
     SDL_Renderer *renderer, float x, float y, std::function<void()> callback,
     SDL_Color color, Image attachment, double startPercent, float width, double animSpeed)
     : Widget(renderer, x, y, callback),
-      attachment(attachment), percentage(startPercent), animSpeed(animSpeed), color(color)
+      attachment(attachment), percentage(startPercent), 
+      animSpeed(animSpeed), color(color),
+      text(renderer, 0, 0, "0.00", colors.white, 12)
 {
     Position.x = x;
     Position.y = y;
@@ -15,6 +17,8 @@ Progress::Progress(
     fillRect.x = rect.x;
     fillRect.y = rect.y;
     fillRect.h = rect.h;
+    text.rect.x = rect.x + (rect.w / 2);
+    text.rect.y = rect.y - (rect.h * 2);
     reachPercent = startPercent;
     if (attachment.renderer)
     {
@@ -47,11 +51,22 @@ void Progress::handle(double dt)
         onCallback();
         reset();
     }
+    std::ostringstream oss;
+    oss << std::fixed << std::setprecision(2) << (percentage * 100);
+    text.updateData(oss.str() + "%");
 }
 
 void Progress::render(Vector2D Camera)
 {
     dst = rect;
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+    SDL_SetRenderDrawColor(
+        renderer,
+        colors.black.r,
+        colors.black.g,
+        colors.black.b,
+        32);
+    SDL_RenderFillRect(renderer, &rect);
     fillRect.w = rect.w * (float)percentage;
     SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
     SDL_RenderFillRect(renderer, &fillRect);
@@ -70,6 +85,7 @@ void Progress::render(Vector2D Camera)
         colors.black.b,
         colors.black.a);
     SDL_RenderRect(renderer, &rect);
+    text.render();
 }
 
 void Progress::advance(double increment)

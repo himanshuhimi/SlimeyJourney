@@ -116,7 +116,7 @@ void Text::updateData(string newData)
     surface = TTF_RenderText_Blended(font, newData.c_str(), newData.size(), color);
     texture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_GetTextureSize(texture, &rect.w, &rect.h);
-    SDL_SetTextureScaleMode(texture, SDL_SCALEMODE_PIXELART);
+    SDL_SetTextureScaleMode(texture, SDL_SCALEMODE_LINEAR);
 }
 
 void Text::updateAlpha(int newAlpha)

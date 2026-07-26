@@ -143,7 +143,7 @@ LoadingScreen::LoadingScreen(Game &game) : UIScreen(game)
 
 void LoadingScreen::handle(double dt)
 {
-    getWidget<Progress>("progs", "loading").advance(dt);
+    getWidget<Progress>("progs", "loading").advance(0.001);
     UIScreen::handle(dt);
 }
 
@@ -157,20 +157,20 @@ SettingsScreen::SettingsScreen(Game &game)
     {
         Text title(
             game.renderer,
-            WIDTH / 12,
+            WIDTH / 2,
             16 + (SPRITE_SIZE * 3 * i++),
             capitalize(category),
             colors.white,
-            18,
-            1);
+            18);
         texts.emplace_back(title);
         int count = game.settings->allowedData.at(category).size();
         const float padding = SPRITE_SIZE;
         SDL_FRect container = SDL_FRect{
-            title.rect.x + (SPRITE_SIZE / 2),
+            WIDTH / 2.0f,
             title.rect.y + SPRITE_SIZE,
-            WIDTH / 2 + (SPRITE_SIZE * 6),
+            (float)WIDTH - (SPRITE_SIZE * 2),
             (count) * (SPRITE_SIZE)};
+        container.x -= container.w / 2;
         containers.emplace_back(container);
         int j = 0;
         for (auto &[name, options] : game.settings->allowedData.at(category))
@@ -184,7 +184,7 @@ SettingsScreen::SettingsScreen(Game &game)
                 12, 1);
             text.rect.y += j++ * text.rect.h;
             texts.emplace_back(text);
-            float widgetX = WIDTH / 2 + text.rect.x + (SPRITE_SIZE * 3);
+            float widgetX = container.w - container.w / 8.0f;
             float widgetY = text.rect.y;
             if (options == SettingBool)
             {
@@ -274,6 +274,7 @@ SelectionScreen::SelectionScreen(Game &game) : UIScreen(game)
                 SPRITE_SIZE / 2 + SPRITE_SIZE * (1.5 * i++),
                 capitalize(name),
                 func));
+                // Image{game.renderer, "ui/cards/" + name + ".png"}));
 }
 
 PlayingScreen::PlayingScreen(Game &game) : UIScreen(game), hearts(game)

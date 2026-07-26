@@ -23,7 +23,7 @@ Game::Game()
     SDL_SetRenderVSync(renderer, std::stoi(settings->get("graphics", "vsync")));
     ui = new UI(*this);
     active = true;
-    SDL_AddTimer(5000, cloudTimerCallback, this);
+    SDL_AddTimer(5000, passiveTimerCallback, this);
     setScene(Scenes::HOME, false);
 }
 
@@ -62,14 +62,21 @@ void Game::handle()
             }
             break;
         case SDL_EVENT_USER:
-            if (event.type == CLOUD_EVENT)
-                clouds.emplace_back(renderer);
+            if (event.type == PASSIVE_EVENT)
+            {
+                if (Random.randint(0, 1))
+                    clouds.emplace_back(Cloud(renderer));
+                else
+                    petals.emplace_back(Petal(renderer));
+            }
             break;
         }
         ui->update(event);
     }
     for (auto &cloud : clouds)
         cloud.handle(dt);
+    for (auto &petal : petals)
+        petal.handle(dt);
     ui->handle(dt);
     switch (scene)
     {
@@ -91,6 +98,8 @@ void Game::render()
     SDL_RenderClear(renderer);
     for (auto &cloud : clouds)
         cloud.render((scene == Scenes::PLAYING) ? crntLvl->Camera : Vector2D{});
+    for (auto &petal : petals)
+        petal.render((scene == Scenes::PLAYING) ? crntLvl->Camera : Vector2D{});
     if (scene == Scenes::PLAYING)
         crntLvl->render();
     ui->render();
@@ -285,12 +294,12 @@ void Game::collision()
         setScene(Scenes::OVER, false);
 }
 
-Uint32 Game::cloudTimerCallback(void *userdata, SDL_TimerID id, Uint32 interval)
+Uint32 Game::passiveTimerCallback(void *userdata, SDL_TimerID id, Uint32 interval)
 {
     Game *game = static_cast<Game *>(userdata);
-    SDL_Event cloudEvent;
-    SDL_zero(cloudEvent);
-    cloudEvent.type = game->CLOUD_EVENT;
-    SDL_PushEvent(&cloudEvent);
+    SDL_Event passiveEvent;
+    SDL_zero(passiveEvent);
+    passiveEvent.type = game->PASSIVE_EVENT;
+    SDL_PushEvent(&passiveEvent);
     return Random.randint(0, 5000);
 };

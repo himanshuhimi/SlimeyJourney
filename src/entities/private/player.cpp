@@ -102,8 +102,6 @@ void Player::handleMovement(double dt)
     }
     if (states.inAir || !states.onGround)
         anims.at("jump").handle(dt);
-    if (anims.at("walking").active)
-        anims.at("walking").handle(dt);
 }
 
 void Player::handleAttacking(double dt)

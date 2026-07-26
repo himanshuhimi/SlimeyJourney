@@ -7,10 +7,6 @@ int CHANGED_WIDTH{WIDTH}, CHANGED_HEIGHT{HEIGHT};
 int scaleX{0}, scaleY{0};
 int CAMERA_X{WIDTH / 2}, CAMERA_Y{HEIGHT / 2};
 bool scaled = true;
-const vector<string> fruitTypes = {
-    "apple", "blueberry",
-    "mango", "melon",
-    "orange", "strawberry"};
 SDL_RendererLogicalPresentation logicalPresentation = SDL_LOGICAL_PRESENTATION_INTEGER_SCALE;
 
 void updateScale()

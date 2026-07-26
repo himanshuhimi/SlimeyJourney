@@ -9,6 +9,7 @@ public:
     Image attachment;
     SDL_Color color;
     Vector2D Position;
+    Text text;
     double startPercent = 0.0, animSpeed = 0.0, reachPercent = 0.0, percentage = 0.0;
     bool complete = false;
     Progress(SDL_Renderer *renderer, float x, float y, 

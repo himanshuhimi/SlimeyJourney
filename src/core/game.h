@@ -5,6 +5,7 @@
 #include "tools/systems/level.h"
 #include "tools/systems/region.h"
 #include "entities/cloud.h"
+#include "entities/petal.h"
 #include "tools/systems/ui.h"
 
 class UI;
@@ -32,18 +33,19 @@ public:
 
 private:
     vector<Cloud> clouds = {};
+    vector<Petal> petals = {};
+    UI *ui = nullptr;
     using Levels = map<int, Level *>;
     map<string, Levels> regions = {};
+    const Uint32 PASSIVE_EVENT = SDL_RegisterEvents(1);
     map<string, vector<int>> lvlNums = {};
     Uint64 LAST = SDL_GetPerformanceCounter();
-    Uint64 NOW;
-    const Uint32 CLOUD_EVENT = SDL_RegisterEvents(1);
     map<string, int> rgnMaxLvls = {};
-    UI *ui = nullptr;
     string crntRgnName = "";
     int lvlNum = 0;
+    Uint64 NOW;
     void updateDeltaTime();
     void collision();
     void nextLevel();
-    static Uint32 cloudTimerCallback(void *userData, SDL_TimerID id, Uint32 interval);
+    static Uint32 passiveTimerCallback(void *userData, SDL_TimerID id, Uint32 interval);
 };

@@ -5,8 +5,9 @@ Card::Card(
     float x,
     float y,
     string label,
-    UIFunction callback)
-    : Widget(renderer, x, y, callback), label(label),
+    UIFunction callback,
+    Image bgImage)
+    : Widget(renderer, x, y, callback), label(label), bgImage(bgImage),
       bgUnhovered(renderer, "ui/card/unhovered.png"),
       bgHovered(renderer, "ui/card/hovered.png"),
       displayText(renderer, 0, 0, label, colors.white)
