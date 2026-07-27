@@ -191,99 +191,104 @@ void Game::nextLevel()
 void Game::collision()
 {
     auto &level = crntLvl;
-    for (auto stoneIt = level->stones.begin();
-         stoneIt != level->stones.end(); stoneIt++)
-    {
-        auto stone = *stoneIt;
-        for (auto bIt = level->player.balls.begin();
-             bIt != level->player.balls.end();)
+    if (crntLvl->stones.size() > 0)
+        for (auto stoneIt = level->stones.begin();
+            stoneIt != level->stones.end(); stoneIt++)
         {
-            auto ball = *bIt;
-            if (checkCollision(stone.rect, ball.rect))
+            auto stone = *stoneIt;
+            for (auto bIt = level->player.balls.begin();
+                bIt != level->player.balls.end();)
             {
-                stoneIt->destruct();
-                bIt = level->player.balls.erase(bIt);
+                auto ball = *bIt;
+                if (checkCollision(stone.rect, ball.rect))
+                {
+                    stoneIt->destruct();
+                    bIt = level->player.balls.erase(bIt);
+                }
+                else
+                    bIt++;
             }
-            else
-                bIt++;
         }
-    }
-    for (auto &spike : level->spikes)
-        if (checkCollision(level->player.rect, spike.rect))
-            level->player.resetPos();
-    for (auto &pad : level->pads)
+    if (crntLvl->spikes.size() > 0)
+        for (auto &spike : level->spikes)
+            if (checkCollision(level->player.rect, spike.rect))
+                level->player.resetPos();
+    if (crntLvl->pads.size() > 0)
     {
-        if (checkCollision(level->player.rect, pad.rect) && !level->player.buffed)
+        bool onPad = false;
+        for (auto &pad : level->pads)
+            if (checkCollision(level->player.rect, pad.rect) && !level->player.buffed)
+            {
+                onPad = true;
+                break;
+            }
+        if (onPad && !level->player.buffed)
         {
+            level->player.jumpStrength += 0.2 * level->player.baseJumpStrength;
             level->player.buffed = true;
-            level->player.jumpStrength += 0.2 * level->player.jumpStrength;
         }
-        else
-        {
-            level->player.buffed = false;
-            level->player.jumpStrength -= 0.2 * level->player.jumpStrength;
-        }
-        
     }
-    for (auto fruitIt = level->fruits.begin();
-         fruitIt != level->fruits.end();)
-    {
-        auto &fruit = *fruitIt;
-        if (!fruit->picked && checkCollision(fruit->rect, level->player.rect))
+    if (crntLvl->fruits.size() > 0)
+        for (auto fruitIt = level->fruits.begin();
+            fruitIt != level->fruits.end();)
         {
-            level->player.audios.at("pickup").play();
-            ui->getWidget<Progress>("progs", "fruit").advance(level->increment);
-            fruitIt = level->fruits.erase(fruitIt);
-        }
-        else
-            fruitIt++;
-    }
-    for (auto sIt = level->enemies.begin(); sIt != level->enemies.end();)
-    {
-        auto &slime = *sIt;
-        auto rawSlime = slime.get();
-        if (slime->dead)
-        {
-            slime->drop<Fruit>(level->fruits);
-            sIt = level->enemies.erase(sIt);
-            level->player.enemiesKilled++;
-            continue;
-        }
-        if (checkCollision(level->player.rect, slime->range))
-        {
-            slime->actions.alert = true;
-            slime->actions.attacking = true;
-            level->player.inCombat = true;
-            level->player.combatEnemy = rawSlime;
-        }
-        else if (level->player.inCombat && level->player.combatEnemy == rawSlime)
-        {
-            level->player.inCombat = false;
-            level->player.combatEnemy = nullptr;
-            slime->actions.attacking = false;
-            slime->actions.alert = false;
-        }
-        if (slime->actions.attacking)
-            slime->attack((level->player.Position - slime->Position).normalise());
-        for (auto bIt = slime->balls.begin(); bIt != slime->balls.end();)
-            if (!bIt->used && checkCollision(level->player.rect, bIt->rect))
+            auto &fruit = *fruitIt;
+            if (!fruit->picked && checkCollision(fruit->rect, level->player.rect))
             {
-                level->player.damage();
-                bIt = slime->balls.erase(bIt);
+                level->player.audios.at("pickup").play();
+                ui->getWidget<Progress>("progs", "fruit").advance(level->increment);
+                fruitIt = level->fruits.erase(fruitIt);
             }
             else
-                bIt++;
-        for (auto bIt = level->player.balls.begin();
-             bIt != level->player.balls.end();)
-            if (!bIt->used && checkCollision(slime->rect, bIt->rect))
+                fruitIt++;
+        }
+    if (crntLvl->enemies.size() > 0)
+        for (auto sIt = level->enemies.begin(); sIt != level->enemies.end();)
+        {
+            auto &slime = *sIt;
+            auto rawSlime = slime.get();
+            if (slime->dead)
             {
-                slime->damage();
-                bIt = level->player.balls.erase(bIt);
+                slime->drop<Fruit>(level->fruits);
+                sIt = level->enemies.erase(sIt);
+                level->player.enemiesKilled++;
+                continue;
             }
-            else
-                bIt++;
-        sIt++;
-    }
+            if (checkCollision(level->player.rect, slime->range))
+            {
+                slime->actions.alert = true;
+                slime->actions.attacking = true;
+                level->player.inCombat = true;
+                level->player.combatEnemy = rawSlime;
+            }
+            else if (level->player.inCombat && level->player.combatEnemy == rawSlime)
+            {
+                level->player.inCombat = false;
+                level->player.combatEnemy = nullptr;
+                slime->actions.attacking = false;
+                slime->actions.alert = false;
+            }
+            if (slime->actions.attacking)
+                slime->attack((level->player.Position - slime->Position).normalise());
+            for (auto bIt = slime->balls.begin(); bIt != slime->balls.end();)
+                if (!bIt->used && checkCollision(level->player.rect, bIt->rect))
+                {
+                    level->player.damage();
+                    bIt = slime->balls.erase(bIt);
+                }
+                else
+                    bIt++;
+            for (auto bIt = level->player.balls.begin();
+                bIt != level->player.balls.end();)
+                if (!bIt->used && checkCollision(slime->rect, bIt->rect))
+                {
+                    slime->damage();
+                    bIt = level->player.balls.erase(bIt);
+                }
+                else
+                    bIt++;
+            sIt++;
+        }
     bool keyPressed = SDL_GetKeyboardState(NULL)[SDL_SCANCODE_F];
     bool collided = checkCollision(level->player.rect, level->fren.rect);
     if (keyPressed && collided)
