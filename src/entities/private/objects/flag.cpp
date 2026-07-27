@@ -1,4 +1,4 @@
-#include "../flag.h"
+#include "../../objects/flag.h"
 
 Flag::Flag(SDL_Renderer *renderer, float x, float y)
     : Sprite(renderer, "object.png", x, y),

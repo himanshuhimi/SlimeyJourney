@@ -4,8 +4,8 @@
 #include "tools/systems/settings.h"
 #include "tools/systems/level.h"
 #include "tools/systems/region.h"
-#include "entities/cloud.h"
-#include "entities/petal.h"
+#include "entities/passives/cloud.h"
+#include "entities/passives/petal.h"
 #include "tools/systems/ui.h"
 
 class UI;

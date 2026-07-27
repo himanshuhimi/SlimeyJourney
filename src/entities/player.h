@@ -1,7 +1,7 @@
 #pragma once
 
 #include "tools/sprite.h"
-#include "ball.h"
+#include "weapons/ball.h"
 #include "tools/enemy.h"
 
 class Player : public Sprite
@@ -13,7 +13,7 @@ public:
     map<string, Audio> audios = {};
     float speed = 0.0f, jumpStrength = 0.0f;
     int maxHP = 5, HP = maxHP, enemiesKilled = 0;
-    bool inCombat = false, dead = false, immune = false, mouseClicked = false;
+    bool inCombat = false, dead = false, immune = false, mouseClicked = false, buffed = false;
     Player(SDL_Renderer *renderer, float x, float y);
     void handle(double dt, const vector<Object> &objects) override;
     void render(Vector2D Camera) override;

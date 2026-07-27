@@ -174,13 +174,11 @@ void Game::setLevel(string region, int number)
 {
     crntRgnName = region;
     lvlNum = number;
-    int rgnMax = rgnMaxLvls.at(crntRgnName);
-    if (lvlNum < rgnMax)
-    {
-        auto &crntLvls = regions.at(crntRgnName);
-        crntLvl = crntLvls.at(lvlNum);
-    }
-    else if (lvlNum >= rgnMax)
+    auto &crntLvls = regions.at(crntRgnName);
+    auto it = crntLvls.find(lvlNum);
+    if (it != crntLvls.end())
+        crntLvl = it->second;
+    else
         setScene(Scenes::SELECTION);
 }
 
@@ -215,15 +213,14 @@ void Game::collision()
             level->player.resetPos();
     for (auto &pad : level->pads)
     {
-        bool buffed = false;
-        if (checkCollision(level->player.rect, pad.rect) && !buffed)
+        if (checkCollision(level->player.rect, pad.rect) && !level->player.buffed)
         {
-            buffed = true;
+            level->player.buffed = true;
             level->player.jumpStrength += 0.2 * level->player.jumpStrength;
         }
         else
         {
-            buffed = false;
+            level->player.buffed = false;
             level->player.jumpStrength -= 0.2 * level->player.jumpStrength;
         }
         

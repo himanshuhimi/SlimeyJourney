@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../ball.h"
+#include "../weapons/ball.h"
 #include "tools/enemy.h"
 
 class Slime : public Enemy

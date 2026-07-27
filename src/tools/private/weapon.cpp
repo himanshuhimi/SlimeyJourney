@@ -1,16 +1,16 @@
-#include "../ball.h"
+#include "../weapon.h"
 
-Ball::Ball(SDL_Renderer *renderer, float x, float y, string type, Vector2D Direction)
-    : Sprite(renderer, type + "/ball.png", x, y)
+Weapon::Weapon(SDL_Renderer *renderer, string imgSource, 
+        float x, float y, Vector2D Direction)
+    : Sprite(renderer, imgSource, x, y), Direction(Direction)
 {
     speed = 180;
     prevPos = Position;
     Velocity.x = Direction.x * speed;
     Velocity.y = Direction.y * speed;
-    anims = {{"explosion", Animation(renderer, "explosion.png")}};
 }
 
-void Ball::handle(double dt, const vector<Object> &objects)
+void Weapon::handle(double dt, const vector<Object> &objects)
 {
     if (used)
         return;
@@ -20,14 +20,14 @@ void Ball::handle(double dt, const vector<Object> &objects)
     Sprite::handle(dt, objects);
 }
 
-void Ball::render(Vector2D Camera)
+void Weapon::render(Vector2D Camera)
 {
     if (used)
         return;
     Sprite::render(Camera);
 }
 
-void Ball::destroy()
+void Weapon::destroy()
 {
     used = true;
 }

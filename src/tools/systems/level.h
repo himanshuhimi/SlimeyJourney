@@ -2,12 +2,12 @@
 
 #include "map.h"
 #include "entities/player.h"
-#include "entities/fruit.h"
-#include "entities/flag.h"
-#include "entities/fren.h"
-#include "entities/spike.h"
-#include "entities/stone.h"
-#include "entities/pad.h"
+#include "entities/objects/fruit.h"
+#include "entities/objects/flag.h"
+#include "entities/objects/spike.h"
+#include "entities/objects/stone.h"
+#include "entities/objects/pad.h"
+#include "entities/passives/fren.h"
 #include "entities/enemies/slime.h"
 #include "tools/systems/quest.h"
 

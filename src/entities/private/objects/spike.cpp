@@ -1,4 +1,4 @@
-#include "../spike.h"
+#include "../../objects/spike.h"
 
 Spike::Spike(SDL_Renderer *renderer, float x, float y, float width, float height)
     : Sprite(renderer, "object.png", x, y) 

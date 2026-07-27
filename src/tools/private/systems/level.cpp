@@ -41,6 +41,8 @@ void Level::handle(double dt)
         spike.handle(dt, objects);
     for (auto &slime : enemies)
         slime->handle(dt, objects);
+    for (auto &pad : pads)
+        pad.handle(dt, objects);
     for (auto &[_, quest] : quests)
         quest.handle(dt);
     player.handle(dt, objects);
@@ -63,6 +65,8 @@ void Level::render()
         slime->render(Camera);
     for (auto &stone : stones)
         stone.render(Camera);
+    for (auto &pad : pads)
+        pad.render(Camera);
     for (auto &[_, quest] : quests)
         quest.render();
     timer.render();

@@ -1,4 +1,4 @@
-#include "../cloud.h"
+#include "../../passives/cloud.h"
 
 Cloud::Cloud(SDL_Renderer *renderer)
     : Sprite(

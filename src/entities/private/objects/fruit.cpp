@@ -1,4 +1,4 @@
-#include "../fruit.h"
+#include "../../objects/fruit.h"
 
 Fruit::Fruit(SDL_Renderer *renderer, float x, float y)
     : Sprite(renderer, "object.png", x, y)

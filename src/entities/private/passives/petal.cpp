@@ -1,4 +1,4 @@
-#include "../petal.h"
+#include "../../passives/petal.h"
 
 Petal::Petal(SDL_Renderer *renderer)
     : Sprite(renderer, "petals/leaf.png", 

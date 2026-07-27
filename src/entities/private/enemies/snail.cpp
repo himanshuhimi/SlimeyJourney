@@ -11,3 +11,7 @@ Snail::Snail(SDL_Renderer *renderer, float x, float y)
 {
     Velocity.x = data.speed;
 }
+
+void Snail::attack(Vector2D Direction)
+{
+}

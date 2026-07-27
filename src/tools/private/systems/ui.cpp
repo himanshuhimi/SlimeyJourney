@@ -376,9 +376,7 @@ void OverScreen::render(Vector2D Camera)
     UIScreen::render(Camera);
 }
 
-UI::UI(Game &game) : game(game)
-{
-}
+UI::UI(Game &game) : game(game) {}
 
 void UI::render(Vector2D Camera)
 {

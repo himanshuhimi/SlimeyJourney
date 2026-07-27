@@ -1,4 +1,4 @@
-#include "../stone.h"
+#include "../../objects/stone.h"
 
 Stone::Stone(SDL_Renderer *renderer, float x, float y)
     : Sprite(renderer, "stones/0.png", x, y)
