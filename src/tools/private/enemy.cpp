@@ -17,7 +17,6 @@ Enemy::Enemy(SDL_Renderer *renderer, float x, float y, string type, EnemyData da
     range = SDL_FRect{rect.x, rect.y, data.atkRange, data.atkRange};
     lineOfSight.rect.w = data.atkRange;
     HP = data.maxHP;
-    knockback = 32.0f;
     anims = {
         {"walking", Animation(renderer, type + "/walking.png", 0.1)},
         {"damage", Animation(renderer, type + "/damage.png", 0.1)}};
@@ -69,8 +68,6 @@ void Enemy::damage(int byPoints)
     if (dead)
         return;
     HP -= byPoints;
-    knockback *= (Velocity.x > 0) ? 1 : -1;
-    Position.x += knockback;
     anims.at("damage").restart();
     audios.at("hurt").play(Random.randint(50, 100));
 }

@@ -5,7 +5,6 @@ Player::Player(SDL_Renderer *renderer, float x, float y)
 {
     jumpStrength = 32.0f * 5;
     speed = 32 * 5;
-    knockback = 32.0f;
     anims = {
         {"jump", Animation(renderer, "player/jump.png")},
         {"damage", Animation(renderer, "player/damage.png", 0.1)},
@@ -65,7 +64,6 @@ void Player::damage(int byPoints)
         HP -= byPoints;
     movable = false;
     immune = true;
-    Position.x -= knockback;
     anims.at("damage").restart();
     audios.at("hurt").play(Random.randint(50, 80));
 }

@@ -29,7 +29,6 @@ public:
     Cooldown atkCooldown = {3.0f};
     map<string, Animation> anims = {};
     map<string, Audio> audios = {};
-    float knockback = 0.0f;
     string type = "";
     bool dead = false;
     int HP = 0;
