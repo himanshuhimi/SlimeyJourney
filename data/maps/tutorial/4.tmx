@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.12.2" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="3" nextobjectid="24">
+<map version="1.10" tiledversion="1.12.2" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="35">
  <tileset firstgid="1" source="../tilesets/0.tsx"/>
- <layer id="1" name="ground" width="20" height="20">
+ <layer id="4" name="ground" width="20" height="20">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -17,31 +17,37 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-1,2,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,2,2,2,2,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,18,18,18,18,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,3,
-17,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,19
+2,2,2,2,2,2,0,0,0,0,0,0,0,0,2,2,2,2,2,2,
+18,18,18,18,18,18,0,0,0,0,0,0,0,0,18,18,18,18,18,18
 </data>
  </layer>
- <objectgroup id="2" name="objects">
-  <object id="2" name="object" x="0" y="576" width="640" height="32"/>
-  <object id="3" name="player" x="32" y="576">
+ <objectgroup id="3" name="objects">
+  <object id="25" name="object" x="0" y="576" width="192" height="32"/>
+  <object id="26" name="object" x="448" y="576" width="192" height="32"/>
+  <object id="27" name="object" x="256" y="480" width="128" height="32"/>
+  <object id="28" name="player" x="32" y="576">
    <point/>
   </object>
-  <object id="4" name="fren" x="608" y="576">
+  <object id="29" name="pad" x="160" y="576">
    <point/>
   </object>
-  <object id="13" name="stone" x="64" y="480" width="32" height="96"/>
-  <object id="17" name="fruit" x="320" y="576">
+  <object id="30" name="pad" x="480" y="576">
    <point/>
   </object>
-  <object id="18" name="object" x="0" y="448" width="96" height="32"/>
-  <object id="21" name="fruit" x="32" y="448">
+  <object id="31" name="fren" x="608" y="576">
    <point/>
   </object>
-  <object id="23" name="pad" x="128" y="576">
+  <object id="32" name="fruit" x="96" y="576">
+   <point/>
+  </object>
+  <object id="33" name="fruit" x="544" y="576">
+   <point/>
+  </object>
+  <object id="34" name="enemy" x="320" y="480">
    <point/>
   </object>
  </objectgroup>

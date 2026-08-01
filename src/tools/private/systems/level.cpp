@@ -2,7 +2,7 @@
 
 Level::Level(SDL_Renderer *renderer, string region, int number)
     : renderer(renderer), player(renderer, 0, 0),
-      timer(renderer, WIDTH / 2, 20, durations.at(number)), fren(renderer, 0, 0),
+      timer(renderer, WIDTH / 2, 20, durations.at(region).at(number)), fren(renderer, 0, 0),
       map(renderer, region + "/" + std::to_string(number) + ".tmx")
 {
     loadObjects();

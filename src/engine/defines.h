@@ -64,4 +64,4 @@ enum Scenes
 
 extern map<int, string> titles;
 extern map<int, SDL_Color> titleColors;
-extern map<int, double> durations;
+extern map<string, map<int, double>> durations;

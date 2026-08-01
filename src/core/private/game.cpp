@@ -64,10 +64,17 @@ void Game::handle()
         case SDL_EVENT_USER:
             if (event.type == PASSIVE_EVENT)
             {
+                if (clouds.size() > 99 || petals.size() > 99)
+                {
+                    clouds.clear();
+                    petals.clear();
+                }
                 if (Random.randint(0, 1))
                     clouds.emplace_back(Cloud(renderer));
                 else
                     petals.emplace_back(Petal(renderer));
+                print("Clouds: " + std::to_string(clouds.size()) 
+                        + ", Petals: " + std::to_string(petals.size()));
             }
             break;
         }
