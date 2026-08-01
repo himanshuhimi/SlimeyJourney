@@ -14,4 +14,5 @@ Snail::Snail(SDL_Renderer *renderer, float x, float y)
 
 void Snail::attack(Vector2D Direction)
 {
+    
 }

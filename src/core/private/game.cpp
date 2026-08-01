@@ -73,8 +73,6 @@ void Game::handle()
                     clouds.emplace_back(Cloud(renderer));
                 else
                     petals.emplace_back(Petal(renderer));
-                print("Clouds: " + std::to_string(clouds.size()) 
-                        + ", Petals: " + std::to_string(petals.size()));
             }
             break;
         }
