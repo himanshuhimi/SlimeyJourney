@@ -41,16 +41,15 @@ void Sprite::render(Vector2D Camera)
 
 void Sprite::moveX(double dt, const vector<Object> &objects) 
 {
-    float oldX = Position.x;
     Position.x += Velocity.x * dt;
     rect.x = Position.x;
     for (const auto &obj : objects)
     {
         if (!checkCollision(rect, obj.rect))
             continue;
-        if (Velocity.x > 0 && oldX + rect.w <= obj.rect.x)
+        if (Velocity.x > 0 && Position.x + rect.w <= obj.rect.x)
             Position.x = obj.rect.x - rect.w;
-        else if (Velocity.x < 0 && oldX >= obj.rect.x + obj.rect.w)
+        else if (Velocity.x < 0 && Position.x >= obj.rect.x + obj.rect.w)
             Position.x = obj.rect.x + obj.rect.w;
         rect.x = Position.x;
         Velocity.x = 0;

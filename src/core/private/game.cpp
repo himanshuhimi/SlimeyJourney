@@ -194,6 +194,7 @@ void Game::nextLevel()
 {
     lvlNum++;
     setLevel(crntRgnName, lvlNum);
+    ui->updateScreen(scene);
 }
 
 void Game::collision()

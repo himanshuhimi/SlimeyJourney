@@ -1,4 +1,4 @@
-#include "../enemy.h"
+#include "../../sprites/enemy.h"
 
 EnemyData::EnemyData(
     float speed,

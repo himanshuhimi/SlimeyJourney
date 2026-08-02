@@ -1,4 +1,4 @@
-#include "../weapon.h"
+#include "../../sprites/weapon.h"
 
 Weapon::Weapon(SDL_Renderer *renderer, string imgSource, 
         float x, float y, Vector2D Direction)
