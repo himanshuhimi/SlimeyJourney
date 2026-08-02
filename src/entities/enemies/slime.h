@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../weapons/ball.h"
 #include "tools/sprites/enemy.h"
+#include "../weapons/ball.h"
 
 class Slime : public Enemy
 {

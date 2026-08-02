@@ -14,5 +14,8 @@ Snail::Snail(SDL_Renderer *renderer, float x, float y)
 
 void Snail::attack(Vector2D Direction)
 {
-    
+    if (!atkCooldown.available || dead)
+        return;
+    spits.emplace_back(renderer, Center.x, Center.y, Direction);
+    atkCooldown.reset();
 }

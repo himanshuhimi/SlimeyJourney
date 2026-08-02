@@ -29,6 +29,7 @@ void Enemy::handle(double dt, const vector<Object> &objects)
     if (dead)
         return;
     Sprite::handle(dt, objects);
+    atkCooldown.handle(dt);
     range.x = rect.x - (range.w / 2) + (rect.w / 2);
     range.y = rect.y - (range.h / 2) + (rect.h / 2);
     if (anims.at("damage").active)
@@ -51,7 +52,12 @@ void Enemy::render(Vector2D Camera)
         anims.at("damage").render(Camera, rect);
     if (data.rangeVisible)
     {
-        SDL_SetRenderDrawColor(renderer, colors.red.r, colors.red.g, colors.red.b, colors.red.a);
+        SDL_SetRenderDrawColor(
+            renderer, 
+            colors.red.r, 
+            colors.red.g, 
+            colors.red.b, 
+            colors.red.a);
         SDL_FRect rangeDst = range;
         rangeDst.x -= Camera.x;
         rangeDst.y -= Camera.y;
