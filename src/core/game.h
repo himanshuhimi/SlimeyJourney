@@ -39,6 +39,7 @@ private:
     map<string, Levels> regions = {};
     const Uint32 PASSIVE_EVENT = SDL_RegisterEvents(1);
     map<string, vector<int>> lvlNums = {};
+    map<string, Audio> audios = {};
     Uint64 LAST = SDL_GetPerformanceCounter();
     map<string, int> rgnMaxLvls = {};
     string crntRgnName = "";

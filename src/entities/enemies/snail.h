@@ -1,6 +1,6 @@
 #pragma once
 
-#include "tools/enemy.h"
+#include "tools/sprites/enemy.h"
 
 class Snail : public Enemy
 {

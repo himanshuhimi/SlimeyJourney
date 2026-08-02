@@ -278,7 +278,7 @@ SelectionScreen::SelectionScreen(Game &game) : UIScreen(game)
             make_unique<Card>(
                 game.renderer,
                 WIDTH / 2,
-                SPRITE_SIZE / 2 + SPRITE_SIZE * (1.5 * i++),
+                HEIGHT / 2  - SPRITE_SIZE + SPRITE_SIZE * (1.5 * i++),
                 capitalize(name),
                 func,
                 image));

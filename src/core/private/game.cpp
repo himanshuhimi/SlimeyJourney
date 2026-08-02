@@ -24,6 +24,9 @@ Game::Game()
     ui = new UI(*this);
     active = true;
     SDL_AddTimer(5000, passiveTimerCallback, this);
+    audios = {
+        {"success", Audio("success.wav")}
+    };
     setScene(Scenes::HOME, false);
 }
 
@@ -257,6 +260,8 @@ void Game::collision()
                 slime->drop<Fruit>(level->fruits);
                 sIt = level->enemies.erase(sIt);
                 level->player.enemiesKilled++;
+                if (level->player.HP != level->player.maxHP)
+                    level->player.HP++;
                 continue;
             }
             if (checkCollision(level->player.rect, slime->range))
@@ -310,7 +315,10 @@ void Game::collision()
                                     [](auto &q)
                                     { return q.second.completed; });
         if (complete)
+        {
             nextLevel();
+            audios.at("success").play();
+        }
     }
     if (level->player.dead || crntLvl->timer.currentTime <= 0.0)
         setScene(Scenes::OVER, false);

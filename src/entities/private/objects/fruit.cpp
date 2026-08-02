@@ -14,6 +14,8 @@ void Fruit::handle(double dt, const vector<Object> &objects)
 {
     if (picked)
         return;
+    time += dt;
+    Velocity.y = sin(360 * time);
     Sprite::handle(dt, objects);
 }
 

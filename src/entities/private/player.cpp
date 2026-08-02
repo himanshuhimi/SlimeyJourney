@@ -9,7 +9,6 @@ Player::Player(SDL_Renderer *renderer, float x, float y)
         {"walking", Animation(renderer, "player/walking.png", 0.1)}};
     audios = {
         {"jump", Audio("player/jump.wav")},
-        {"walking", Audio("player/walking.wav")},
         {"shoot", Audio("player/shoot.wav")},
         {"pickup", Audio("player/pickup.wav")},
         {"hurt", Audio("player/hurt.wav")}};

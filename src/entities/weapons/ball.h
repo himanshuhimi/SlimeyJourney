@@ -1,6 +1,6 @@
 #pragma once
 
-#include "tools/weapon.h"
+#include "tools/sprites/weapon.h"
 
 class Ball : public Weapon
 {

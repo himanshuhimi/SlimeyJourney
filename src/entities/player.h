@@ -2,7 +2,7 @@
 
 #include "tools/sprite.h"
 #include "weapons/ball.h"
-#include "tools/enemy.h"
+#include "tools/sprites/enemy.h"
 
 class Player : public Sprite
 {

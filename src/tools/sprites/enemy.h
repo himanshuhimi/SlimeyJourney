@@ -1,6 +1,6 @@
 #pragma once
 
-#include "tools/sprite.h"
+#include "../sprite.h"
 
 struct EnemyData
 {
