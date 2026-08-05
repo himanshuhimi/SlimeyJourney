@@ -252,23 +252,23 @@ void Game::collision()
                 fruitIt++;
         }
     if (crntLvl->enemies.size() > 0)
-        for (auto sIt = level->enemies.begin(); sIt != level->enemies.end();)
+        for (auto eIt = level->enemies.begin(); eIt != level->enemies.end();)
         {
-            auto &slime = *sIt;
-            auto rawSlime = slime.get();
-            if (slime->dead)
+            auto &enemy = *eIt;
+            auto rawSlime = enemy.get();
+            if (enemy->dead)
             {
-                slime->drop<Fruit>(level->fruits);
-                sIt = level->enemies.erase(sIt);
+                enemy->drop<Fruit>(level->fruits);
+                eIt = level->enemies.erase(eIt);
                 level->player.enemiesKilled++;
                 if (level->player.HP != level->player.maxHP)
                     level->player.HP++;
                 continue;
             }
-            if (checkCollision(level->player.rect, slime->range))
+            if (checkCollision(level->player.rect, enemy->range))
             {
-                slime->actions.alert = true;
-                slime->actions.attacking = true;
+                enemy->actions.alert = true;
+                enemy->actions.attacking = true;
                 level->player.inCombat = true;
                 level->player.combatEnemy = rawSlime;
             }
@@ -276,29 +276,32 @@ void Game::collision()
             {
                 level->player.inCombat = false;
                 level->player.combatEnemy = nullptr;
-                slime->actions.attacking = false;
-                slime->actions.alert = false;
+                enemy->actions.attacking = false;
+                enemy->actions.alert = false;
             }
-            if (slime->actions.attacking)
-                slime->attack((level->player.Position - slime->Position).normalise());
-            for (auto bIt = slime->balls.begin(); bIt != slime->balls.end();)
-                if (!bIt->used && checkCollision(level->player.rect, bIt->rect))
+            if (enemy->actions.attacking)
+                enemy->attack((level->player.Position - enemy->Position).normalise());
+            for (auto wIt = enemy->throws.begin(); wIt != enemy->throws.end();)
+            {
+                auto &weapon = *wIt->get();
+                if (!weapon.used && checkCollision(level->player.rect, weapon.rect))
                 {
                     level->player.damage();
-                    bIt = slime->balls.erase(bIt);
+                    wIt = enemy->throws.erase(wIt);
                 }
                 else
-                    bIt++;
+                    wIt++;
+            }
             for (auto bIt = level->player.balls.begin();
                 bIt != level->player.balls.end();)
-                if (!bIt->used && checkCollision(slime->rect, bIt->rect))
+                if (!bIt->used && checkCollision(enemy->rect, bIt->rect))
                 {
-                    slime->damage();
+                    enemy->damage();
                     bIt = level->player.balls.erase(bIt);
                 }
                 else
                     bIt++;
-            sIt++;
+            eIt++;
         }
     bool keyPressed = SDL_GetKeyboardState(NULL)[SDL_SCANCODE_F];
     bool collided = checkCollision(level->player.rect, level->fren.rect);

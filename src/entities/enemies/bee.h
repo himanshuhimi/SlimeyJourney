@@ -6,7 +6,6 @@
 class Bee : public Enemy
 {
 public:
-    vector<Sting> stings = {};
-    Bee(SDL_Renderer *renderer, float x, float y, Vector2D Direction);
+    Bee(SDL_Renderer *renderer, float x, float y);
     void attack(Vector2D Direction);
 };

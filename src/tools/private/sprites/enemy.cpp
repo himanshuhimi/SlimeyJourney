@@ -38,6 +38,8 @@ void Enemy::handle(double dt, const vector<Object> &objects)
         anims.at("idle").handle(dt);
     else
         anims.at("idle").restart();
+    for (auto &throwable : throws)
+        throwable->handle(dt, objects);
 }
 
 void Enemy::render(Vector2D Camera)
@@ -63,6 +65,8 @@ void Enemy::render(Vector2D Camera)
         rangeDst.y -= Camera.y;
         SDL_RenderRect(renderer, &rangeDst);
     }
+    for (auto &throwable : throws)
+        throwable->render(Camera);
 }
 
 void Enemy::damage(int byPoints)
@@ -72,4 +76,10 @@ void Enemy::damage(int byPoints)
     HP -= byPoints;
     anims.at("damage").restart();
     audios.at("hurt").play(Random.randint(50, 100));
+}
+
+void Enemy::attack(Vector2D Direction)
+{
+    if (dead)
+        return;
 }

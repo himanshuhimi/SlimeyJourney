@@ -15,7 +15,7 @@ extern struct _Random_
 {
     int randint(int begin, int end);
     template <typename T>
-    T choice(vector<T> vec)
+    T choice(vector<T> &vec)
     {
         if (vec.empty())
             std::cout << "Empty Vector.";

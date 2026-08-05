@@ -8,7 +8,7 @@ Cloud::Cloud(SDL_Renderer *renderer)
         Random.randint(SPRITE_SIZE, HEIGHT - SPRITE_SIZE)) 
 {
     Velocity.x = Random.randint(1, 10);
-    Velocity.x *= Random.choice<int>({-1, 1});
+    Velocity.x *= Random.randint(0, 1) ? -1 : 1;
 }
 
 void Cloud::handle(double dt)

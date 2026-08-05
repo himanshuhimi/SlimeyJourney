@@ -36,6 +36,11 @@ void Slime::attack(Vector2D Direction)
 {
     if (!atkCooldown.available || dead)
         return;
-    balls.emplace_back(renderer, Center.x, Center.y, "enemies/" + type, Direction);
+    throws.emplace_back(make_unique<Ball>(
+        renderer, 
+        Center.x, 
+        Center.y, 
+        "enemies/" + type, 
+        Direction));
     atkCooldown.reset();
 }

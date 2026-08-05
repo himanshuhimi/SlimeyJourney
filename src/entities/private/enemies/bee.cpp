@@ -1,6 +1,6 @@
 #include "../../enemies/bee.h"
 
-Bee::Bee(SDL_Renderer *renderer, float x, float y, Vector2D Direction)
+Bee::Bee(SDL_Renderer *renderer, float x, float y)
     : Enemy(renderer, x, y, 
         "bee", 
         EnemyData{
@@ -17,6 +17,6 @@ void Bee::attack(Vector2D Direction)
 {
     if (!atkCooldown.available || dead)
         return;
-    stings.emplace_back(renderer, Center.x, Center.y, "enemies/" + type, Direction);
+    throws.emplace_back(make_unique<Sting>(renderer, Center.x, Center.y, Direction));
     atkCooldown.reset();
 }

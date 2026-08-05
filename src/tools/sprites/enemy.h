@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../sprite.h"
+#include "weapon.h"
 
 struct EnemyData
 {
@@ -29,6 +30,7 @@ public:
     Cooldown atkCooldown = {3.0f};
     map<string, Animation> anims = {};
     map<string, Audio> audios = {};
+    vector<unique_ptr<Weapon>> throws = {};
     string type = "";
     bool dead = false;
     int HP = 0;
@@ -36,6 +38,7 @@ public:
     virtual void handle(double dt, const vector<Object> &objects);
     virtual void render(Vector2D Camera);
     virtual void damage(int byPoints = 1);
+    virtual void attack(Vector2D Direction);
     template <typename T>
     void drop(vector<unique_ptr<T>> &droppingList)
     {

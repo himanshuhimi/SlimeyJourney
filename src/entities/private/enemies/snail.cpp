@@ -16,6 +16,6 @@ void Snail::attack(Vector2D Direction)
 {
     if (!atkCooldown.available || dead)
         return;
-    spits.emplace_back(renderer, Center.x, Center.y, Direction);
+    throws.emplace_back(make_unique<Spit>(renderer, Center.x, Center.y, Direction));
     atkCooldown.reset();
 }

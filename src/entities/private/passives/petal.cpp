@@ -6,9 +6,9 @@ Petal::Petal(SDL_Renderer *renderer)
         Random.randint(0, HEIGHT))
 {
     Velocity.x = Random.randint(1, 10);
-    Velocity.x *= Random.choice<int>({-1, 1});
+    Velocity.x *= Random.randint(0, 1) ? -1 : 1;
     Velocity.y = Random.randint(1, 10);
-    Velocity.y *= Random.choice<int>({-1, 1});
+    Velocity.y *= Random.randint(0, 1) ? -1 : 1;
 }
 
 void Petal::handle(double dt)
