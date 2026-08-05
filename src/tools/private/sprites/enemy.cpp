@@ -11,7 +11,7 @@ EnemyData::EnemyData(
       onAtk(atkMethod) {};
 
 Enemy::Enemy(SDL_Renderer *renderer, float x, float y, string type, EnemyData data)
-    : Sprite(renderer, "object.png", x, y), type(type), data(data)
+    : Sprite(renderer, "empty.png", x, y), type(type), data(data)
 {
     image = Image{renderer, "images/enemies/" + type + "/idle.png"};
     range = SDL_FRect{rect.x, rect.y, data.atkRange, data.atkRange};

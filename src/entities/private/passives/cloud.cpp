@@ -3,7 +3,7 @@
 Cloud::Cloud(SDL_Renderer *renderer)
     : Sprite(
         renderer, 
-        "cloud.png",
+        "passives/clouds/0.png",
         Random.randint(SPRITE_SIZE, WIDTH - SPRITE_SIZE),
         Random.randint(SPRITE_SIZE, HEIGHT - SPRITE_SIZE)) 
 {

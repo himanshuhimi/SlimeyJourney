@@ -2,7 +2,7 @@
 
 Weapon::Weapon(SDL_Renderer *renderer, string imgSource, 
         float x, float y, Vector2D Direction)
-    : Sprite(renderer, imgSource, x, y), Direction(Direction)
+    : Sprite(renderer, "weapons/" + imgSource, x, y), Direction(Direction)
 {
     speed = 180;
     prevPos = Position;

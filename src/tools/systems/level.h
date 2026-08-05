@@ -3,7 +3,6 @@
 #include "map.h"
 #include "entities/player.h"
 #include "entities/objects/fruit.h"
-#include "entities/objects/flag.h"
 #include "entities/objects/spike.h"
 #include "entities/objects/stone.h"
 #include "entities/objects/pad.h"

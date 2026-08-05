@@ -1,7 +1,7 @@
 #include "../../passives/fren.h"
 
 Fren::Fren(SDL_Renderer *renderer, float x, float y)
-    : Sprite(renderer, "fren/idle.png", x, y) 
+    : Sprite(renderer, "passives/fren/idle.png", x, y) 
 {
     dialogue = new Dialogue(renderer, x, y - SPRITE_SIZE, "Need.. food!");
 }

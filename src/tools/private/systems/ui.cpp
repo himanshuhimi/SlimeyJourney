@@ -36,8 +36,8 @@ void UIScreen::update(SDL_Event event)
 }
 
 Hearts::Hearts(Game &game)
-    : game(game), brokenHeart{game.renderer, "images/hearts/broken.png"},
-      normalHeart(game.renderer, "images/hearts/normal.png")
+    : game(game), brokenHeart{game.renderer, "ui/hearts/broken.png"},
+      normalHeart(game.renderer, "ui/hearts/normal.png")
 {
     if (game.crntLvl == nullptr)
         return;
@@ -267,12 +267,12 @@ SelectionScreen::SelectionScreen(Game &game) : UIScreen(game)
     int i = 1;
     for (auto &[name, func] : funcs)
     {
-        Image image{game.renderer, "images/cards/default.png"};
-        string path = "data/assets/images/cards/" + name + ".png";
+        Image image{game.renderer, "ui/cards/default.png"};
+        string path = "data/assets/ui/cards/" + name + ".png";
         if (fs::exists(path))
             image = Image{game.renderer, path};
         else
-            image = Image(game.renderer, "images/cards/default.png");
+            image = Image(game.renderer, "ui/cards/default.png");
         ctgWidgets.at("cards").emplace_back(
             name,
             make_unique<Card>(

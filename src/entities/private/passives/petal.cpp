@@ -1,7 +1,7 @@
 #include "../../passives/petal.h"
 
 Petal::Petal(SDL_Renderer *renderer)
-    : Sprite(renderer, "petals/leaf.png", 
+    : Sprite(renderer, "passives/petals/leaf.png", 
         Random.randint(0, WIDTH), 
         Random.randint(0, HEIGHT))
 {

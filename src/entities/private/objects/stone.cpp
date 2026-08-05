@@ -1,7 +1,7 @@
 #include "../../objects/stone.h"
 
 Stone::Stone(SDL_Renderer *renderer, float x, float y)
-    : Sprite(renderer, "stones/0.png", x, y)
+    : Sprite(renderer, "objects/stones/0.png", x, y)
 {
     movable = false;
 }

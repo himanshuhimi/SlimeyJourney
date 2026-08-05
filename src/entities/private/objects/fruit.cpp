@@ -1,13 +1,13 @@
 #include "../../objects/fruit.h"
 
 Fruit::Fruit(SDL_Renderer *renderer, float x, float y)
-    : Sprite(renderer, "object.png", x, y)
+    : Sprite(renderer, "empty.png", x, y)
 {
     vector<string> fruits = {};
-    for (auto &entry : fs::directory_iterator("data/assets/images/fruits/")) 
+    for (auto &entry : fs::directory_iterator("data/assets/images/objects/fruits/")) 
         fruits.emplace_back(entry.path().stem().string());
     choice = Random.choice<string>(fruits);
-    image = Image(renderer, "images/fruits/" + choice + ".png");
+    image = Image(renderer, "images/objects/fruits/" + choice + ".png");
 }
 
 void Fruit::handle(double dt, const vector<Object> &objects)
