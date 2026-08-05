@@ -38,7 +38,7 @@ void Player::render(Vector2D Camera)
     dst = rect;
     for (auto &[key, anim] : anims)
         anim.dst = dst;
-    if (states.inAir)
+    if (anims.at("jump").active)
         anims.at("jump").render(Camera, rect);
     else if (anims.at("walking").active)
         anims.at("walking").render(Camera, rect);
@@ -89,6 +89,7 @@ void Player::handleMovement(double dt)
         return;
     const bool *keys = SDL_GetKeyboardState(NULL);
     Velocity.x = -((int)keys[SDL_SCANCODE_A] - (int)keys[SDL_SCANCODE_D]) * speed;
+    states.walking = (bool)Velocity.x;
     anims.at("walking").active = states.walking;
     if (!states.inAir && keys[SDL_SCANCODE_SPACE])
     {
