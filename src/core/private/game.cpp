@@ -19,7 +19,7 @@ Game::Game()
     if (!SDL_CreateWindowAndRenderer(
         TITLE.c_str(), 
         width, height, 
-        SDL_WINDOW_VULKAN, 
+        0, 
         &window, &renderer))
         print("Display Unloaded: " + (string)SDL_GetError());
     if (scaled)

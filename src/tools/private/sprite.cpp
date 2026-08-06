@@ -1,8 +1,8 @@
 #include "../sprite.h"
 
-Sprite::Sprite(SDL_Renderer *renderer, string imgSource, float x, float y)
+Sprite::Sprite(SDL_Renderer *renderer, string imgSource, float x, float y, double imgAngle)
     : renderer(renderer), Original(x, y), image(renderer, "images/" + imgSource),
-      gravityLOS(renderer, 0, 0, 1, 0), lineOfSight(renderer, 0, 0, 0, 1)
+      imgAngle(imgAngle), gravityLOS(renderer, 0, 0, 1, 0), lineOfSight(renderer, 0, 0, 0, 1)
 {
     Position = Vector2D{x - image.width / 2, y - image.height / 2};
     rect.x = Position.x;

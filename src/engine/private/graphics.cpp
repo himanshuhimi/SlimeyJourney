@@ -1,6 +1,7 @@
 #include "../graphics.h"
 
-Image::Image(SDL_Renderer *renderer, string source) : renderer(renderer), source(source)
+Image::Image(SDL_Renderer *renderer, string source, double angle) 
+    : renderer(renderer), source(source), angle(angle)
 {
     string path = "data/assets/" + source;
     if (!renderer)
@@ -14,7 +15,10 @@ Image::Image(SDL_Renderer *renderer, string source) : renderer(renderer), source
 
 void Image::render(const SDL_FRect *src, const SDL_FRect *dst)
 {
-    SDL_RenderTexture(renderer, texture, src, dst);
+    if (angle != 0)
+        SDL_RenderTextureRotated(renderer, texture, src, dst, angle, nullptr, SDL_FLIP_NONE);
+    else
+        SDL_RenderTexture(renderer, texture, src, dst);
 }
 
 Animation::Animation(SDL_Renderer *renderer, string source, float frameTime)

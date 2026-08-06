@@ -14,8 +14,9 @@ struct Image
     SDL_Surface *surface = nullptr;
     SDL_Texture *texture = nullptr;
     float width = 0, height = 0;
+    double angle = 0;
     string source = "";
-    Image(SDL_Renderer *renderer, string source);
+    Image(SDL_Renderer *renderer, string source, double angle = 0);
     void render(const SDL_FRect *srcrect, const SDL_FRect *dstrect);
 };
 

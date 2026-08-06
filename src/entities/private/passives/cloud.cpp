@@ -2,10 +2,10 @@
 
 Cloud::Cloud(SDL_Renderer *renderer)
     : Sprite(
-        renderer, 
-        "passives/clouds/0.png",
+        renderer, "passives/cloud.png",
         Random.randint(SPRITE_SIZE, WIDTH - SPRITE_SIZE),
-        Random.randint(SPRITE_SIZE, HEIGHT - SPRITE_SIZE)) 
+        Random.randint(SPRITE_SIZE, HEIGHT - SPRITE_SIZE),
+        Random.randint(0, 180))
 {
     Velocity.x = Random.randint(1, 10);
     Velocity.x *= Random.randint(0, 1) ? -1 : 1;

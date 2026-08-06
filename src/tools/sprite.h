@@ -10,8 +10,9 @@ public:
     LineOfSight gravityLOS, lineOfSight;
     SDL_FRect hitbox, rect, dst;
     Image image;
-    bool movable = true;
     float left, right, bottom, top;
+    double imgAngle = 0;
+    bool movable = true;
     enum Direction
     {
         Left,
@@ -21,7 +22,11 @@ public:
     {
         bool prevOnGround, onGround, inAir, walking;
     } states;
-    Sprite(SDL_Renderer *renderer, string imgSource, float x, float y);
+    Sprite(SDL_Renderer *renderer, 
+        string imgSource, 
+        float x, float y,
+        double imgAngle = 0
+    );
     virtual void handle(double dt, const vector<Object> &objects);
     virtual void render(Vector2D Camera);
 
