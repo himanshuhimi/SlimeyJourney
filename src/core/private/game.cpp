@@ -16,7 +16,11 @@ Game::Game()
         print("Mix Unloaded: " + (string)SDL_GetError());
     float width = (scaled) ? CHANGED_WIDTH : WIDTH;
     float height = (scaled) ? CHANGED_HEIGHT : HEIGHT;
-    if (!SDL_CreateWindowAndRenderer(TITLE.c_str(), width, height, 0, &window, &renderer))
+    if (!SDL_CreateWindowAndRenderer(
+        TITLE.c_str(), 
+        width, height, 
+        SDL_WINDOW_VULKAN, 
+        &window, &renderer))
         print("Display Unloaded: " + (string)SDL_GetError());
     if (scaled)
         SDL_SetRenderLogicalPresentation(renderer, WIDTH, HEIGHT, logicalPresentation);
@@ -226,11 +230,10 @@ void Game::collision()
     {
         bool onPad = false;
         for (auto &pad : level->pads)
-            if (checkCollision(level->player.rect, pad.rect) && !level->player.buffed)
-            {
-                onPad = true;
-                break;
-            }
+        {
+            onPad = checkCollision(level->player.rect, pad.rect) && !level->player.buffed;
+            break;
+        }
         if (onPad && !level->player.buffed)
         {
             level->player.jumpStrength += 0.2 * level->player.baseJumpStrength;

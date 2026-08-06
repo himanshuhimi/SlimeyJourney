@@ -32,7 +32,7 @@ extern SDL_RendererLogicalPresentation logicalPresentation;
 
 void updateScale();
 template <typename T>
-void print(const T &message) { std::cout << "[LOG] " << message << std::endl; };
+void print(const T &message) { std::cout << "[LOG] " << message << "\n" << std::endl; };
 bool checkCollision(SDL_FRect A, SDL_FRect B);
 SDL_FRect getMousePosition();
 vector<string> partition(string splittingStr, string separator);

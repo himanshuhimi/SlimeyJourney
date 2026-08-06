@@ -5,13 +5,13 @@ Audio::Audio(string audioSource)
     string path = "data/assets/audios/" + audioSource;
     mixer = MIX_CreateMixerDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, nullptr);
     if (!mixer)
-        std::cout << "Mixer Unloaded";
+        std::cout << "Mixer Unloaded" << std::endl;
     audio = MIX_LoadAudio(mixer, path.c_str(), true);
     if (!audio)
-        std::cout << "Audio Unloaded:" + path;
+        std::cout << "Audio Unloaded:" + path << std::endl;
     track = MIX_CreateTrack(mixer);
     if (!track)
-        std::cout << "Track Unloaded";
+        std::cout << "Track Unloaded" << std::endl;
     MIX_SetTrackAudio(track, audio);
 }
 

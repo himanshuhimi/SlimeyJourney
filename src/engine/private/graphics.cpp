@@ -7,7 +7,7 @@ Image::Image(SDL_Renderer *renderer, string source) : renderer(renderer), source
         return;
     surface = IMG_Load(path.c_str());
     if (!surface)
-        std::cout << "Unloaded Image: " + (string)SDL_GetError();
+        std::cout << "Unloaded Image: " + (string)SDL_GetError() << std::endl;
     texture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_GetTextureSize(texture, &width, &height);
 }

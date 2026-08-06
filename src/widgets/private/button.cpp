@@ -15,6 +15,7 @@ Button::Button(SDL_Renderer *renderer, float x, float y,
 
 void Button::handle(double dt)
 {
+    t += dt;
     if (hovered())
     {
         if (scaleX < maxScale)
@@ -50,7 +51,13 @@ void Button::render(Vector2D Camera)
     SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
     SDL_RenderFillRect(renderer, &dst);
     if (hovered())
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+    {
+        SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+        SDL_SetRenderDrawColor(
+            renderer, 
+            255, 255, 255, 
+            127.5 * (sin(2 * M_PI * t) + 1.0));
+    }
     else
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderRect(renderer, &dst);

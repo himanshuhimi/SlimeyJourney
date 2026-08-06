@@ -11,6 +11,7 @@ public:
     string label;
     float scaleX{1}, scaleY{1};
     float maxScale = 1.1;
+    double t = 0.0;
     bool resized = false;
     Button(SDL_Renderer *renderer, float x, float y, std::function<void()> callback, 
         string label, SDL_Color color);
