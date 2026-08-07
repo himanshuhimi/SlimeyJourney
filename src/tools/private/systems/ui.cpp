@@ -285,7 +285,8 @@ SelectionScreen::SelectionScreen(Game &game) : UIScreen(game)
     }
 }
 
-PlayingScreen::PlayingScreen(Game &game) : UIScreen(game), hearts(game)
+PlayingScreen::PlayingScreen(Game &game) 
+    : UIScreen(game), hearts(game)
 {
     ctgWidgets["progs"];
     ctgWidgets.at("progs").emplace_back(

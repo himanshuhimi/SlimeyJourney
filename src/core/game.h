@@ -7,6 +7,7 @@
 #include "entities/passives/cloud.h"
 #include "entities/passives/petal.h"
 #include "tools/systems/ui.h"
+#include "tools/parallax.h"
 
 class UI;
 class Game
@@ -34,6 +35,7 @@ public:
 private:
     vector<Cloud> clouds = {};
     vector<Petal> petals = {};
+    Parallax *parallax;
     UI *ui = nullptr;
     using Levels = map<int, Level *>;
     map<string, Levels> regions = {};

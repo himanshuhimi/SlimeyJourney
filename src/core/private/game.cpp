@@ -17,20 +17,20 @@ Game::Game()
     float width = (scaled) ? CHANGED_WIDTH : WIDTH;
     float height = (scaled) ? CHANGED_HEIGHT : HEIGHT;
     if (!SDL_CreateWindowAndRenderer(
-        TITLE.c_str(), 
-        width, height, 
-        0, 
-        &window, &renderer))
+            TITLE.c_str(),
+            width, height,
+            0,
+            &window, &renderer))
         print("Display Unloaded: " + (string)SDL_GetError());
     if (scaled)
         SDL_SetRenderLogicalPresentation(renderer, WIDTH, HEIGHT, logicalPresentation);
     SDL_SetRenderVSync(renderer, std::stoi(settings->get("graphics", "vsync")));
     ui = new UI(*this);
+    parallax = new Parallax(renderer);
     active = true;
     SDL_AddTimer(5000, passiveTimerCallback, this);
     audios = {
-        {"success", Audio("success.wav")}
-    };
+        {"success", Audio("success.wav")}};
     setScene(Scenes::HOME, false);
 }
 
@@ -61,9 +61,9 @@ void Game::handle()
             if (event.key.key == SDLK_ESCAPE)
             {
                 if (scene != Scenes::PLAYING &&
-                scene != Scenes::LOADING &&
-                scene != Scenes::HOME) 
-                setScene(Scenes::HOME);
+                    scene != Scenes::LOADING &&
+                    scene != Scenes::HOME)
+                    setScene(Scenes::HOME);
                 if (scene == Scenes::PLAYING)
                     setScene(Scenes::PAUSED, false);
             }
@@ -113,7 +113,10 @@ void Game::render()
     for (auto &petal : petals)
         petal.render((scene == Scenes::PLAYING) ? crntLvl->Camera : Vector2D{});
     if (scene == Scenes::PLAYING)
+    {
+        parallax->render();
         crntLvl->render();
+    }
     ui->render();
     SDL_RenderPresent(renderer);
 }
@@ -206,11 +209,11 @@ void Game::collision()
     auto &level = crntLvl;
     if (crntLvl->stones.size() > 0)
         for (auto stoneIt = level->stones.begin();
-            stoneIt != level->stones.end(); stoneIt++)
+             stoneIt != level->stones.end(); stoneIt++)
         {
             auto stone = *stoneIt;
             for (auto bIt = level->player.balls.begin();
-                bIt != level->player.balls.end();)
+                 bIt != level->player.balls.end();)
             {
                 auto ball = *bIt;
                 if (checkCollision(stone.rect, ball.rect))
@@ -242,7 +245,7 @@ void Game::collision()
     }
     if (crntLvl->fruits.size() > 0)
         for (auto fruitIt = level->fruits.begin();
-            fruitIt != level->fruits.end();)
+             fruitIt != level->fruits.end();)
         {
             auto &fruit = *fruitIt;
             if (!fruit->picked && checkCollision(fruit->rect, level->player.rect))
@@ -296,7 +299,7 @@ void Game::collision()
                     wIt++;
             }
             for (auto bIt = level->player.balls.begin();
-                bIt != level->player.balls.end();)
+                 bIt != level->player.balls.end();)
                 if (!bIt->used && checkCollision(enemy->rect, bIt->rect))
                 {
                     enemy->damage();
