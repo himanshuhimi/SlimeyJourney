@@ -7,7 +7,7 @@ int CHANGED_WIDTH{WIDTH}, CHANGED_HEIGHT{HEIGHT};
 int scaleX{0}, scaleY{0};
 int CAMERA_X{WIDTH / 2}, CAMERA_Y{HEIGHT / 2};
 bool scaled = true;
-SDL_RendererLogicalPresentation logicalPresentation = SDL_LOGICAL_PRESENTATION_INTEGER_SCALE;
+SDL_RendererLogicalPresentation logicalPresentation = SDL_LOGICAL_PRESENTATION_OVERSCAN;
 
 void updateScale()
 {
