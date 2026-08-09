@@ -108,11 +108,9 @@ void Game::render()
         colors.skyblue.b,
         colors.skyblue.a);
     SDL_RenderClear(renderer);
+    parallax->render((scene == Scenes::PLAYING) ? crntLvl->Camera : Vector2D{});
     if (scene == Scenes::PLAYING)
-    {
-        parallax->render(crntLvl->Camera);
         crntLvl->render();
-    }
     for (auto &cloud : clouds)
         cloud.render((scene == Scenes::PLAYING) ? crntLvl->Camera : Vector2D{});
     for (auto &petal : petals)

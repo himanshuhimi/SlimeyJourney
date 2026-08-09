@@ -9,10 +9,7 @@ void Group<T>::render(Player player, Vector2D Camera)
 {
     for (auto &sprite : sprites)
         if (player.Position.distanceFromVec(sprite->Position) < WIDTH)
-        {
-            print("yea vro");
             sprite->render(Camera);
-        }
 }
 
 template <class T>
