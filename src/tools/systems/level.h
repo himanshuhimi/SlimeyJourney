@@ -1,6 +1,7 @@
 #pragma once
 
 #include "map.h"
+#include "../group.h"
 #include "entities/player.h"
 #include "entities/objects/fruit.h"
 #include "entities/objects/spike.h"
@@ -21,11 +22,11 @@ public:
     Player player;
     Fren fren;
     vector<Object> objects = {};
-    vector<Spike> spikes = {};
-    vector<Stone> stones = {};
-    vector<Pad> pads = {};
-    vector<Fruit> fruits = {};
-    vector<unique_ptr<Enemy>> enemies = {};
+    Group<Spike> spikes = {};
+    Group<Stone> stones = {};
+    Group<Pad> pads = {};
+    Group<Fruit> fruits = {};
+    Group<Enemy> enemies = {};
     std::map<string, Quest> quests = {};
     std::map<string, Audio> audios = {};
     using EnemyFactory = std::function<unique_ptr<Enemy>()>;

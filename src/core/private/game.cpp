@@ -211,14 +211,14 @@ void Game::collision()
         for (auto stoneIt = level->stones.begin();
              stoneIt != level->stones.end(); stoneIt++)
         {
-            auto stone = *stoneIt;
+            auto stone = stoneIt->get();
             for (auto bIt = level->player.balls.begin();
                  bIt != level->player.balls.end();)
             {
                 auto ball = *bIt;
-                if (checkCollision(stone.rect, ball.rect))
+                if (checkCollision(stone->rect, ball.rect))
                 {
-                    stoneIt->destruct();
+                    stone->destruct();
                     bIt = level->player.balls.erase(bIt);
                 }
                 else
@@ -227,14 +227,14 @@ void Game::collision()
         }
     if (crntLvl->spikes.size() > 0)
         for (auto &spike : level->spikes)
-            if (checkCollision(level->player.rect, spike.rect))
+            if (checkCollision(level->player.rect, spike->rect))
                 level->player.resetPos();
     if (crntLvl->pads.size() > 0)
     {
         bool onPad = false;
         for (auto &pad : level->pads)
         {
-            onPad = checkCollision(level->player.rect, pad.rect) && !level->player.buffed;
+            onPad = checkCollision(level->player.rect, pad->rect) && !level->player.buffed;
             break;
         }
         if (onPad && !level->player.buffed)
@@ -247,15 +247,15 @@ void Game::collision()
         for (auto fruitIt = level->fruits.begin();
              fruitIt != level->fruits.end();)
         {
-            auto &fruit = *fruitIt;
-            if (!fruit.picked && checkCollision(fruit.rect, level->player.rect))
+            Fruit *fruit = dynamic_cast<Fruit *>(fruitIt->get());
+            if (!fruit->picked && checkCollision(fruit->rect, level->player.rect))
             {
                 level->player.audios.at("pickup").play();
                 ui->getWidget<Progress>("progs", "fruit").advance(level->increment);
-                fruitIt = level->fruits.erase(fruitIt);
+                fruitIt = level->fruits.sprites.erase(fruitIt);
             }
             else
-                fruitIt++;
+                ++fruitIt;
         }
     if (crntLvl->enemies.size() > 0)
         for (auto eIt = level->enemies.begin(); eIt != level->enemies.end();)
@@ -264,8 +264,8 @@ void Game::collision()
             auto rawSlime = enemy.get();
             if (enemy->dead)
             {
-                enemy->drop<Fruit>(level->fruits);
-                eIt = level->enemies.erase(eIt);
+                // enemy->drop(level->fruits.sprites);
+                eIt = level->enemies.sprites.erase(eIt);
                 level->player.enemiesKilled++;
                 if (level->player.HP != level->player.maxHP)
                     level->player.HP++;

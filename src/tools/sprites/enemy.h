@@ -39,9 +39,4 @@ public:
     virtual void render(Vector2D Camera);
     virtual void damage(int byPoints = 1);
     virtual void attack(Vector2D Direction);
-    template <typename T>
-    void drop(vector<T> &droppingList)
-    {
-        droppingList.emplace_back(renderer, Center.x, Center.y);
-    }
 };
