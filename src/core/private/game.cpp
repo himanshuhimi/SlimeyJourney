@@ -108,15 +108,15 @@ void Game::render()
         colors.skyblue.b,
         colors.skyblue.a);
     SDL_RenderClear(renderer);
+    if (scene == Scenes::PLAYING)
+    {
+        parallax->render(crntLvl->Camera);
+        crntLvl->render();
+    }
     for (auto &cloud : clouds)
         cloud.render((scene == Scenes::PLAYING) ? crntLvl->Camera : Vector2D{});
     for (auto &petal : petals)
         petal.render((scene == Scenes::PLAYING) ? crntLvl->Camera : Vector2D{});
-    if (scene == Scenes::PLAYING)
-    {
-        parallax->render();
-        crntLvl->render();
-    }
     ui->render();
     SDL_RenderPresent(renderer);
 }
@@ -248,7 +248,7 @@ void Game::collision()
              fruitIt != level->fruits.end();)
         {
             auto &fruit = *fruitIt;
-            if (!fruit->picked && checkCollision(fruit->rect, level->player.rect))
+            if (!fruit.picked && checkCollision(fruit.rect, level->player.rect))
             {
                 level->player.audios.at("pickup").play();
                 ui->getWidget<Progress>("progs", "fruit").advance(level->increment);
@@ -330,7 +330,7 @@ void Game::collision()
             audios.at("success").play();
         }
     }
-    if (level->player.dead || crntLvl->timer.currentTime <= 0.0)
+    if (level->player.dead)
         setScene(Scenes::OVER, false);
 }
 

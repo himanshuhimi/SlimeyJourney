@@ -40,8 +40,8 @@ public:
     virtual void damage(int byPoints = 1);
     virtual void attack(Vector2D Direction);
     template <typename T>
-    void drop(vector<unique_ptr<T>> &droppingList)
+    void drop(vector<T> &droppingList)
     {
-        droppingList.emplace_back(make_unique<T>(renderer, Center.x, Center.y));
+        droppingList.emplace_back(renderer, Center.x, Center.y);
     }
 };

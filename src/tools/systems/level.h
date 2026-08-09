@@ -20,12 +20,11 @@ public:
     Map map;
     Player player;
     Fren fren;
-    Timer timer;
     vector<Object> objects = {};
     vector<Spike> spikes = {};
     vector<Stone> stones = {};
     vector<Pad> pads = {};
-    vector<unique_ptr<Fruit>> fruits = {};
+    vector<Fruit> fruits = {};
     vector<unique_ptr<Enemy>> enemies = {};
     std::map<string, Quest> quests = {};
     std::map<string, Audio> audios = {};

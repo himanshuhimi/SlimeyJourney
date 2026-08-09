@@ -1,8 +1,7 @@
 #include "../../systems/level.h"
 
 Level::Level(SDL_Renderer *renderer, string region, int number)
-    : renderer(renderer), player(renderer, 0, 0),
-      timer(renderer, WIDTH / 2, 20, durations.at(region).at(number)), fren(renderer, 0, 0),
+    : renderer(renderer), player(renderer, 0, 0), fren(renderer, 0, 0),
       map(renderer, region + "/" + std::to_string(number) + ".tmx")
 {
     loadObjects();
@@ -34,44 +33,56 @@ void Level::handle(double dt)
 {
     clampCamera();
     for (auto &stone : stones)
-        stone.handle(dt, objects);
+        if (player.Position.distanceFromVec(stone.Position) < WIDTH)
+            stone.handle(dt, objects);
     for (auto &ball : player.balls)
-        ball.handle(dt, objects);
+        if (player.Position.distanceFromVec(ball.Position) < WIDTH)
+            ball.handle(dt, objects);
     for (auto &spike : spikes)
-        spike.handle(dt, objects);
-    for (auto &slime : enemies)
-        slime->handle(dt, objects);
+        if (player.Position.distanceFromVec(spike.Position) < WIDTH)
+            spike.handle(dt, objects);
+    for (auto &enemy : enemies)
+        if (player.Position.distanceFromVec(enemy->Position) < WIDTH)
+            enemy->handle(dt, objects);
     for (auto &pad : pads)
-        pad.handle(dt, objects);
+        if (player.Position.distanceFromVec(pad.Position) < WIDTH)
+            pad.handle(dt, objects);
     for (auto &[_, quest] : quests)
         quest.handle(dt);
-    player.handle(dt, objects);
     fren.handle(dt, objects);
+    player.handle(dt, objects);
     if (player.rect.y >= map.pixelHeight)
         player.resetPos();
-    timer.handle(dt);
 }
 
 void Level::render()
 {
     map.render(Camera);
     for (auto &fruit : fruits)
-        fruit->render(Camera);
+        if (player.Position.distanceFromVec(fruit.Position) < WIDTH)
+        {
+            print("fruit rendering...");
+            fruit.render(Camera);
+        }
     for (auto &ball : player.balls)
-        ball.render(Camera);
+        if (player.Position.distanceFromVec(ball.Position) < WIDTH )
+            ball.render(Camera);
     for (auto &spike : spikes)
-        spike.render(Camera);
+        if (player.Position.distanceFromVec(spike.Position) < WIDTH)
+            spike.render(Camera);
     for (auto &enemy : enemies)
-        enemy->render(Camera);
+        if (player.Position.distanceFromVec(enemy->Position) < WIDTH)
+            enemy->render(Camera);
     for (auto &stone : stones)
-        stone.render(Camera);
+        if (player.Position.distanceFromVec(stone.Position) < WIDTH)
+            stone.render(Camera);
     for (auto &pad : pads)
-        pad.render(Camera);
+        if (player.Position.distanceFromVec(pad.Position) < WIDTH)
+            pad.render(Camera);
     for (auto &[_, quest] : quests)
         quest.render();
-    timer.render();
-    player.render(Camera);
     fren.render(Camera);
+    player.render(Camera);
 }
 
 void Level::reset() { loadObjects(); }
@@ -105,7 +116,7 @@ void Level::loadObjects()
         else if (name == "pad")
             pads.emplace_back(renderer, obj.x, obj.y);
         else if (name == "fruit")
-            fruits.emplace_back(make_unique<Fruit>(renderer, obj.x, obj.y - SPRITE_SIZE / 2));
+            fruits.emplace_back(renderer, obj.x, obj.y - SPRITE_SIZE / 2);
         else if (name == "enemy")
         {
             vector<EnemyFactory> enems = {

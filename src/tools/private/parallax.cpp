@@ -5,20 +5,22 @@ Parallax::Parallax(SDL_Renderer *renderer)
 {
     for (const auto &entry : fs::directory_iterator(directory))
     {
-        auto path = entry.path();
         string filename = entry.path().stem().string();
         int number = std::stoi(filename);
-        images.insert({number, Image{renderer, path.string()}});
+        images.insert({number, Image{renderer, "ui/parallax/" + filename + ".png"}});
     }
     rect.x = 0;
     rect.y = 0;
     rect.w = WIDTH;
     rect.h = HEIGHT;
-    degree = images.size() - 1;
+    degree = images.size();
 }
 
 void Parallax::render(Vector2D Camera)
 {
-    for (int i = 0; i >= degree; i++)
+    SDL_FRect dst = rect;
+    dst.x -= Camera.x;
+    dst.y -= Camera.y;
+    for (int i = 0; i < degree; i++)
         images.at(i).render(nullptr, &rect);
 }
