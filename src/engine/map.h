@@ -32,7 +32,6 @@ public:
     };
     struct ObjectGroup
     {
-        vector<Text> texts;
         vector<Object> objects;
     };
     ObjectGroup objectGroup;

@@ -1,4 +1,4 @@
-#include "../../systems/map.h"
+#include "../map.h"
 
 Map::Map(SDL_Renderer *renderer, string source)
     : renderer(renderer), source(source)
@@ -42,8 +42,6 @@ void Map::render(Vector2D Camera)
             tileset.image->render(&src, &dest);
         }
     }
-    for (auto &text : objectGroup.texts)
-        text.render();
 }
 
 void Map::loadChildren()

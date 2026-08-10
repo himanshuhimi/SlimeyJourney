@@ -2,9 +2,12 @@
 
 Vector2D::Vector2D(float x, float y) : x(x), y(y) {};
 
-float Vector2D::distanceFromVec(Vector2D secVector)
+float Vector2D::distanceFromVec(Vector2D secVector, bool squared)
 {
-    return sqrt(pow(secVector.x - x, 2) + pow(secVector.y - y, 2));
+    if (!squared)
+        return sqrt(pow(secVector.x - x, 2) + pow(secVector.y - y, 2));
+    else
+        return pow(secVector.x - x, 2) + pow(secVector.y - y, 2);
 }
 
 float Vector2D::getLength() { return sqrt(pow(x, 2) + pow(y, 2)); }

@@ -32,12 +32,12 @@ Level::Level(SDL_Renderer *renderer, string region, int number)
 void Level::handle(double dt)
 {
     clampCamera();
+    for (auto &[_, quest] : quests)
+        quest.handle(dt);
     stones.handle(player, dt, objects);
     spikes.handle(player, dt, objects);
     pads.handle(player, dt, objects);
     enemies.handle(player, dt, objects);
-    for (auto &[_, quest] : quests)
-        quest.handle(dt);
     fren.handle(dt, objects);
     player.handle(dt, objects);
     if (player.rect.y >= map.pixelHeight)
@@ -47,13 +47,13 @@ void Level::handle(double dt)
 void Level::render()
 {
     map.render(Camera);
+    for (auto &[_, quest] : quests)
+        quest.render();
     fruits.render(player, Camera);
     spikes.render(player, Camera);
     stones.render(player, Camera);
     enemies.render(player, Camera);
     pads.render(player, Camera);
-    for (auto &[_, quest] : quests)
-        quest.render();
     fren.render(Camera);
     player.render(Camera);
 }
@@ -72,6 +72,12 @@ void Level::clampCamera()
 
 void Level::loadObjects()
 {
+    objects.clear();
+    spikes.clear();
+    stones.clear();
+    pads.clear();
+    fruits.clear();
+    enemies.clear();
     for (const Map::Object &obj : map.objectGroup.objects)
     {
         const string &name = obj.name;

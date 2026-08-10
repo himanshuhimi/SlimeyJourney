@@ -6,7 +6,7 @@ struct Vector2D
 {
     float x, y;
     Vector2D(float x = 0.0f, float y = 0.0f);
-    float distanceFromVec(Vector2D secVector);
+    float distanceFromVec(Vector2D secVector, bool squared = false);
     float getLength();
     Vector2D normalise();
     Vector2D operator+(const Vector2D &rhs);
