@@ -8,7 +8,7 @@ template <class T>
 void Group<T>::render(Player player, Vector2D Camera)
 {
     for (auto &sprite : sprites)
-        if (player.Position.distanceFromVec(sprite->Position) < WIDTH / 2)
+        if (playerNearby(player, sprite))
             sprite->render(Camera);
 }
 
@@ -16,7 +16,7 @@ template <class T>
 void Group<T>::handle(Player player, double dt, vector<Object> &grasses)
 {
     for (auto &sprite : sprites)
-        if (player.Position.distanceFromVec(sprite->Position) < WIDTH / 2)
+        if (playerNearby(player, sprite))
             sprite->handle(dt, grasses);
 }
 
@@ -46,6 +46,13 @@ void Group<T>::clear() { sprites.clear(); }
 
 template <class T>
 int Group<T>::size() { return sprites.size(); }
+
+template <class T>
+bool Group<T>::playerNearby(Player player, unique_ptr<T> &sprite)
+{
+    int renderDistance = WIDTH / 2;
+    return player.Position.distanceFromVec(sprite->Position, true) < pow(renderDistance, 2);
+}
 
 template <class T>
 typename Sprites<T>::iterator Group<T>::kick(unique_ptr<T> &&sprite)

@@ -21,7 +21,4 @@ void Stone::handle(double dt, vector<Object> &objects)
     Sprite::handle(dt, objects);
 }
 
-void Stone::destruct(int byPoints)
-{
-    destructLvl += byPoints;
-}
+void Stone::destruct(int byPoints) { destructLvl += byPoints; }

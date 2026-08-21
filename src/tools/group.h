@@ -18,6 +18,7 @@ public:
     void kick(unique_ptr<T> sprite);
     void clear();
     int size();
+    bool playerNearby(Player player, unique_ptr<T> &sprite);
     typename Sprites<T>::iterator kick(unique_ptr<T> &&sprite);
     typename Sprites<T>::iterator begin();
     typename Sprites<T>::iterator end();
