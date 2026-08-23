@@ -40,7 +40,7 @@ void Slime::attack(Vector2D Direction)
         renderer, 
         Center.x, 
         Center.y, 
-        "enemies/" + type, 
+        type, 
         Direction));
     atkCooldown.reset();
 }

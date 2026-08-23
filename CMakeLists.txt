@@ -12,6 +12,7 @@ set(LINK_TARGETS "")
 set(DIRECTORIES
     assets
     maps
+    database
 )
 
 foreach(lib ${LIBRARIES})

@@ -4,7 +4,7 @@ Player::Player(SDL_Renderer *renderer, float x, float y)
     : Sprite(renderer, "player/idle.png", x, y)
 {
     anims = {
-        {"jump", Animation(renderer, "player/jump.png")},
+        {"jump", Animation(renderer, "player/jump.png", 0.2)},
         {"damage", Animation(renderer, "player/damage.png", 0.1)},
         {"walking", Animation(renderer, "player/walking.png", 0.1)}};
     audios = {
@@ -31,6 +31,8 @@ void Player::handle(double dt, const vector<Object> &objects)
     handleMovement(dt);
     Sprite::handle(dt, objects);
     handleAttacking(dt);
+    for (auto &ball : balls)
+        ball.handle(dt, objects);
 }
 
 void Player::render(Vector2D Camera)
@@ -42,15 +44,17 @@ void Player::render(Vector2D Camera)
         anims.at("jump").render(Camera, rect);
     else if (anims.at("walking").active)
         anims.at("walking").render(Camera, rect);
-    else
-        Sprite::render(Camera);
-    if (anims.at("damage").active)
+    else if (anims.at("damage").active)
     {
         for (auto &[key, anim]: anims)
             if (key != "damage")
                 anim.active = false;
         anims.at("damage").render(Camera, rect);
     }
+    else
+        Sprite::render(Camera);
+    for (auto &ball : balls)
+        ball.render(Camera);
 }
 
 void Player::damage(int byPoints)
