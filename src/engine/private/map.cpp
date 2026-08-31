@@ -110,8 +110,7 @@ void Map::loadTileset(XMLElement *child)
         print("imageElement Uninitialized");
         return;
     }
-    tileset.image = new Image(renderer,
-                              "tilesets/" + (string)imageElement->Attribute("source"));
+    tileset.image = new Image(renderer,(string)imageElement->Attribute("source"));
     tileset.columns = tileset.image->width / tileWidth;
     tileset.rows = tileset.image->height / tileHeight;
 }
