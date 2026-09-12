@@ -1,9 +1,5 @@
-Copyright (C) 2026 Himanshu. All Rights Reserved.
+Copyright (c) 2026 Himanshu. All rights reserved.
 
-This game and its source code are the exclusive property of [YOUR NAME]. 
-
-CONDITIONS OF USE:
-1. You are granted permission to play this game for personal entertainment only.
-2. You are STRICTLY PROHIBITED from distributing, sharing, or copying this game.
-3. You are STRICTLY PROHIBITED from modifying the code, changing the game's name, or removing the creator's name.
-4. You may not claim authorship, ownership, or credit for this game or any portion of its code.
+This software and its source code are the proprietary property of the author. 
+No part of this software may be copied, reproduced, distributed, or modified 
+in any form or by any means without the prior written permission of the copyright owner.
