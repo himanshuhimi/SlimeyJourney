@@ -1,5 +1,4 @@
 *.dll
-build
-bin
-include
+dependencies.txt
 data/database
+build

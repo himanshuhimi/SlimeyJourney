@@ -2,7 +2,6 @@
 
 int main()
 {
-    Game PuddlePebble;
-    PuddlePebble.launch();
+    Game().launch();
     return 0;
 }
