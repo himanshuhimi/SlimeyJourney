@@ -2,9 +2,9 @@
 
 #include "tools/widget.h"
 
-class Card : public Widget
+struct Card : public Widget
 {
-public:
+
     Image bgImage, bgUnhovered, bgHovered;
     Text displayText;
     string label = "";

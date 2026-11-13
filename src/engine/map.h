@@ -4,9 +4,9 @@
 
 using namespace tinyxml2;
 
-class Map
+struct Map
 {
-public:
+
     SDL_Renderer *renderer = nullptr;
     tinyxml2::XMLDocument doc;
     XMLElement *mapElement;
@@ -38,8 +38,8 @@ public:
     vector<Layer> layers;
     Tileset tileset;
     string directory = "maps/", source = "";
-    int width, height, tileWidth, tileHeight, pixelWidth, pixelHeight;
-    Map(SDL_Renderer *renderer, string source);
+    int width, height, tileWidth, tileHeight, pixelWidth, pixelHeight, x, y;
+    Map(SDL_Renderer *renderer, string source, int x = 0, int y = 0);
     void render(Vector2D Camera);
     void loadChildren();
     void loadLayer(XMLElement *child);

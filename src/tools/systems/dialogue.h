@@ -2,9 +2,9 @@
 
 #include "core/config.h"
 
-class Dialogue
+struct Dialogue
 {
-public:
+
     SDL_Renderer *renderer = nullptr;
     Image box;
     SDL_FRect rect;

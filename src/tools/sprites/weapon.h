@@ -2,9 +2,9 @@
 
 #include "../sprite.h"
 
-class Weapon : public Sprite
+struct Weapon : public Sprite
 {
-public:
+
     Vector2D prevPos{}, Direction{};
     float speed = 0.0f;
     bool used = false;

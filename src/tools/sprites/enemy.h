@@ -18,9 +18,9 @@ struct EnemyData
         std::function<void(Vector2D)> atkMethod = [](Vector2D Direction) {});
 };
 
-class Enemy : public Sprite
+struct Enemy : public Sprite
 {
-public:
+
     SDL_FRect range;
     EnemyData data;
     struct EnemyActions

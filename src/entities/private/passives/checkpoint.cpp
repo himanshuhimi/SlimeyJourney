@@ -1,12 +1,12 @@
-#include "../../passives/fren.h"
+#include "../../passives/checkpoint.h"
 
-Fren::Fren(SDL_Renderer *renderer, float x, float y)
-    : Sprite(renderer, "passives/fren/idle.png", x, y) 
+Checkpoint::Checkpoint(SDL_Renderer *renderer, float x, float y)
+    : Sprite(renderer, "empty.png", x, y) 
 {
     dialogue = new Dialogue(renderer, x, y - SPRITE_SIZE, "Need.. food!");
 }
 
-void Fren::handle(double dt, vector<Object> &objects)
+void Checkpoint::handle(double dt, vector<Object> &objects)
 {
     dialogue->Position = Position;
     dialogue->handle(dt);
@@ -16,7 +16,7 @@ void Fren::handle(double dt, vector<Object> &objects)
     dialogue->handle(dt);
 }
 
-void Fren::render(Vector2D Camera)
+void Checkpoint::render(Vector2D Camera)
 {
     Sprite::render(Camera);
     dialogue->render(Camera);

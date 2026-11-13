@@ -2,9 +2,9 @@
 
 #include "core/config.h"
 
-class Sprite
+struct Sprite
 {
-public:
+
     SDL_Renderer *renderer = nullptr;
     Vector2D Original, Camera, Velocity, Position, Center;
     LineOfSight gravityLOS, lineOfSight;

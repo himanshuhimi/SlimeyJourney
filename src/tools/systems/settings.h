@@ -6,9 +6,9 @@
 extern vector<string> SettingBool;
 extern vector<string> SettingProgress;
 
-class Settings
+struct Settings
 {
-public:
+
     Database *db = nullptr;
     struct Option
     {

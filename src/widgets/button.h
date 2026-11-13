@@ -2,9 +2,9 @@
 
 #include "tools/widget.h"
 
-class Button : public Widget
+struct Button : public Widget
 {
-public:
+
     SDL_FRect shadow;
     SDL_Color color;
     Text text;

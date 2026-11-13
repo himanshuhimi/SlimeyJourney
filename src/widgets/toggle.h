@@ -2,9 +2,9 @@
 
 #include "tools/widget.h"
 
-class Toggle : public Widget
+struct Toggle : public Widget
 {
-public:
+
     Image checkedImg, uncheckedImg, hoveredImg;
     Image image;
     bool value = false;

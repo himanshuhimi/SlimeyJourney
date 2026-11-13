@@ -3,9 +3,9 @@
 #include "tools/sprites/enemy.h"
 #include "../weapons/ball.h"
 
-class Slime : public Enemy
+struct Slime : public Enemy
 {
-public:
+
     map<string, Animation> anims = {};
     vector<Ball> balls = {};
     Slime(SDL_Renderer *renderer, float x, float y);

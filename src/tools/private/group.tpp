@@ -1,10 +1,10 @@
 #include "../group.h"
 #include "../../entities/player.h"
 
-template <class T>
+template <typename T>
 Group<T>::Group() { sprites.clear(); }
 
-template <class T>
+template <typename T>
 void Group<T>::render(Player player, Vector2D Camera)
 {
     for (auto &sprite : sprites)
@@ -12,7 +12,7 @@ void Group<T>::render(Player player, Vector2D Camera)
             sprite->render(Camera);
 }
 
-template <class T>
+template <typename T>
 void Group<T>::handle(Player player, double dt, vector<Object> &grasses)
 {
     for (auto &sprite : sprites)
@@ -20,13 +20,13 @@ void Group<T>::handle(Player player, double dt, vector<Object> &grasses)
             sprite->handle(dt, grasses);
 }
 
-template <class T>
+template <typename T>
 void Group<T>::insert(unique_ptr<T> sprite)
 {
     sprites.emplace_back(std::move(sprite));
 }
 
-template <class T>
+template <typename T>
 void Group<T>::kick(unique_ptr<T> sprite)
 {
     auto it = std::find_if(
@@ -41,20 +41,20 @@ void Group<T>::kick(unique_ptr<T> sprite)
         sprites.erase(it);
 }
 
-template <class T>
+template <typename T>
 void Group<T>::clear() { sprites.clear(); }
 
-template <class T>
+template <typename T>
 int Group<T>::size() { return sprites.size(); }
 
-template <class T>
+template <typename T>
 bool Group<T>::playerNearby(Player player, unique_ptr<T> &sprite)
 {
     int renderDistance = WIDTH / 2;
     return player.Position.distanceFromVec(sprite->Position, true) < pow(renderDistance, 2);
 }
 
-template <class T>
+template <typename T>
 typename Sprites<T>::iterator Group<T>::kick(unique_ptr<T> &&sprite)
 {
     auto it = std::find_if(
@@ -71,8 +71,8 @@ typename Sprites<T>::iterator Group<T>::kick(unique_ptr<T> &&sprite)
         return sprites.end();
 }
 
-template <class T>
+template <typename T>
 typename Sprites<T>::iterator Group<T>::begin() { return sprites.begin(); }
 
-template <class T>
+template <typename T>
 typename Sprites<T>::iterator Group<T>::end() { return sprites.end(); }

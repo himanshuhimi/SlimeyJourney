@@ -4,9 +4,9 @@
 
 using UIFunction = std::function<void()>;
 
-class Widget
+struct Widget
 {
-public:
+
     SDL_Renderer *renderer = nullptr;
     SDL_FRect rect, dst;
     UIFunction onCallback;

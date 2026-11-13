@@ -39,14 +39,14 @@ Hearts::Hearts(Game &game)
     : game(game), brokenHeart{game.renderer, "ui/hearts/broken.png"},
       normalHeart(game.renderer, "ui/hearts/normal.png")
 {
-    if (game.crntLvl == nullptr)
+    if (game.world == nullptr)
         return;
     load();
 }
 
 void Hearts::render()
 {
-    if (game.crntLvl == nullptr)
+    if (game.world == nullptr)
         return;
     if (images.empty())
         load();
@@ -56,16 +56,16 @@ void Hearts::render()
 
 void Hearts::handle()
 {
-    if (game.crntLvl == nullptr)
+    if (game.world == nullptr)
         return;
-    if (game.crntLvl->player.HP != game.crntLvl->player.maxHP)
-        for (int i = 0; i < game.crntLvl->player.maxHP; i++)
-            images[i] = (i < game.crntLvl->player.HP) ? normalHeart : brokenHeart;
+    if (game.player.HP != game.player.maxHP)
+        for (int i = 0; i < game.player.maxHP; i++)
+            images[i] = (i < game.player.HP) ? normalHeart : brokenHeart;
 }
 
 void Hearts::clear()
 {
-    if (game.crntLvl == nullptr)
+    if (game.world == nullptr)
         return;
     images.clear();
     rects.clear();
@@ -73,9 +73,9 @@ void Hearts::clear()
 
 void Hearts::load()
 {
-    float startX = (WIDTH / 2 - (game.crntLvl->player.maxHP / 2 * SPRITE_SIZE));
+    float startX = (WIDTH / 2 - (game.player.maxHP / 2 * SPRITE_SIZE));
     if (images.empty())
-        for (int i = 0; i < game.crntLvl->player.maxHP; i++)
+        for (int i = 0; i < game.player.maxHP; i++)
         {
             images.emplace_back(normalHeart);
             rects.emplace_back(
@@ -259,7 +259,7 @@ SelectionScreen::SelectionScreen(Game &game) : UIScreen(game)
                 region,
                 [this, region]
                 {
-                    this->game.setLevel(region, 0);
+                    this->game.loadWorld(region);
                     this->game.setScene(Scenes::PLAYING);
                 });
         }
@@ -296,7 +296,7 @@ PlayingScreen::PlayingScreen(Game &game)
             WIDTH - SPRITE_SIZE,
             SPRITE_SIZE,
             [this]
-            { this->game.crntLvl->quests.at("fruit").completed = true; },
+            { this->game.world->quests.at("fruit").completed = true; },
             colors.violet,
             Image(game.renderer, "ui/bottle.png")));
     auto &fruit = getWidget<Progress>("progs", "fruit");

@@ -2,9 +2,9 @@
 
 #include "tools/widget.h"
 
-class Progress : public Widget
+struct Progress : public Widget
 {
-public:
+
     SDL_FRect attachmentRect, fillRect;
     Image attachment;
     SDL_Color color;

@@ -2,9 +2,9 @@
 
 #include "core/config.h"
 
-class Region
+struct Region
 {
-public:
+
     SDL_Renderer *renderer = nullptr;
     string name = "";
     Region(SDL_Renderer *renderer, string name);

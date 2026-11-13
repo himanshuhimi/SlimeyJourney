@@ -2,9 +2,9 @@
 
 #include "tools/sprite.h"
 
-class Cloud : public Sprite
+struct Cloud : public Sprite
 {
-public:
+
     bool renderable = true;
     Cloud(SDL_Renderer *renderer);
     void handle(double dt);

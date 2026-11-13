@@ -2,9 +2,9 @@
 
 #include "tools/widget.h"
 
-class Carousel : public Widget
+struct Carousel : public Widget
 {
-public:
+
     Text text;
     Image rightArrow, leftArrow, rightHovered, rightUnhovered, leftHovered, leftUnhovered;
     SDL_FRect rightRect, leftRect;

@@ -1,7 +1,7 @@
 #include "../map.h"
 
-Map::Map(SDL_Renderer *renderer, string source)
-    : renderer(renderer), source(source)
+Map::Map(SDL_Renderer *renderer, string source, int x, int y)
+    : renderer(renderer), source(source), x(x), y(y)
 {
     mapPath = fs::path("data/") / directory / source;
     string path = mapPath.string();
@@ -35,8 +35,8 @@ void Map::render(Vector2D Camera)
                 (float)tileWidth,
                 (float)tileHeight};
             SDL_FRect dest = {
-                (float)((i % layer.width) * tileWidth) - Camera.x,
-                (float)((i / layer.width) * tileHeight) - Camera.y,
+                (float)x + ((i % layer.width) * tileWidth) - Camera.x,
+                (float)y + ((i / layer.width) * tileHeight) - Camera.y,
                 (float)(tileWidth),
                 (float)(tileHeight)};
             tileset.image->render(&src, &dest);
@@ -129,22 +129,6 @@ void Map::loadObjectGroup(XMLElement *child)
         object.width = objectElement->FloatAttribute("width");
         object.height = objectElement->FloatAttribute("height");
         objectGroup.objects.push_back(object);
-        // for (
-        //     XMLElement *propElement = objectElement->FirstChildElement("property");
-        //     propElement != nullptr;
-        //     propElement = propElement->NextSiblingElement("property")
-        // )
-        // {
-        //     string name = propElement->Attribute("name");
-        //     string type = propElement->Attribute("type");
-        //     string value = propElement->Attribute("value");
-        //     if (type == "int")
-        //         object.properties[name] = std::stoi(value);
-        //     else if (type == "float")
-        //         object.properties[name] = std::stof(value);
-        //     else
-        //         object.properties[name] = value;
-        // }
     }
 }
 

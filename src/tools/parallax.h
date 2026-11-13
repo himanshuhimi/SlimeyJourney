@@ -2,9 +2,9 @@
 
 #include "core/config.h"
 
-class Parallax
+struct Parallax
 {
-public:
+
     SDL_Renderer *renderer = nullptr;
     map<int, Image> images = {};
     SDL_FRect rect = {};

@@ -2,9 +2,9 @@
 
 #include "tools/sprite.h"
 
-class Stone : public Sprite
+struct Stone : public Sprite
 {
-public:
+
     int destructLvl = 0, maxDestructLvl = 2;
     bool destructed = false;
     Stone(SDL_Renderer *renderer, float x, float y);

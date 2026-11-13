@@ -5,18 +5,18 @@
 using DBRow = map<string, string>;
 using DBResult = vector<DBRow>;
 
-class Database;
-class Table
+struct Database;
+struct Table
 {
-public:
+
     Database *db = nullptr;
     string name = "";
     Table(string name, string dbName, string columns);
 };
 
-class Database
+struct Database
 {
-public:
+
     sqlite3 *db = nullptr;
     sqlite3_stmt *stmt;
     map<string, Table> tables = {};

@@ -2,14 +2,14 @@
 
 #include "core/config.h"
 
-template <class T>
+template <typename T>
 using Sprites = vector<unique_ptr<T>>;
 
-class Player;
-template <class T>
-class Group
+struct Player;
+template <typename T>
+struct Group
 {
-public:
+
     Sprites<T> sprites = {};
     Group();
     void render(Player player, Vector2D Camera);

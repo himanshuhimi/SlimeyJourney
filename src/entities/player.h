@@ -4,9 +4,9 @@
 #include "weapons/ball.h"
 #include "tools/sprites/enemy.h"
 
-class Player : public Sprite
+struct Player : public Sprite
 {
-public:
+
     Vector2D prevJumpPos;
     vector<Ball> balls = {};
     Enemy *combatEnemy = nullptr;

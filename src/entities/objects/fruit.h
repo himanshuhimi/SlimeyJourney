@@ -2,9 +2,9 @@
 
 #include "tools/sprite.h"
 
-class Fruit : public Sprite
+struct Fruit : public Sprite
 {
-public:
+
     bool picked = false;
     string choice = "";
     float time = 0.0f;

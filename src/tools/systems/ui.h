@@ -9,7 +9,7 @@
 
 using std::pair;
 
-class Game;
+struct Game;
 
 struct UIScreen
 {
@@ -20,7 +20,7 @@ struct UIScreen
     virtual void render(Vector2D Camera = {});
     virtual void handle(double dt);
     virtual void update(SDL_Event event);
-    template <class T>
+    template <typename T>
     T &getWidget(string category, string name)
     {
         auto &ctg = ctgWidgets.at(category);
@@ -98,16 +98,16 @@ struct OverScreen : public UIScreen
     void render(Vector2D Camera = {}) override;
 };
 
-class UI
+struct UI
 {
-public:
+
     unique_ptr<UIScreen> activeScreen = nullptr;
     UI(Game &game);
     void render(Vector2D Camera = {});
     void handle(double dt);
     void update(SDL_Event event);
     void updateScreen(Scenes scene);
-    template <class T>
+    template <typename T>
     T &getWidget(string category, string name)
     {
         return activeScreen->getWidget<T>(category, name);

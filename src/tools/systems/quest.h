@@ -2,9 +2,9 @@
 
 #include "core/config.h"
 
-class Quest
+struct Quest
 {
-public:
+
     SDL_Renderer *renderer = nullptr;
     SDL_FRect bgRect;
     Text *text = nullptr;
