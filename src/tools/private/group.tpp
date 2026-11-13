@@ -50,7 +50,7 @@ int Group<T>::size() { return sprites.size(); }
 template <typename T>
 bool Group<T>::playerNearby(unique_ptr<T> &sprite)
 {
-    int renderDistance = WIDTH / 2;
+    int renderDistance = WIDTH;
     return player->Position.distanceFromVec(sprite->Position, true) < pow(renderDistance, 2);
 }
 

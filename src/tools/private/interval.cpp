@@ -10,7 +10,6 @@ void Interval::handle(double dt)
 {
     if (!called)
         timeElapsed += dt;
-    std::cout << dt << std::endl;
     if (timeElapsed >= duration)
     {
         func();

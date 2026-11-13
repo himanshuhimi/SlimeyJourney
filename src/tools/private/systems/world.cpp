@@ -34,7 +34,6 @@ void World::handle(double dt)
         quest.handle(dt);
     map.handle(dt);
     checkpoint.handle(dt, map.objects);
-    player->handle(dt, map.objects);
     if (player->rect.y >= map.pixelHeight)
         player->resetPos();
 }
@@ -45,7 +44,6 @@ void World::render()
     for (auto &[_, quest] : quests)
         quest.render();
     checkpoint.render(Camera);
-    player->render(Camera);
 }
 
 void World::reset() { loadMaps(); }
@@ -96,21 +94,6 @@ void World::loadObjects(Map *newMap)
             map.enemies.insert(make_unique<Bee>(renderer, x, y - SPRITE_SIZE));
         else if (name == "snail")
             map.enemies.insert(make_unique<Snail>(renderer, x, y - SPRITE_SIZE));
-        else if (name == "stone")
-        {
-            if (obj.width > SPRITE_SIZE && obj.height == SPRITE_SIZE)
-                for (int x = 0; x < obj.width; x += SPRITE_SIZE)
-                    map.stones.insert(make_unique<Stone>(
-                        renderer, 
-                        x + SPRITE_SIZE / 2, 
-                        y));
-            else if (obj.height > SPRITE_SIZE && obj.width == SPRITE_SIZE)
-                for (int y = 0; y < obj.height; y += SPRITE_SIZE)
-                    map.stones.insert(make_unique<Stone>(
-                        renderer, 
-                        x, 
-                        y + SPRITE_SIZE / 2));
-        }
     }
 }
 
@@ -138,12 +121,11 @@ void World::loadMaps()
 }
 
 World::MapGroup::MapGroup(Player *player) 
-    : spikes(player), stones(player), pads(player), fruits(player),
+    : spikes(player),pads(player), fruits(player),
         enemies(player) {}
 
 void World::MapGroup::handle(double dt)
 {
-    stones.handle(dt, objects);
     spikes.handle(dt, objects);
     pads.handle(dt, objects);
     enemies.handle(dt, objects);
@@ -155,7 +137,6 @@ void World::MapGroup::render(Vector2D Camera)
         map->render(Camera);
     fruits.render(Camera);
     spikes.render(Camera);
-    stones.render(Camera);
     enemies.render(Camera);
     pads.render(Camera);
 }
@@ -164,7 +145,6 @@ void World::MapGroup::clear()
 {
     objects.clear();
     spikes.clear();
-    stones.clear();
     pads.clear();
     fruits.clear();
     enemies.clear();

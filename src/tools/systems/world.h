@@ -5,7 +5,6 @@
 #include "entities/player.h"
 #include "entities/objects/fruit.h"
 #include "entities/objects/spike.h"
-#include "entities/objects/stone.h"
 #include "entities/objects/pad.h"
 #include "entities/passives/checkpoint.h"
 #include "entities/enemies/slime.h"
@@ -27,7 +26,6 @@ struct World
         int width, height, pixelWidth, pixelHeight;
         vector<Object> objects;
         Group<Spike> spikes;
-        Group<Stone> stones;
         Group<Pad> pads;
         Group<Fruit> fruits;
         Group<Enemy> enemies;

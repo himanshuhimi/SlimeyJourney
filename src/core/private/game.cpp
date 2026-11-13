@@ -1,6 +1,6 @@
 #include "../game.h"
 
-Game::Game() : player(nullptr, 32, 384)
+Game::Game() : player(nullptr, 32, SPRITE_SIZE / 2)
 {
     settings = new Settings();
     string size = settings->get("graphics", "size");
@@ -94,6 +94,7 @@ void Game::handle()
     {
     case Scenes::PLAYING:
         world->handle(dt);
+        player.handle(dt, world->map.objects);
         collision();
         break;
     }
@@ -162,34 +163,13 @@ void Game::loadWorld(string region)
     int maxLevel = *std::max_element(levels.begin(), levels.end());
     for (int i = 0; i <= maxLevel; i++)
         worldSeed += std::to_string(Random.randint(0, maxLevel));
-    world = new World(renderer, &player, region, worldSeed);
+    world = new World(renderer, &player, region, "1");
 }
 
-void Game::unloadWorld()
-{
-    world = nullptr;
-}
+void Game::unloadWorld() { world = nullptr; }
 
 void Game::collision()
 {
-    if (world->map.stones.size() > 0)
-        for (auto stoneIt = world->map.stones.begin();
-             stoneIt != world->map.stones.end(); stoneIt++)
-        {
-            auto stone = stoneIt->get();
-            for (auto bIt = player.balls.begin();
-                 bIt != player.balls.end();)
-            {
-                auto ball = *bIt;
-                if (checkCollision(stone->rect, ball.rect))
-                {
-                    stone->destruct();
-                    bIt = player.balls.erase(bIt);
-                }
-                else
-                    bIt++;
-            }
-        }
     if (world->map.spikes.size() > 0)
         for (auto &spike : world->map.spikes)
             if (checkCollision(player.rect, spike->rect))

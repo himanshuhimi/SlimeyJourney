@@ -17,9 +17,7 @@ Enemy::Enemy(SDL_Renderer *renderer, float x, float y, string type, EnemyData da
     range = SDL_FRect{rect.x, rect.y, data.atkRange, data.atkRange};
     lineOfSight.rect.w = data.atkRange;
     HP = data.maxHP;
-    anims = {
-        {"idle", Animation(renderer, type + "/walking.png", 0.1)},
-        {"damage", Animation(renderer, type + "/damage.png", 0.1)}};
+    anims = {{"damage", Animation(renderer, type + "/damage.png", 0.1)}};
     audios = {{"hurt", Audio(type + "/hurt.wav")}};
 };
 
@@ -34,10 +32,6 @@ void Enemy::handle(double dt, const vector<Object> &objects)
     range.y = rect.y - (range.h / 2) + (rect.h / 2);
     if (anims.at("damage").active)
         anims.at("damage").handle(dt);
-    if (anims.at("idle").active)
-        anims.at("idle").handle(dt);
-    else
-        anims.at("idle").restart();
     for (auto &throwable : throws)
         throwable->handle(dt, objects);
 }
@@ -46,10 +40,6 @@ void Enemy::render(Vector2D Camera)
 {
     if (dead)
         return;
-    if (anims.at("idle").active)
-        anims.at("idle").render(Camera, rect);
-    else
-        Sprite::render(Camera);
     if (anims.at("damage").active)
         anims.at("damage").render(Camera, rect);
     if (data.rangeVisible)
@@ -67,6 +57,11 @@ void Enemy::render(Vector2D Camera)
     }
     for (auto &throwable : throws)
         throwable->render(Camera);
+    bool animActive = false;
+    for (auto [_, anim] : anims)
+        animActive = anim.active;
+    if (!animActive)
+        Sprite::render(Camera);
 }
 
 void Enemy::damage(int byPoints)
