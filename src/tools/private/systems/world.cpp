@@ -5,19 +5,14 @@ World::World(SDL_Renderer *renderer, Player player, string region, string seed)
 {
     map.world = this;
     loadMaps();
+    quests = {{"checkpoint", Quest(renderer, SPRITE_SIZE, SPRITE_SIZE, "Reach the checkpoint!")}};
     fruitLength = map.fruits.size();
-    enemyLength = map.enemies.size();
     if (fruitLength > 0)
+    {
         increment = (double)1 / fruitLength;
-    audios = {
-        {"pickup", Audio("player/pickup.wav")},
-        {"hurt", Audio("player/hurt.wav")}};
-    quests = {{"checkpoint",
-               Quest(renderer, SPRITE_SIZE, SPRITE_SIZE,
-                     "Reach the checkpoint!")}};
-    if (fruitLength > 0)
         quests.insert({"fruit", Quest(renderer, SPRITE_SIZE, 0, "Collect All Fruits")});
-    if (enemyLength > 0)
+    }
+    if (map.enemies.size() > 0)
         quests.insert({"enemies", Quest(renderer, SPRITE_SIZE, 0, "Kill All Enemies")});
     int i = 0;
     for (auto [name, quest] : quests)
@@ -27,6 +22,9 @@ World::World(SDL_Renderer *renderer, Player player, string region, string seed)
         quest.text->rect.y = y;
         quest.text->attachRect.y = y;
     }
+    audios = {
+        {"pickup", Audio("player/pickup.wav")},
+        {"hurt", Audio("player/hurt.wav")}};
 }
 
 void World::handle(double dt)
@@ -62,15 +60,12 @@ void World::clampCamera()
     Camera.y = std::clamp(targetY, 0.0f, maxY);
 }
 
-void World::loadObjects(Map *newMap, int offset)
+void World::loadObjects(Map *newMap)
 {
     for (const Map::Object &obj : newMap->objectGroup.objects)
     {
         int x = obj.x + newMap->x, y = obj.y;
-        std::cout << newMap->x << std::endl;
-        // int prevX = maps.empty() ? 0 : maps.back()->objectGroup.objects.back().x;
         const string &name = obj.name;
-        std::cout << newMap->source << ": " << obj.name << ": " << "(" << x << "," << y << ")" << std::endl;
         if (name == "checkpoint")
             checkpoint = Checkpoint(renderer, x, y - SPRITE_SIZE);
         else if (name == "object")
@@ -137,7 +132,7 @@ void World::loadMaps()
         map.height = std::max(map.height, newMap->height);
         map.pixelWidth += newMap->pixelWidth;
         map.pixelHeight = std::max(map.pixelHeight, newMap->pixelHeight);
-        loadObjects(newMap, map.pixelWidth);
+        loadObjects(newMap);
         maps.emplace_back(newMap);
     }
 }

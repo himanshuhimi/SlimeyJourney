@@ -32,7 +32,6 @@ Game::Game() : player(nullptr, 0, 0)
     audios = {
         {"success", Audio("success.wav")}};
     setScene(Scenes::HOME, false);
-    worldSeed = "01";
 }
 
 void Game::launch()
@@ -132,10 +131,30 @@ void Game::updateDeltaTime()
 
 void Game::loadWorld(string region)
 {
+    vector<int> levels = {};
+    string directory = "data/maps/" + region;
+    if (!fs::exists(directory))
+        return;
+    if (fs::is_directory(fs::path(directory)))
+    {
+        for (auto &tmx : fs::directory_iterator(directory))
+        {
+            auto tmxPath = tmx.path();
+            string tmxFilename = tmxPath.filename().string();
+            int number = std::stoi(tmxPath.stem().string());
+            levels.emplace_back(number);
+        }
+    }
+    int maxLevel = *std::max_element(levels.begin(), levels.end());
+    for (int i = 0; i <= maxLevel; i++)
+        worldSeed += std::to_string(Random.randint(0, maxLevel));
     world = new World(renderer, player, region, worldSeed);
 }
 
-void Game::unloadWorld() {}
+void Game::unloadWorld()
+{
+    world = nullptr;
+}
 
 void Game::collision()
 {

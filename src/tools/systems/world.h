@@ -44,7 +44,7 @@ struct World
     void handle(double dt);
     void render();
     void loadMaps();
-    void loadObjects(Map *newMap, int offset);
+    void loadObjects(Map *newMap);
     void reset();
     void clampCamera();
 };
