@@ -1,6 +1,6 @@
 #include "../game.h"
 
-Game::Game() : player(nullptr, 32, 64)
+Game::Game() : player(nullptr, 32, 384)
 {
     settings = new Settings();
     string size = settings->get("graphics", "size");
@@ -28,7 +28,7 @@ Game::Game() : player(nullptr, 32, 64)
     ui = new UI(*this);
     parallax = new Parallax(renderer);
     active = true;
-    player = Player(renderer, 32, 64);
+    player = Player(renderer, 32, 384);
     audios = {
         {"success", Audio("success.wav")}};
     setScene(Scenes::HOME, false);
