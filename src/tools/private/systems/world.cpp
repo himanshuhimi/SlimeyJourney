@@ -1,7 +1,7 @@
 #include "../../systems/world.h"
 
-World::World(SDL_Renderer *renderer, Player player, string region, string seed)
-    : renderer(renderer), player(player), checkpoint(renderer, 0, 0), region(region), seed(seed)
+World::World(SDL_Renderer *renderer, Player *player, string region, string seed)
+    : renderer(renderer), player(player), checkpoint(renderer, 0, 0), region(region), seed(seed), map(player)
 {
     map.world = this;
     loadMaps();
@@ -34,9 +34,9 @@ void World::handle(double dt)
         quest.handle(dt);
     map.handle(dt);
     checkpoint.handle(dt, map.objects);
-    player.handle(dt, map.objects);
-    if (player.rect.y >= map.pixelHeight)
-        player.resetPos();
+    player->handle(dt, map.objects);
+    if (player->rect.y >= map.pixelHeight)
+        player->resetPos();
 }
 
 void World::render()
@@ -45,15 +45,15 @@ void World::render()
     for (auto &[_, quest] : quests)
         quest.render();
     checkpoint.render(Camera);
-    player.render(Camera);
+    player->render(Camera);
 }
 
 void World::reset() { loadMaps(); }
 
 void World::clampCamera()
 {
-    float targetX = player.Position.x - CAMERA_X;
-    float targetY = player.Position.y - CAMERA_Y;
+    float targetX = player->Position.x - CAMERA_X;
+    float targetY = player->Position.y - CAMERA_Y;
     float maxX = std::max<float>(0.0f, map.pixelWidth - WIDTH);
     float maxY = std::max<float>(0.0f, map.pixelHeight - HEIGHT);
     Camera.x = std::clamp(targetX, 0.0f, maxX);
@@ -137,23 +137,27 @@ void World::loadMaps()
     }
 }
 
+World::MapGroup::MapGroup(Player *player) 
+    : spikes(player), stones(player), pads(player), fruits(player),
+        enemies(player) {}
+
 void World::MapGroup::handle(double dt)
 {
-    stones.handle(world->player, dt, objects);
-    spikes.handle(world->player, dt, objects);
-    pads.handle(world->player, dt, objects);
-    enemies.handle(world->player, dt, objects);
+    stones.handle(dt, objects);
+    spikes.handle(dt, objects);
+    pads.handle(dt, objects);
+    enemies.handle(dt, objects);
 }
 
 void World::MapGroup::render(Vector2D Camera)
 {
     for (auto map : world->maps)
         map->render(Camera);
-    fruits.render(world->player, Camera);
-    spikes.render(world->player, Camera);
-    stones.render(world->player, Camera);
-    enemies.render(world->player, Camera);
-    pads.render(world->player, Camera);
+    fruits.render(Camera);
+    spikes.render(Camera);
+    stones.render(Camera);
+    enemies.render(Camera);
+    pads.render(Camera);
 }
 
 void World::MapGroup::clear()

@@ -2,21 +2,21 @@
 #include "../../entities/player.h"
 
 template <typename T>
-Group<T>::Group() { sprites.clear(); }
+Group<T>::Group(Player *player) : player(player) { sprites.clear(); }
 
 template <typename T>
-void Group<T>::render(Player player, Vector2D Camera)
+void Group<T>::render(Vector2D Camera)
 {
     for (auto &sprite : sprites)
-        if (playerNearby(player, sprite))
+        if (playerNearby(sprite))
             sprite->render(Camera);
 }
 
 template <typename T>
-void Group<T>::handle(Player player, double dt, vector<Object> &grasses)
+void Group<T>::handle(double dt, vector<Object> &grasses)
 {
     for (auto &sprite : sprites)
-        if (playerNearby(player, sprite))
+        if (playerNearby(sprite))
             sprite->handle(dt, grasses);
 }
 
@@ -48,10 +48,10 @@ template <typename T>
 int Group<T>::size() { return sprites.size(); }
 
 template <typename T>
-bool Group<T>::playerNearby(Player player, unique_ptr<T> &sprite)
+bool Group<T>::playerNearby(unique_ptr<T> &sprite)
 {
     int renderDistance = WIDTH / 2;
-    return player.Position.distanceFromVec(sprite->Position, true) < pow(renderDistance, 2);
+    return player->Position.distanceFromVec(sprite->Position, true) < pow(renderDistance, 2);
 }
 
 template <typename T>

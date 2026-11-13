@@ -1,6 +1,6 @@
 #include "../game.h"
 
-Game::Game() : player(nullptr, 0, 0)
+Game::Game() : player(nullptr, 32, 64)
 {
     settings = new Settings();
     string size = settings->get("graphics", "size");
@@ -53,9 +53,9 @@ void Game::handle()
         case SDL_EVENT_WINDOW_CLOSE_REQUESTED:
             terminate();
             break;
-        case SDL_EVENT_MOUSE_BUTTON_UP:
-            if (scene == Scenes::PLAYING)
-                player.mouseClicked = (event.button.button == SDL_BUTTON_LEFT);
+        case SDL_EVENT_MOUSE_BUTTON_DOWN:
+            if (scene == Scenes::PLAYING && (event.button.button == SDL_BUTTON_LEFT))
+                player.mouseClicked = true;
             break;
         case SDL_EVENT_KEY_UP:
             if (event.key.key == SDLK_ESCAPE)
@@ -148,7 +148,7 @@ void Game::loadWorld(string region)
     int maxLevel = *std::max_element(levels.begin(), levels.end());
     for (int i = 0; i <= maxLevel; i++)
         worldSeed += std::to_string(Random.randint(0, maxLevel));
-    world = new World(renderer, player, region, worldSeed);
+    world = new World(renderer, &player, region, worldSeed);
 }
 
 void Game::unloadWorld()

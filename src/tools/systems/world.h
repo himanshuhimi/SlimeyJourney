@@ -17,7 +17,7 @@ struct World
 {
     SDL_Renderer *renderer = nullptr;
     Vector2D Camera;
-    Player player;
+    Player *player;
     Checkpoint checkpoint;
     vector<Map *> maps = {};
     string region = "", seed = "";
@@ -25,12 +25,13 @@ struct World
     {
         World *world = nullptr;
         int width, height, pixelWidth, pixelHeight;
-        vector<Object> objects = {};
-        Group<Spike> spikes = {};
-        Group<Stone> stones = {};
-        Group<Pad> pads = {};
-        Group<Fruit> fruits = {};
-        Group<Enemy> enemies = {};
+        vector<Object> objects;
+        Group<Spike> spikes;
+        Group<Stone> stones;
+        Group<Pad> pads;
+        Group<Fruit> fruits;
+        Group<Enemy> enemies;
+        MapGroup(Player *player);
         void handle(double dt);
         void render(Vector2D Camera);
         void clear();
@@ -40,7 +41,7 @@ struct World
     using EnemyFactory = std::function<unique_ptr<Enemy>()>;
     int fruitLength = 0, enemyLength = 0;
     double increment = 0.0;
-    World(SDL_Renderer *renderer, Player player, string region, string seed);
+    World(SDL_Renderer *renderer, Player *player, string region, string seed);
     void handle(double dt);
     void render();
     void loadMaps();

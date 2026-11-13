@@ -112,7 +112,7 @@ void Player::handleAttacking(double dt)
     if (mouseClicked && throwCooldown.available)
     {
         attack();
-        mouseClicked = false;
         throwCooldown.reset();
+        mouseClicked = false;
     }
 }
