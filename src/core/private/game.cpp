@@ -32,6 +32,19 @@ Game::Game() : player(nullptr, 32, 384)
     audios = {
         {"success", Audio("success.wav")}};
     setScene(Scenes::HOME, false);
+    passiveTimer = new Interval(
+        [this]
+        {
+            if (clouds.size() >= 999)
+                clouds.clear();
+            if (petals.size() >= 999)
+                petals.clear();
+            if (Random.randint(0, 1))
+                clouds.emplace_back(renderer);
+            else
+                petals.emplace_back(renderer);
+        }, 2
+    );
 }
 
 void Game::launch()
@@ -71,6 +84,7 @@ void Game::handle()
         }
         ui->update(event);
     }
+    passiveTimer->handle(dt);
     for (auto &cloud : clouds)
         cloud.handle(dt);
     for (auto &petal : petals)

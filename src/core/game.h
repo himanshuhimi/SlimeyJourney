@@ -8,6 +8,7 @@
 #include "entities/passives/petal.h"
 #include "tools/systems/ui.h"
 #include "tools/parallax.h"
+#include "tools/interval.h"
 
 struct UI;
 struct Game
@@ -40,6 +41,7 @@ private:
     map<string, Audio> audios = {};
     Uint64 LAST = SDL_GetPerformanceCounter();
     Uint64 NOW;
+    Interval *passiveTimer;
     void updateDeltaTime();
     void collision();
 };
