@@ -184,17 +184,24 @@ void Game::collision()
                 player.resetPos();
     if (world->map.pads.size() > 0)
     {
+        unique_ptr<Pad> *usingPad;
         bool onPad = false;
         for (auto &pad : world->map.pads)
         {
-            onPad = checkCollision(player.rect, pad->rect) && !player.buffed;
-            break;
+            if (checkCollision(player.rect, pad->rect))
+            {
+                onPad = true;
+                pad->inUse = true;
+                break;
+            }
+            else
+                pad->inUse = false;
         }
         if (onPad && !player.buffed)
-        {
-            player.jumpStrength += 0.2 * player.baseJumpStrength;
-            player.buffed = true;
-        }
+            player.jumpStrength += (0.5 * player.baseJumpStrength);
+        if (!onPad)
+            player.jumpStrength = player.baseJumpStrength;
+        player.buffed = onPad;
     }
     if (world->map.fruits.size() > 0)
         for (auto fruitIt = world->map.fruits.begin();
