@@ -5,7 +5,7 @@ Player::Player(SDL_Renderer *renderer, float x, float y)
 {
     anims = {
         {"jump", Anim(renderer, "player/jump.gif", 0.2)},
-        {"damage", Anim(renderer, "damage.gif", 0.1)}};
+        {"damage", Anim(renderer, "player/damage.gif", 0.1)}};
     audios = {
         {"jump", Audio("player/jump.wav")},
         {"shoot", Audio("player/shoot.wav")},

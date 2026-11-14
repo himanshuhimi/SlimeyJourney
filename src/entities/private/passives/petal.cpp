@@ -15,8 +15,8 @@ Petal::Petal(SDL_Renderer *renderer)
         "images/passives/petals/" + choice + ".png",
         Random.randint(0, 180)
     );
-    rect.w /= 2;
-    rect.h /= 2;
+    rect.w /= 4;
+    rect.h /= 4;
 }
 
 void Petal::handle(double dt)

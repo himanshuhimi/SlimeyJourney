@@ -17,7 +17,7 @@ Enemy::Enemy(SDL_Renderer *renderer, float x, float y, string type, EnemyData da
     range = SDL_FRect{rect.x, rect.y, data.atkRange, data.atkRange};
     lineOfSight.rect.w = data.atkRange;
     HP = data.maxHP;
-    anims = {{"damage", Anim(renderer, "damage.gif", 0.1)}};
+    anims = {{"damage", Anim(renderer, type + "/damage.gif", 0.1)}};
     audios = {{"hurt", Audio(type + "/hurt.wav")}};
 };
 
