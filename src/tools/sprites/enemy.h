@@ -28,7 +28,7 @@ struct Enemy : public Sprite
         bool alert = false, attacking = false;
     } actions;
     Cooldown atkCooldown = {3.0f};
-    map<string, Animation> anims = {};
+    map<string, Anim> anims = {};
     map<string, Audio> audios = {};
     vector<unique_ptr<Weapon>> throws = {};
     string type = "";

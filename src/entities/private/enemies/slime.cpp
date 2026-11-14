@@ -12,8 +12,8 @@ Slime::Slime(SDL_Renderer *renderer, float x, float y)
 {
     Velocity.x = data.speed;
     anims = {
-        {"walking", Animation(renderer, "slime/walking.png")},
-        {"damage", Animation(renderer, "slime/damage.png")}};
+        {"walking", Anim(renderer, "slime/walking.gif")},
+        {"damage", Anim(renderer, "damage.gif")}};
 }
 
 void Slime::handle(double dt, const vector<Object> &objects)

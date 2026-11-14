@@ -6,7 +6,7 @@
 struct Slime : public Enemy
 {
 
-    map<string, Animation> anims = {};
+    map<string, Anim> anims = {};
     vector<Ball> balls = {};
     Slime(SDL_Renderer *renderer, float x, float y);
     void handle(double dt, const vector<Object> &objects) override;

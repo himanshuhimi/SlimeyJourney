@@ -21,44 +21,45 @@ void Image::render(const SDL_FRect *src, const SDL_FRect *dst)
         SDL_RenderTexture(renderer, texture, src, dst);
 }
 
-Animation::Animation(SDL_Renderer *renderer, string source, float frameTime)
-    : renderer(renderer), frameTime(frameTime), imageSet(renderer, "anims/" + source),
-      maxFrames(imageSet.width / 32) {}
-
-void Animation::handle(double dt)
+Anim::Anim(SDL_Renderer *renderer, string source, double delay)
+    : renderer(renderer), x(x), y(y), source(source), delay(delay)
 {
-    if (!active)
+    animation = IMG_LoadAnimation(("data/assets/anims/" + source).c_str());
+    if (!animation)
+        std::cout << "Unloaded Animation: " + source << std::endl;
+    for (int i = 0; i < animation->count; i++)
+        textures.emplace_back(SDL_CreateTextureFromSurface(renderer, animation->frames[i]));
+}
+
+void Anim::handle(double dt)
+{
+    if (!active || complete)
         return;
-    timer += (float)dt;
-    if (timer >= frameTime)
+    timeElapsed += dt;
+    if (timeElapsed >= delay)
     {
-        timer = 0.0f;
-        index++;
-        if (index >= maxFrames)
+        timeElapsed = 0.0;
+        i++;
+        if (i >= animation->count)
         {
-            index = 0;
+            i = 0;
             complete = true;
             active = false;
         }
-    };
+    }
 }
 
-void Animation::render(Vector2D Camera, SDL_FRect dst)
+void Anim::render(Vector2D Camera, SDL_FRect dst)
 {
     SDL_FRect renderDst = dst;
     renderDst.x -= Camera.x;
     renderDst.y -= Camera.y;
-    src.x = index * dst.w;
-    src.y = 0;
-    src.w = (float)dst.w;
-    src.h = (float)dst.h;
-    imageSet.render(&src, &renderDst);
+    SDL_RenderTexture(renderer, textures.at(i), nullptr, &renderDst);
 }
 
-void Animation::restart()
+void Anim::restart()
 {
-    index = 0;
-    timer = 0;
+    timeElapsed = 0;
     complete = false;
     active = true;
 }

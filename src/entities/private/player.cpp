@@ -4,9 +4,9 @@ Player::Player(SDL_Renderer *renderer, float x, float y)
     : Sprite(renderer, "player/idle.png", x, y)
 {
     anims = {
-        {"jump", Animation(renderer, "player/jump.png", 0.2)},
-        {"damage", Animation(renderer, "player/damage.png", 0.1)},
-        {"walking", Animation(renderer, "player/walking.png", 0.1)}};
+        {"jump", Anim(renderer, "player/jump.gif", 0.2)},
+        {"damage", Anim(renderer, "damage.gif", 0.1)},
+        {"walking", Anim(renderer, "player/walking.gif", 0.1)}};
     audios = {
         {"jump", Audio("player/jump.wav")},
         {"shoot", Audio("player/shoot.wav")},
@@ -38,21 +38,18 @@ void Player::handle(double dt, const vector<Object> &objects)
 void Player::render(Vector2D Camera)
 {
     dst = rect;
-    for (auto &[key, anim] : anims)
-        anim.dst = dst;
     if (anims.at("jump").active)
-        anims.at("jump").render(Camera, rect);
+        anims.at("jump").render(Camera, dst);
     else if (anims.at("walking").active)
-        anims.at("walking").render(Camera, rect);
+        anims.at("walking").render(Camera, dst);
     else if (anims.at("damage").active)
     {
         for (auto &[key, anim]: anims)
             if (key != "damage")
                 anim.active = false;
-        anims.at("damage").render(Camera, rect);
+        anims.at("damage").render(Camera, dst);
     }
-    else
-        Sprite::render(Camera);
+    Sprite::render(Camera);
     for (auto &ball : balls)
         ball.render(Camera);
 }
@@ -93,7 +90,7 @@ void Player::handleMovement(double dt)
         return;
     const bool *keys = SDL_GetKeyboardState(NULL);
     Velocity.x = -((int)keys[SDL_SCANCODE_A] - (int)keys[SDL_SCANCODE_D]) * speed;
-    states.walking = (bool)Velocity.x;
+    states.walking = Original.x != Position.x;
     anims.at("walking").active = states.walking;
     if (!states.inAir && keys[SDL_SCANCODE_SPACE])
     {

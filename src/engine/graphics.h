@@ -1,12 +1,13 @@
 #pragma once
 
 #include <iostream>
+#include <vector>
 #include <SDL3/SDL.h>
 #include <SDL3_image/SDL_image.h>
 #include <SDL3_ttf/SDL_ttf.h>
 #include "vector.h"
 
-using std::string;
+using std::string, std::vector;
 
 struct Image
 {
@@ -20,15 +21,17 @@ struct Image
     void render(const SDL_FRect *srcrect, const SDL_FRect *dstrect);
 };
 
-struct Animation
+struct Anim
 {
     SDL_Renderer *renderer = nullptr;
-    SDL_FRect src, renderDst, dst;
-    Image imageSet;
-    int maxFrames = 0.0, index = 0;
+    vector<SDL_Texture *> textures = {};
+    IMG_Animation *animation = nullptr;
+    string source = "";
+    float x, y;
+    double delay, timeElapsed;
     bool active = false, complete = false;
-    float timer = 0.0f, frameTime = 0.5f;
-    Animation(SDL_Renderer *renderer, string source, float frameTime = 0.5f);
+    int i = 0;
+    Anim(SDL_Renderer *renderer, string source, double delay = 1.0);
     void handle(double dt);
     void render(Vector2D Camera, SDL_FRect dst);
     void restart();
