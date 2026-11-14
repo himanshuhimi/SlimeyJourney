@@ -22,7 +22,7 @@ void Sprite::handle(double dt, const vector<Object> &objects)
     handleGravity(dt);
     handleMovement(dt, objects);
     states.inAir = !states.onGround;
-    states.walking = Velocity.x != 0;
+    states.walking = Original.x != Position.x && movable;
     if (states.walking)
         lastDirection = Velocity.x > 0 ? Direction::Right : Direction::Left;
     handleLOS();

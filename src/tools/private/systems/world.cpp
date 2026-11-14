@@ -1,7 +1,9 @@
 #include "../../systems/world.h"
 
 World::World(SDL_Renderer *renderer, Player *player, string region, string seed)
-    : renderer(renderer), player(player), checkpoint(renderer, 0, 0), region(region), seed(seed), map(player)
+    : renderer(renderer), player(player),
+      checkpoint(renderer, WIDTH - SPRITE_SIZE, HEIGHT - SPRITE_SIZE),
+      region(region), seed(seed), map(player)
 {
     map.world = this;
     loadMaps();
@@ -58,45 +60,6 @@ void World::clampCamera()
     Camera.y = std::clamp(targetY, 0.0f, maxY);
 }
 
-void World::loadObjects(Map *newMap)
-{
-    for (const Map::Object &obj : newMap->objectGroup.objects)
-    {
-        int x = obj.x + newMap->x, y = obj.y;
-        const string &name = obj.name;
-        if (name == "checkpoint")
-            checkpoint = Checkpoint(renderer, x, y - SPRITE_SIZE);
-        else if (name == "object")
-            map.objects.emplace_back(x, y, obj.width, obj.height);
-        else if (name == "spike")
-            map.spikes.insert(make_unique<Spike>(
-                renderer,
-                x + SPRITE_SIZE / 2, y,
-                obj.width, obj.height));
-        else if (name == "pad")
-            map.pads.insert(make_unique<Pad>(renderer, x, y));
-        else if (name == "fruit")
-            map.fruits.insert(make_unique<Fruit>(renderer, x, y - SPRITE_SIZE / 2));
-        else if (name == "enemy")
-        {
-            vector<EnemyFactory> enems = {
-                [&]
-                { return make_unique<Slime>(renderer, x, y - SPRITE_SIZE); },
-                [&]
-                { return make_unique<Bee>(renderer, x, y - SPRITE_SIZE); },
-                [&]
-                { return make_unique<Snail>(renderer, x, y - SPRITE_SIZE); }};
-            map.enemies.insert(Random.choice(enems)());
-        }
-        else if (name == "slime")
-            map.enemies.insert(make_unique<Slime>(renderer, x, y - SPRITE_SIZE));
-        else if (name == "bee")
-            map.enemies.insert(make_unique<Bee>(renderer, x, y - SPRITE_SIZE));
-        else if (name == "snail")
-            map.enemies.insert(make_unique<Snail>(renderer, x, y - SPRITE_SIZE));
-    }
-}
-
 void World::loadMaps()
 {
     for (Map *m : maps)
@@ -115,14 +78,15 @@ void World::loadMaps()
         map.height = std::max(map.height, newMap->height);
         map.pixelWidth += newMap->pixelWidth;
         map.pixelHeight = std::max(map.pixelHeight, newMap->pixelHeight);
-        loadObjects(newMap);
+        map.loadObjects(newMap);
         maps.emplace_back(newMap);
     }
 }
 
-World::MapGroup::MapGroup(Player *player) 
-    : spikes(player),pads(player), fruits(player),
-        enemies(player) {}
+World::MapGroup::MapGroup(Player *player)
+    : spikes(player), pads(player), fruits(player), enemies(player)
+{
+}
 
 void World::MapGroup::handle(double dt)
 {
@@ -148,4 +112,72 @@ void World::MapGroup::clear()
     pads.clear();
     fruits.clear();
     enemies.clear();
+}
+
+void World::MapGroup::loadObjects(Map *newMap)
+{
+    for (const Map::Object &obj : newMap->objectGroup.objects)
+    {
+        int x = obj.x + newMap->x, y = obj.y;
+        vector<EnemyFactory> enems = {
+            [&]
+            { return make_unique<Slime>(world->renderer, x, y - SPRITE_SIZE); },
+            [&]
+            { return make_unique<Bee>(world->renderer, x, y - SPRITE_SIZE); },
+            [&]
+            { return make_unique<Snail>(world->renderer, x, y - SPRITE_SIZE); }};
+        MapGroup::SpriteTypes spriteType = hashString(obj.name);
+        switch (spriteType)
+        {
+        case 0:
+            objects.emplace_back(x, y, obj.width, obj.height);
+            break;
+        case 1:
+            spikes.insert(make_unique<Spike>(
+                world->renderer,
+                x + SPRITE_SIZE / 2, y,
+                obj.width, obj.height));
+            break;
+        case 2:
+            pads.insert(make_unique<Pad>(world->renderer, x, y));
+            break;
+        case 3:
+            fruits.insert(make_unique<Fruit>(world->renderer, x, y - SPRITE_SIZE / 2));
+            break;
+        case 4:
+            enemies.insert(Random.choice(enems)());
+            break;
+        case 5:
+            enemies.insert(make_unique<Slime>(world->renderer, x, y - SPRITE_SIZE));
+            break;
+        case 6:
+            enemies.insert(make_unique<Bee>(world->renderer, x, y - SPRITE_SIZE));
+            break;
+        case 7:
+            enemies.insert(make_unique<Snail>(world->renderer, x, y - SPRITE_SIZE));
+            break;
+        default:
+            break;
+        }
+    }
+}
+
+World::MapGroup::SpriteTypes World::MapGroup::hashString(string str)
+{
+    if (str == "object")
+        return SpriteTypes::object;
+    if (str == "spike")
+        return SpriteTypes::spike;
+    if (str == "pad")
+        return SpriteTypes::pad;
+    if (str == "fruit")
+        return SpriteTypes::fruit;
+    if (str == "enemy")
+        return SpriteTypes::enemy;
+    if (str == "slime")
+        return SpriteTypes::slime;
+    if (str == "bee")
+        return SpriteTypes::bee;
+    if (str == "snail")
+        return SpriteTypes::snail;
 }

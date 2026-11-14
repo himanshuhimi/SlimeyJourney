@@ -23,27 +23,39 @@ struct World
     struct MapGroup
     {
         World *world = nullptr;
-        int width, height, pixelWidth, pixelHeight;
         vector<Object> objects;
         Group<Spike> spikes;
         Group<Pad> pads;
         Group<Fruit> fruits;
         Group<Enemy> enemies;
+        using EnemyFactory = std::function<unique_ptr<Enemy>()>;
+        enum SpriteTypes
+        {
+            object,
+            spike,
+            pad,
+            fruit,
+            enemy,
+            slime,
+            bee,
+            snail
+        };
+        int width, height, pixelWidth, pixelHeight;
         MapGroup(Player *player);
         void handle(double dt);
         void render(Vector2D Camera);
+        void loadObjects(Map *newMap);
         void clear();
+        SpriteTypes hashString(string str);
     } map;
     std::map<string, Quest> quests = {};
     std::map<string, Audio> audios = {};
-    using EnemyFactory = std::function<unique_ptr<Enemy>()>;
     int fruitLength = 0, enemyLength = 0;
     double increment = 0.0;
     World(SDL_Renderer *renderer, Player *player, string region, string seed);
     void handle(double dt);
     void render();
     void loadMaps();
-    void loadObjects(Map *newMap);
     void reset();
     void clampCamera();
 };

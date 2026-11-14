@@ -5,8 +5,7 @@ Player::Player(SDL_Renderer *renderer, float x, float y)
 {
     anims = {
         {"jump", Anim(renderer, "player/jump.gif", 0.2)},
-        {"damage", Anim(renderer, "damage.gif", 0.1)},
-        {"walking", Anim(renderer, "player/walking.gif", 0.1)}};
+        {"damage", Anim(renderer, "damage.gif", 0.1)}};
     audios = {
         {"jump", Audio("player/jump.wav")},
         {"shoot", Audio("player/shoot.wav")},
@@ -21,8 +20,6 @@ void Player::handle(double dt, const vector<Object> &objects)
         return;
     if (anims.at("damage").active)
         anims.at("damage").handle(dt);
-    else if (anims.at("walking").active)
-        anims.at("walking").handle(dt);
     if (anims.at("damage").complete)
     {
         movable = true;
@@ -38,18 +35,12 @@ void Player::handle(double dt, const vector<Object> &objects)
 void Player::render(Vector2D Camera)
 {
     dst = rect;
-    if (anims.at("jump").active)
-        anims.at("jump").render(Camera, dst);
-    else if (anims.at("walking").active)
-        anims.at("walking").render(Camera, dst);
-    else if (anims.at("damage").active)
-    {
-        for (auto &[key, anim]: anims)
-            if (key != "damage")
-                anim.active = false;
+    if (anims.at("damage").active)
         anims.at("damage").render(Camera, dst);
-    }
-    Sprite::render(Camera);
+    else if (anims.at("jump").active)
+        anims.at("jump").render(Camera, dst);
+    else
+        Sprite::render(Camera);
     for (auto &ball : balls)
         ball.render(Camera);
 }
@@ -90,8 +81,6 @@ void Player::handleMovement(double dt)
         return;
     const bool *keys = SDL_GetKeyboardState(NULL);
     Velocity.x = -((int)keys[SDL_SCANCODE_A] - (int)keys[SDL_SCANCODE_D]) * speed;
-    states.walking = Original.x != Position.x;
-    anims.at("walking").active = states.walking;
     if (!states.inAir && keys[SDL_SCANCODE_SPACE])
     {
         Velocity.y = -jumpStrength;
@@ -100,7 +89,13 @@ void Player::handleMovement(double dt)
         anims.at("jump").restart();
     }
     if (states.inAir || !states.onGround)
+    {
+        if (!anims.at("jump").active)
+            anims.at("jump").restart();
         anims.at("jump").handle(dt);
+    }
+    else
+        anims.at("jump").active = false;
 }
 
 void Player::handleAttacking(double dt)

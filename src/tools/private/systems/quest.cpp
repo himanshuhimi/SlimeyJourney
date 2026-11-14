@@ -5,7 +5,7 @@ Quest::Quest(SDL_Renderer *renderer, float x, float y, string label)
       bg(renderer, "ui/quest.png")
 {
     text = new Text(renderer, x, y, 
-        label, colors.black, 10, 1,
+        label, SDL_Color{80, 80, 80, 255}, 10, 1,
         Image(renderer, "ui/incomplete.png"));
     // bgRect.w = bg.width;
     // bgRect.h = bg.height;

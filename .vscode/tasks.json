@@ -4,7 +4,7 @@
         {
             "label": "Run",
             "type": "shell",
-            "command": "cmake --build build/debug",
+            "command": "cmake -S . -B build/debug -G 'Ninja' -DCMAKE_PREFIX_PATH='C:/msys64/ucrt64' | cmake --build build/debug",
             "problemMatcher": []
         }
     ]

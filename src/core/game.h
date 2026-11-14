@@ -42,6 +42,9 @@ private:
     Uint64 LAST = SDL_GetPerformanceCounter();
     Uint64 NOW;
     Interval *passiveTimer;
+    SDL_Color background;
+    int realHour = 0;
     void updateDeltaTime();
     void collision();
+    int getTime();
 };

@@ -58,6 +58,7 @@ void Game::launch()
 
 void Game::handle()
 {
+    realHour = getTime();
     updateDeltaTime();
     while (SDL_PollEvent(&event))
     {
@@ -102,12 +103,13 @@ void Game::handle()
 
 void Game::render()
 {
-    SDL_SetRenderDrawColor(
-        renderer,
-        colors.skyblue.r,
-        colors.skyblue.g,
-        colors.skyblue.b,
-        colors.skyblue.a);
+    if (realHour >= 5 && realHour < 12)
+        background = SDL_Color{168, 196, 226, 255};
+    else if (realHour >= 12 && realHour < 18)
+        background = SDL_Color{240, 136, 78, 255};
+    else
+        background = SDL_Color{7, 11, 52, 255};
+    SDL_SetRenderDrawColor(renderer, background.r, background.g, background.b, background.a);
     SDL_RenderClear(renderer);
     parallax->render((scene == Scenes::PLAYING) ? world->Camera : Vector2D{});
     if (scene == Scenes::PLAYING)
@@ -142,6 +144,12 @@ void Game::updateDeltaTime()
     NOW = SDL_GetPerformanceCounter();
     dt = (double)(NOW - LAST) / SDL_GetPerformanceFrequency();
     LAST = NOW;
+}
+
+int Game::getTime()
+{
+    std::time_t now = std::time(nullptr);
+    return std::localtime(&now)->tm_hour;
 }
 
 void Game::loadWorld(string region)
@@ -257,7 +265,6 @@ void Game::collision()
     // ending needs to be changed
     if (checkCollision(player.rect, world->checkpoint.rect))
     {
-        
     }
     if (player.dead)
         setScene(Scenes::OVER, false);
