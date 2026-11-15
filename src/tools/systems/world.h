@@ -6,6 +6,7 @@
 #include "entities/objects/fruit.h"
 #include "entities/objects/spike.h"
 #include "entities/objects/pad.h"
+#include "entities/objects/plate.h"
 #include "entities/passives/checkpoint.h"
 #include "entities/enemies/slime.h"
 #include "entities/enemies/snail.h"
@@ -28,6 +29,7 @@ struct World
         Group<Pad> pads;
         Group<Fruit> fruits;
         Group<Enemy> enemies;
+        Group<Plate> plates;
         using EnemyFactory = std::function<unique_ptr<Enemy>()>;
         enum SpriteTypes
         {
@@ -38,7 +40,9 @@ struct World
             enemy,
             slime,
             bee,
-            snail
+            snail,
+            plate,
+            none
         };
         int width, height, pixelWidth, pixelHeight;
         MapGroup(Player *player);

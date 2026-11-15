@@ -66,7 +66,14 @@ struct Text
 
 struct Object
 {
+    SDL_Renderer *renderer = nullptr;
     SDL_FRect rect;
     Vector2D Position;
-    Object(float x, float y, float width = 32, float height = 32);
+    Image *img;
+    bool visible = true;
+    Object(SDL_Renderer *renderer,
+        float x, float y, 
+        float width = 32, float height = 32,
+        string imgSrc = "images/empty.png");
+    void render(Vector2D Camera);
 };

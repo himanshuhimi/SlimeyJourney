@@ -110,7 +110,7 @@ void Map::loadTileset(XMLElement *child)
         print("imageElement Uninitialized");
         return;
     }
-    tileset.image = new Image(renderer,(string)imageElement->Attribute("source"));
+    tileset.image = new Image(renderer, (string)imageElement->Attribute("source"));
     tileset.columns = tileset.image->width / tileWidth;
     tileset.rows = tileset.image->height / tileHeight;
 }
@@ -118,17 +118,38 @@ void Map::loadTileset(XMLElement *child)
 void Map::loadObjectGroup(XMLElement *child)
 {
     for (
-        XMLElement *objectElement = child->FirstChildElement("object");
-        objectElement != nullptr;
-        objectElement = objectElement->NextSiblingElement("object"))
+        XMLElement *objElem = child->FirstChildElement("object");
+        objElem != nullptr;
+        objElem = objElem->NextSiblingElement("object"))
     {
-        Object object;
-        object.name = objectElement->Attribute("name");
-        object.x = objectElement->FloatAttribute("x");
-        object.y = objectElement->FloatAttribute("y");
-        object.width = objectElement->FloatAttribute("width");
-        object.height = objectElement->FloatAttribute("height");
-        objectGroup.objects.push_back(object);
+        Object obj;
+        obj.id = objElem->IntAttribute("id");
+        obj.name = objElem->Attribute("name");
+        obj.x = objElem->FloatAttribute("x");
+        obj.y = objElem->FloatAttribute("y");
+        obj.width = objElem->FloatAttribute("width");
+        obj.height = objElem->FloatAttribute("height");
+        objectGroup.objects.insert({obj.id, obj});
+        XMLElement *props = objElem->FirstChildElement("properties");
+        if (props)
+            for (XMLElement *propElem = props->FirstChildElement("property");
+                 propElem != nullptr;
+                 propElem = propElem->NextSiblingElement("property"))
+            {
+                string name = propElem->Attribute("name");
+                string type = propElem->Attribute("type");
+                string value = propElem->Attribute("value");
+                if (type == "object")
+                {
+                    auto propObjIt = std::find_if(objectGroup.objects.begin(),
+                                                  objectGroup.objects.end(), [value](const auto &pair)
+                                                  { return pair.first == std::stoi(value); });
+                    if (propObjIt != objectGroup.objects.end())
+                        obj.properties.insert({name, propObjIt->second});
+                }
+                else
+                    obj.properties.insert({name, value});
+            }
     }
 }
 

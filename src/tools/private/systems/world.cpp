@@ -84,7 +84,7 @@ void World::loadMaps()
 }
 
 World::MapGroup::MapGroup(Player *player)
-    : spikes(player), pads(player), fruits(player), enemies(player)
+    : spikes(player), pads(player), fruits(player), enemies(player), plates(player)
 {
 }
 
@@ -93,16 +93,20 @@ void World::MapGroup::handle(double dt)
     spikes.handle(dt, objects);
     pads.handle(dt, objects);
     enemies.handle(dt, objects);
+    plates.handle(dt, objects);
 }
 
 void World::MapGroup::render(Vector2D Camera)
 {
     for (auto map : world->maps)
         map->render(Camera);
+    for (auto &obj : objects)
+        obj.render(Camera);
     fruits.render(Camera);
     spikes.render(Camera);
     enemies.render(Camera);
     pads.render(Camera);
+    plates.render(Camera);
 }
 
 void World::MapGroup::clear()
@@ -112,11 +116,12 @@ void World::MapGroup::clear()
     pads.clear();
     fruits.clear();
     enemies.clear();
+    plates.clear();
 }
 
 void World::MapGroup::loadObjects(Map *newMap)
 {
-    for (auto &[objID, obj] : newMap->objectGroup.objects)
+    for (const auto &[objId, obj] : newMap->objectGroup.objects)
     {
         int x = obj.x + newMap->x, y = obj.y;
         vector<EnemyFactory> enems = {
@@ -130,7 +135,7 @@ void World::MapGroup::loadObjects(Map *newMap)
         switch (spriteType)
         {
         case 0:
-            objects.emplace_back(x, y, obj.width, obj.height);
+            objects.emplace_back(world->renderer, x, y, obj.width, obj.height);
             break;
         case 1:
             spikes.insert(make_unique<Spike>(
@@ -156,6 +161,17 @@ void World::MapGroup::loadObjects(Map *newMap)
         case 7:
             enemies.insert(make_unique<Snail>(world->renderer, x, y - SPRITE_SIZE));
             break;
+        case 8:
+        {
+            auto it = obj.properties.find("path");
+            if (it == obj.properties.end())
+                break;
+            auto *objAttach = std::get_if<Map::Object>(&it->second);
+            if (!objAttach)
+                break;
+            plates.insert({make_unique<Plate>(world->renderer,x, y,objAttach->id)});
+            break;
+        }
         default:
             break;
         }
@@ -180,4 +196,7 @@ World::MapGroup::SpriteTypes World::MapGroup::hashString(string str)
         return SpriteTypes::bee;
     if (str == "snail")
         return SpriteTypes::snail;
+    if (str == "plate")
+        return SpriteTypes::plate;
+    return SpriteTypes::none;
 }

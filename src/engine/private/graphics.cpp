@@ -133,7 +133,8 @@ void Text::updateAlpha(int newAlpha)
 
 void Text::updateAttach(Image newAttach) { attachment = newAttach; }
 
-Object::Object(float x, float y, float width, float height)
+Object::Object(SDL_Renderer *renderer, float x, float y,  float width, float height, string imgSrc)
+    : renderer(renderer)
 {
     Position.x = x;
     Position.y = y;
@@ -141,4 +142,15 @@ Object::Object(float x, float y, float width, float height)
     rect.y = Position.y;
     rect.w = width;
     rect.h = height;
+    img = new Image(renderer, imgSrc);
+}
+
+void Object::render(Vector2D Camera)
+{
+    if (!visible)
+        return;
+    SDL_FRect dst = rect;
+    dst.x -= Camera.x;
+    dst.y -= Camera.y;
+    img->render(nullptr, &dst);
 }
