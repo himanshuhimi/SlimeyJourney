@@ -85,6 +85,8 @@ void Game::handle()
         }
         ui->update(event);
     }
+    if (player.dead)
+        setScene(Scenes::OVER, false);
     passiveTimer->handle(dt);
     for (auto &cloud : clouds)
         cloud.handle(dt);
@@ -177,49 +179,19 @@ void Game::unloadWorld() { world = nullptr; }
 
 void Game::collision()
 {
-    // ngl everything needs to be changed
-    if (world->map.spikes.size() > 0)
-        for (auto &spike : world->map.spikes)
-            if (checkCollision(player.rect, spike->rect))
-                player.resetPos();
-    if (world->map.pads.size() > 0)
-    {
-        bool onPad = false;
-        for (auto &pad : world->map.pads)
-        {
-            if (checkCollision(player.rect, pad->rect))
-            {
-                onPad = true;
-                pad->inUse = true;
-                break;
-            }
-            else
-                pad->inUse = false;
-        }
-        if (onPad && !player.buffed)
-            player.jumpStrength += (0.5 * player.baseJumpStrength);
-        if (!onPad)
-            player.jumpStrength = player.baseJumpStrength;
-        player.buffed = onPad;
-    }
-    if (world->map.fruits.size() > 0)
-        for (auto fruitIt = world->map.fruits.begin();
-             fruitIt != world->map.fruits.end();)
-        {
-            Fruit *fruit = dynamic_cast<Fruit *>(fruitIt->get());
-            if (!fruit->picked && checkCollision(fruit->rect, player.rect))
-            {
-                player.audios.at("pickup").play();
-                ui->getWidget<Progress>("progs", "fruit").advance(world->increment);
-                fruitIt = world->map.fruits.sprites.erase(fruitIt);
-            }
-            else
-                ++fruitIt;
-        }
+    handleEnemies();
+    handleObjects();
+    handlePassives();
+}
+
+void Game::handleEnemies()
+{
     if (world->map.enemies.size() > 0)
         for (auto eIt = world->map.enemies.begin(); eIt != world->map.enemies.end();)
         {
             auto &enemy = *eIt;
+            if (player.Position.distanceFromVec(enemy->Position, 2) < pow(WIDTH, 2))
+                break;
             auto rawSlime = enemy.get();
             if (enemy->dead)
             {
@@ -268,10 +240,61 @@ void Game::collision()
                     bIt++;
             eIt++;
         }
-    // ending needs to be changed
+}
+
+void Game::handleObjects()
+{
+    if (world->map.spikes.size() > 0)
+        for (auto &spike : world->map.spikes)
+        {
+            if (player.Position.distanceFromVec(spike->Position, 2) < pow(WIDTH, 2))
+                break;
+            if (checkCollision(player.rect, spike->rect))
+                player.resetPos();
+        }
+    if (world->map.pads.size() > 0)
+    {
+        bool onPad = false;
+        for (auto &pad : world->map.pads)
+        {
+            if (player.Position.distanceFromVec(pad->Position, 2) < pow(WIDTH, 2))
+                break;
+            if (checkCollision(player.rect, pad->rect))
+            {
+                onPad = true;
+                pad->inUse = true;
+                break;
+            }
+            else
+                pad->inUse = false;
+        }
+        if (onPad && !player.buffed)
+            player.jumpStrength += (0.5 * player.baseJumpStrength);
+        if (!onPad)
+            player.jumpStrength = player.baseJumpStrength;
+        player.buffed = onPad;
+    }
+    if (world->map.fruits.size() > 0)
+        for (auto fruitIt = world->map.fruits.begin();
+             fruitIt != world->map.fruits.end();)
+        {
+            auto fruit = fruitIt->get();
+            if (player.Position.distanceFromVec(fruit->Position, 2) < pow(WIDTH, 2))
+                
+            if (!fruit->picked && checkCollision(fruit->rect, player.rect))
+            {
+                player.audios.at("pickup").play();
+                ui->getWidget<Progress>("progs", "fruit").advance(world->increment);
+                fruitIt = world->map.fruits.sprites.erase(fruitIt);
+            }
+            else
+                ++fruitIt;
+        }
+}
+
+void Game::handlePassives()
+{
     if (checkCollision(player.rect, world->checkpoint.rect))
     {
     }
-    if (player.dead)
-        setScene(Scenes::OVER, false);
 }

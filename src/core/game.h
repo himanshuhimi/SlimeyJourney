@@ -45,6 +45,9 @@ private:
     SDL_Color background;
     int realHour = 0;
     void updateDeltaTime();
+    void handleEnemies();
+    void handleObjects();
+    void handlePassives();
     void collision();
     int getTime();
 };
