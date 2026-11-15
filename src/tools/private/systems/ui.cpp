@@ -264,28 +264,24 @@ SelectionScreen::SelectionScreen(Game &game) : UIScreen(game)
                 });
         }
     }
-    int i = 1;
-    for (auto &[name, func] : funcs)
+    int i = 0;
+    for (auto &[region, func] : funcs)
     {
-        Image image{game.renderer, "ui/cards/default.png"};
-        string path = "data/assets/ui/cards/" + name + ".png";
-        if (fs::exists(path))
-            image = Image{game.renderer, path};
-        else
-            image = Image(game.renderer, "ui/cards/default.png");
+        string path = "ui/cards/" + region + ".png";
+        Image image = Image{game.renderer, path};
         ctgWidgets.at("cards").emplace_back(
-            name,
+            region,
             make_unique<Card>(
                 game.renderer,
-                WIDTH / 2,
-                HEIGHT / 2  - SPRITE_SIZE + SPRITE_SIZE * (1.5 * i++),
-                capitalize(name),
+                WIDTH / 2 - (image.width * 1.1) + ((image.width + (SPRITE_SIZE / 2)) * i++),
+                HEIGHT / 2,
+                capitalize(region),
                 func,
                 image));
     }
 }
 
-PlayingScreen::PlayingScreen(Game &game) 
+PlayingScreen::PlayingScreen(Game &game)
     : UIScreen(game), hearts(game)
 {
     ctgWidgets["progs"];

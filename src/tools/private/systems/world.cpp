@@ -116,7 +116,7 @@ void World::MapGroup::clear()
 
 void World::MapGroup::loadObjects(Map *newMap)
 {
-    for (const Map::Object &obj : newMap->objectGroup.objects)
+    for (auto &[objID, obj] : newMap->objectGroup.objects)
     {
         int x = obj.x + newMap->x, y = obj.y;
         vector<EnemyFactory> enems = {

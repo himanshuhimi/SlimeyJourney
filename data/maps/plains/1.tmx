@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.12.2" orientation="orthogonal" renderorder="right-down" width="100" height="15" tilewidth="32" tileheight="32" infinite="0" nextlayerid="3" nextobjectid="19">
+<map version="1.10" tiledversion="1.12.2" orientation="orthogonal" renderorder="right-down" width="100" height="15" tilewidth="32" tileheight="32" infinite="0" nextlayerid="3" nextobjectid="21">
  <tileset firstgid="1" source="../tileset.tsx"/>
  <layer id="1" name="ground" width="100" height="15">
   <data encoding="csv">
@@ -22,20 +22,12 @@
  </layer>
  <objectgroup id="2" name="object">
   <object id="7" name="object" x="0" y="448" width="3200" height="32"/>
-  <object id="9" name="bee" x="160" y="448">
+  <object id="19" name="plate" x="224" y="448">
+   <properties>
+    <property name="path" type="object" value="20"/>
+   </properties>
    <point/>
   </object>
-  <object id="10" name="slime" x="192" y="448">
-   <point/>
-  </object>
-  <object id="11" name="snail" x="224" y="448">
-   <point/>
-  </object>
-  <object id="12" name="fruit" x="256" y="448">
-   <point/>
-  </object>
-  <object id="13" name="pad" x="288" y="448">
-   <point/>
-  </object>
+  <object id="20" name="object: stone" x="320" y="320" width="32" height="128"/>
  </objectgroup>
 </map>

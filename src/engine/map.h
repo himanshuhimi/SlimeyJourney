@@ -23,20 +23,19 @@ struct Map
     {
         int firstGID, columns, rows;
         Image *image;
-    };
+    } tileset;
     struct Object
     {
+        int id;
         string name;
         float x, y, width, height;
-        map<string, std::variant<string, bool, int, float>> properties;
+        map<string, std::variant<string, bool, int, float, Object>> properties;
     };
     struct ObjectGroup
     {
-        vector<Object> objects;
-    };
-    ObjectGroup objectGroup;
+        map<int, Object> objects;
+    } objectGroup;
     vector<Layer> layers;
-    Tileset tileset;
     string directory = "maps/", source = "";
     int width, height, tileWidth, tileHeight, pixelWidth, pixelHeight, x, y;
     Map(SDL_Renderer *renderer, string source, int x = 0, int y = 0);

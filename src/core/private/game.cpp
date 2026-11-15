@@ -103,16 +103,11 @@ void Game::handle()
 
 void Game::render()
 {
-    // if (realHour >= 5 && realHour < 12)
-        background = SDL_Color{
-            colors.skyblue.r, 
-            colors.skyblue.g, 
-            colors.skyblue.b, 
-            255};
-    // else if (realHour >= 12 && realHour < 18)
-    //     background = SDL_Color{240, 136, 78, 255};
-    // else
-    //     background = SDL_Color{7, 11, 52, 255};
+    background = SDL_Color{
+        colors.skyblue.r, 
+        colors.skyblue.g, 
+        colors.skyblue.b, 
+        255};
     SDL_SetRenderDrawColor(renderer, background.r, background.g, background.b, background.a);
     SDL_RenderClear(renderer);
     parallax->render((scene == Scenes::PLAYING) ? world->Camera : Vector2D{});
@@ -188,7 +183,6 @@ void Game::collision()
                 player.resetPos();
     if (world->map.pads.size() > 0)
     {
-        unique_ptr<Pad> *usingPad;
         bool onPad = false;
         for (auto &pad : world->map.pads)
         {
