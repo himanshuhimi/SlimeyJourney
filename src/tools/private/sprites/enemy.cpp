@@ -15,10 +15,15 @@ Enemy::Enemy(SDL_Renderer *renderer, float x, float y, string type, EnemyData da
 {
     image = Image{renderer, "images/enemies/" + type + "/idle.png"};
     range = SDL_FRect{rect.x, rect.y, data.atkRange, data.atkRange};
-    lineOfSight.rect.w = data.atkRange;
     HP = data.maxHP;
     anims = {{"damage", Anim(renderer, type + "/damage.gif", 0.1)}};
     audios = {{"hurt", Audio(type + "/hurt.wav")}};
+    moveTimer = new Interval(
+        [this]
+        {
+            Velocity.x = (Random.randint(64, 128) * Random.randint(-1, 1)) * this->data.speed;
+        },
+        Random.randint(10.0, 20.0));
 };
 
 void Enemy::handle(double dt, const vector<Object> &objects)
@@ -30,6 +35,9 @@ void Enemy::handle(double dt, const vector<Object> &objects)
     atkCooldown.handle(dt);
     range.x = rect.x - (range.w / 2) + (rect.w / 2);
     range.y = rect.y - (range.h / 2) + (rect.h / 2);
+    actions.idling = !(actions.alert && actions.attacking);
+    if (actions.idling)
+        moveTimer->handle(dt);
     if (anims.at("damage").active)
         anims.at("damage").handle(dt);
     for (auto &throwable : throws)
@@ -45,11 +53,11 @@ void Enemy::render(Vector2D Camera)
     if (data.rangeVisible)
     {
         SDL_SetRenderDrawColor(
-            renderer, 
-            colors.red.r, 
-            colors.red.g, 
-            colors.red.b, 
-            colors.red.a);
+            renderer,
+            colors.red.r,
+            colors.red.g,
+            colors.red.b,
+            128);
         SDL_FRect rangeDst = range;
         rangeDst.x -= Camera.x;
         rangeDst.y -= Camera.y;

@@ -1,8 +1,7 @@
 #include "../sprite.h"
 
 Sprite::Sprite(SDL_Renderer *renderer, string imgSource, float x, float y, double imgAngle)
-    : renderer(renderer), Original(x, y), image(renderer, "images/" + imgSource),
-      imgAngle(imgAngle), gravityLOS(renderer, 0, 0, 1, 0), lineOfSight(renderer, 0, 0, 0, 1)
+    : renderer(renderer), Original(x, y), image(renderer, "images/" + imgSource), imgAngle(imgAngle)
 {
     Position = Vector2D{x - image.width / 2, y - image.height / 2};
     rect.x = Position.x;
@@ -11,8 +10,6 @@ Sprite::Sprite(SDL_Renderer *renderer, string imgSource, float x, float y, doubl
     rect.h = image.height;
     hitbox.w = image.width;
     hitbox.h = image.height;
-    lineOfSight.rect.w = rect.w / 2;
-    gravityLOS.rect.h = rect.h / 2;
 }
 
 void Sprite::handle(double dt, const vector<Object> &objects)
@@ -25,7 +22,6 @@ void Sprite::handle(double dt, const vector<Object> &objects)
     states.walking = Original.x != Position.x && movable;
     if (states.walking)
         lastDirection = Velocity.x > 0 ? Direction::Right : Direction::Left;
-    handleLOS();
 }
 
 void Sprite::render(Vector2D Camera)
@@ -35,8 +31,6 @@ void Sprite::render(Vector2D Camera)
     dst.x -= Camera.x;
     dst.y -= Camera.y;
     image.render(nullptr, &dst);
-    if (lineOfSight.visible)
-        lineOfSight.render(Camera);
 }
 
 void Sprite::moveX(double dt, const vector<Object> &objects) 
@@ -90,14 +84,6 @@ void Sprite::handleMovement(double dt, const vector<Object> &objects)
     Center.y = rect.y + rect.h / 2;
     hitbox.x = Center.x;
     hitbox.y = Center.y;
-}
-
-void Sprite::handleLOS()
-{
-    lineOfSight.matchPosition(rect);
-    gravityLOS.matchPosition(rect);
-    if (states.prevOnGround && !states.onGround)
-        lineOfSight.rect.w *= -1;
 }
 
 void Sprite::handleGravity(double dt)

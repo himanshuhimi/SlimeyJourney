@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../sprite.h"
+#include "../interval.h"
 #include "weapon.h"
 
 struct EnemyData
@@ -25,12 +26,15 @@ struct Enemy : public Sprite
     EnemyData data;
     struct EnemyActions
     {
-        bool alert = false, attacking = false;
+        bool alert = false, idling = false, attacking = false;
     } actions;
     Cooldown atkCooldown = {3.0f};
+    Interval *moveTimer;
     map<string, Anim> anims = {};
     map<string, Audio> audios = {};
     vector<unique_ptr<Weapon>> throws = {};
+    float travelDistance = 0.0;
+    Vector2D travelVector;
     string type = "";
     bool dead = false;
     int HP = 0;
