@@ -14,14 +14,8 @@ Sprite::Sprite(SDL_Renderer *renderer, string imgSource, float x, float y, doubl
 
 void Sprite::handle(double dt, const vector<Object> &objects)
 {
-    states.prevOnGround = states.onGround;
-    states.onGround = false;
     handleGravity(dt);
     handleMovement(dt, objects);
-    states.inAir = !states.onGround;
-    states.walking = Original.x != Position.x && movable;
-    if (states.walking)
-        lastDirection = Velocity.x > 0 ? Direction::Right : Direction::Left;
 }
 
 void Sprite::render(Vector2D Camera)
@@ -35,41 +29,45 @@ void Sprite::render(Vector2D Camera)
 
 void Sprite::moveX(double dt, const vector<Object> &objects) 
 {
-    Position.x += Velocity.x * dt;
+    Position.x += Velocity.x * static_cast<float>(dt);
     rect.x = Position.x;
     for (const auto &obj : objects)
     {
-        if (!checkCollision(rect, obj.rect))
+        if (!checkCollision(rect, obj.rect) || !obj.visible)
             continue;
         if (Velocity.x > 0 && Position.x + rect.w <= obj.rect.x)
-            Position.x = obj.rect.x - rect.w;
+            Position.x = (obj.rect.x - obj.rect.w) - rect.w;
         else if (Velocity.x < 0 && Position.x >= obj.rect.x + obj.rect.w)
             Position.x = obj.rect.x + obj.rect.w;
         rect.x = Position.x;
         Velocity.x = 0;
-        break;
     }
+    states.walking = Original.x != Position.x && movable;
+    if (states.walking)
+        lastDirection = Velocity.x > 0 ? Direction::Right : Direction::Left;
 };
 
 void Sprite::moveY(double dt, const vector<Object> &objects) 
 {
-    Position.y += Velocity.y * dt;
+    states.prevOnGround = states.onGround;
+    states.onGround = false;
+    Position.y += Velocity.y * static_cast<float>(dt);
     rect.y = Position.y;
     for (const auto &obj : objects)
     {
-        if (!checkCollision(rect, obj.rect))
+        if (!checkCollision(rect, obj.rect) || !obj.visible)
             continue;
-        if (Velocity.y > 0)
+        if (Velocity.y < 0)
+            Position.y = obj.rect.y + obj.rect.h;
+        else if (Velocity.y > 0)
         {
             Position.y = obj.rect.y - rect.h;
             states.onGround = true;
         }
-        else if (Velocity.y < 0)
-            Position.y = obj.rect.y + obj.rect.h;
         rect.y = Position.y;
         Velocity.y = 0;
-        break;
     }
+    states.inAir = !states.onGround;
 };
 
 void Sprite::handleMovement(double dt, const vector<Object> &objects)
@@ -78,6 +76,11 @@ void Sprite::handleMovement(double dt, const vector<Object> &objects)
         return;
     moveX(dt, objects);
     moveY(dt, objects);
+    handlePosition();
+}
+
+void Sprite::handlePosition()
+{
     rect.x = Position.x;
     rect.y = Position.y;
     Center.x = rect.x + rect.w / 2;

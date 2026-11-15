@@ -26,6 +26,6 @@ struct Player : public Sprite
 private:
     Cooldown throwCooldown = {1.0};
     map<string, Anim> anims = {};
-    void handleMovement(double dt);
+    void handleMovement(double dt, const vector<Object> &objects);
     void handleAttacking(double dt);
 };

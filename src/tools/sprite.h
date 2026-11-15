@@ -34,4 +34,7 @@ protected:
     void moveY(double dt, const vector<Object> &objects);
     void handleMovement(double dt, const vector<Object> &objects);
     void handleGravity(double dt);
+    void handlePosition();
+    void handleXStates();
+    void handleYStates();
 };

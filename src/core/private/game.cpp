@@ -177,6 +177,7 @@ void Game::unloadWorld() { world = nullptr; }
 
 void Game::collision()
 {
+    // ngl everything needs to be changed
     if (world->map.spikes.size() > 0)
         for (auto &spike : world->map.spikes)
             if (checkCollision(player.rect, spike->rect))

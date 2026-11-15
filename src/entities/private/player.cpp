@@ -25,8 +25,8 @@ void Player::handle(double dt, const vector<Object> &objects)
         movable = true;
         immune = false;
     }
-    handleMovement(dt);
-    Sprite::handle(dt, objects);
+    handleGravity(dt);
+    handleMovement(dt, objects);
     handleAttacking(dt);
     for (auto &ball : balls)
         ball.handle(dt, objects);
@@ -75,7 +75,7 @@ void Player::resetPos(bool previous)
     damage();
 }
 
-void Player::handleMovement(double dt)
+void Player::handleMovement(double dt, const vector<Object> &objects)
 {
     if (!movable)
         return;
@@ -96,6 +96,9 @@ void Player::handleMovement(double dt)
     }
     else
         anims.at("jump").active = false;
+    moveX(dt, objects);
+    moveY(dt, objects);
+    handlePosition();
 }
 
 void Player::handleAttacking(double dt)
