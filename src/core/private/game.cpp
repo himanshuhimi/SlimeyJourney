@@ -190,7 +190,7 @@ void Game::handleEnemies()
         for (auto eIt = world->map.enemies.begin(); eIt != world->map.enemies.end();)
         {
             auto &enemy = *eIt;
-            if (player.Position.distanceFromVec(enemy->Position, 2) < pow(WIDTH, 2))
+            if (!(player.Position.distanceFromVec(enemy->Position, 2) < pow(WIDTH, 2)))
                 break;
             auto rawSlime = enemy.get();
             if (enemy->dead)
@@ -247,7 +247,7 @@ void Game::handleObjects()
     if (world->map.spikes.size() > 0)
         for (auto &spike : world->map.spikes)
         {
-            if (player.Position.distanceFromVec(spike->Position, 2) < pow(WIDTH, 2))
+            if (!(player.Position.distanceFromVec(spike->Position, 2) < pow(WIDTH, 2)))
                 break;
             if (checkCollision(player.rect, spike->rect))
                 player.resetPos();
@@ -257,7 +257,7 @@ void Game::handleObjects()
         bool onPad = false;
         for (auto &pad : world->map.pads)
         {
-            if (player.Position.distanceFromVec(pad->Position, 2) < pow(WIDTH, 2))
+            if (!(player.Position.distanceFromVec(pad->Position, 2) < pow(WIDTH, 2)))
                 break;
             if (checkCollision(player.rect, pad->rect))
             {
@@ -279,8 +279,8 @@ void Game::handleObjects()
              fruitIt != world->map.fruits.end();)
         {
             auto fruit = fruitIt->get();
-            if (player.Position.distanceFromVec(fruit->Position, 2) < pow(WIDTH, 2))
-                
+            if (!(player.Position.distanceFromVec(fruit->Position, 2) < pow(WIDTH, 2)))
+                break;
             if (!fruit->picked && checkCollision(fruit->rect, player.rect))
             {
                 player.audios.at("pickup").play();
@@ -289,6 +289,20 @@ void Game::handleObjects()
             }
             else
                 ++fruitIt;
+        }
+    if (world->map.plates.size() > 0)
+        for (auto plateIt = world->map.plates.begin();
+            plateIt != world->map.plates.end(); plateIt++)
+        {
+            auto plate = plateIt->get();
+            if (!(player.Position.distanceFromVec(plate->Position, 2) < pow(WIDTH, 2)))
+                break;
+            if (checkCollision(player.rect, plate->rect))
+            {
+                auto &actualObj = *std::find_if(world->map.objects.begin(), world->map.objects.end(), 
+                    [plate](const auto &o) { return plate->objID == o.id; });
+                actualObj.visible = false;
+            }
         }
 }
 

@@ -133,8 +133,10 @@ void Text::updateAlpha(int newAlpha)
 
 void Text::updateAttach(Image newAttach) { attachment = newAttach; }
 
-Object::Object(SDL_Renderer *renderer, float x, float y,  float width, float height, string imgSrc)
-    : renderer(renderer)
+Object::Object(SDL_Renderer *renderer, 
+    float x, float y, int objID,
+    float width, float height,  string imgSrc)
+    : renderer(renderer), id(objID)
 {
     Position.x = x;
     Position.y = y;

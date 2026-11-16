@@ -129,7 +129,6 @@ void Map::loadObjectGroup(XMLElement *child)
         obj.y = objElem->FloatAttribute("y");
         obj.width = objElem->FloatAttribute("width");
         obj.height = objElem->FloatAttribute("height");
-        objectGroup.objects.insert({obj.id, obj});
         XMLElement *props = objElem->FirstChildElement("properties");
         if (props)
             for (XMLElement *propElem = props->FirstChildElement("property");
@@ -150,6 +149,7 @@ void Map::loadObjectGroup(XMLElement *child)
                 else
                     obj.properties.insert({name, value});
             }
+        objectGroup.objects.insert({obj.id, obj});
     }
 }
 

@@ -70,9 +70,11 @@ struct Object
     SDL_FRect rect;
     Vector2D Position;
     Image *img;
+    int id;
     bool visible = true;
     Object(SDL_Renderer *renderer,
-        float x, float y, 
+        float x, float y,
+        int objID,
         float width = 32, float height = 32,
         string imgSrc = "images/empty.png");
     void render(Vector2D Camera);

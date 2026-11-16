@@ -134,42 +134,42 @@ void World::MapGroup::loadObjects(Map *newMap)
         MapGroup::SpriteTypes spriteType = hashString(obj.name);
         switch (spriteType)
         {
-        case 0:
-            objects.emplace_back(world->renderer, x, y, obj.width, obj.height);
+        case SpriteTypes::object:
+            objects.emplace_back(world->renderer, x, y, obj.id, obj.width, obj.height);
             break;
-        case 1:
+        case SpriteTypes::spike:
             spikes.insert(make_unique<Spike>(
                 world->renderer,
                 x + SPRITE_SIZE / 2, y,
                 obj.width, obj.height));
             break;
-        case 2:
+        case SpriteTypes::pad:
             pads.insert(make_unique<Pad>(world->renderer, x, y));
             break;
-        case 3:
+        case SpriteTypes::fruit:
             fruits.insert(make_unique<Fruit>(world->renderer, x, y - SPRITE_SIZE / 2));
             break;
-        case 4:
+        case SpriteTypes::enemy:
             enemies.insert(Random.choice(enems)());
             break;
-        case 5:
+        case SpriteTypes::slime:
             enemies.insert(make_unique<Slime>(world->renderer, x, y - SPRITE_SIZE));
             break;
-        case 6:
+        case SpriteTypes::bee:
             enemies.insert(make_unique<Bee>(world->renderer, x, y - SPRITE_SIZE));
             break;
-        case 7:
+        case SpriteTypes::snail:
             enemies.insert(make_unique<Snail>(world->renderer, x, y - SPRITE_SIZE));
             break;
-        case 8:
+        case SpriteTypes::plate:
         {
             auto it = obj.properties.find("path");
             if (it == obj.properties.end())
                 break;
-            auto *objAttach = std::get_if<Map::Object>(&it->second);
-            if (!objAttach)
+            auto *mapObj = std::get_if<Map::Object>(&it->second);
+            if (!mapObj)
                 break;
-            plates.insert({make_unique<Plate>(world->renderer,x, y,objAttach->id)});
+            plates.insert({make_unique<Plate>(world->renderer,x, y, mapObj->id)});
             break;
         }
         default:
